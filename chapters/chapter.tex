@@ -1,0 +1,47 @@
+\renewcommand{\chapid}{chapter}
+
+% Chapter specific commands:
+\newcommand{\thisplain}{[insert repo name]}
+\newcommand{\this}{\project{\thisplain}}
+\newcommand{\license}{MIT License}
+\newcommand{\Python}{\project{Python}}
+\newcommand{\numpy}{\project{numpy}}
+\newcommand{\Ubuntu}{\project{Ubuntu}}
+\newcommand{\github}{\project{GitHub}}
+\newcommand{\pip}{\project{pip}}
+\newcommand{\acor}{\project{acor}}
+\defcitealias{Goodman:2010}{GW10}
+
+% Math:
+\newcommand{\model}{\ensuremath{\vector{\Theta}}}
+\newcommand{\data}{\ensuremath{\vector{D}}}
+\newcommand{\nuisance}{\ensuremath{\vector{\alpha}}}
+\newcommand{\link}{\ensuremath{X}}
+\newcommand{\ensemble}{S}
+\newcommand{\colorens}[1]{\ensemble^{(#1)}}
+\newcommand{\red}{\colorens{0}}
+\newcommand{\blue}{\colorens{1}}
+\renewcommand{\vector}[1]{#1}
+\renewcommand{\matrix}[1]{#1}
+
+\chapter{[Title of Chapter]\chaplabel{chapter}}
+
+This \paper\ represents joint work with [people] published in [place] as [citation].
+
+\section{Chapter abstract}
+
+[probably the paper abstract]
+
+\section{Introduction}
+
+[probably the paper intro, and then all the other sections from the paper]
+
+\section{[Sections]}
+
+[expand those sections into subsections to give all the thorough background content that belongs in a thesis but not in a paper]
+
+\section{Chapter acknowledgements}
+
+It is a pleasure to thank
+[helpful people here]
+for helpful contributions to the ideas and code presented here.
