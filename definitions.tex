@@ -27,6 +27,7 @@
 
 % General formatting:
 \newcommand{\paper}{Chapter}
+\newcommand{\textul}[1]{{\underline{#1}}}
 
 % Foreign text:
 \newcommand{\foreign}[1]{\emph{#1}}
@@ -34,12 +35,11 @@
 \newcommand{\etc}{\foreign{etc.}}
 
 % Project references:
-\newcommand{\project}[1]{{\textsl{#1}}}
-\newcommand{\kepler}{\project{Kepler}}
-\newcommand{\terra}{\project{TERRA}}
-\newcommand{\KT}{\project{K2}}
-\newcommand{\tess}{\project{TESS}}
-\newcommand{\jwst}{\project{JWST}}
+\newcommand{\project}[1]{{\textsc{#1}}}
+\newcommand{\lsst}{\project{LSST}}
+\newcommand{\desc}{\project{LSST-DESC}}
+\newcommand{\coin}{\project{COIN}}
+\newcommand{\plasticc}{\project{PLAsTiCC}}
 
 % LaTeX object referencing:
 \newcommand{\chapid}{no chapter}
@@ -78,7 +78,7 @@
 \newcommand{\chaplabel}[1]{\label{chap:#1}}
 
 \newcommand{\todo}[3]{{\color{#2}\emph{#1}: #3}}
-\newcommand{\dfmtodo}[1]{\todo{DFM}{red}{#1}}
+\newcommand{\aimtodo}[1]{\todo{AIM}{red}{#1}}
 
 % Math:
 \newcommand{\dd}{\ensuremath{\,\mathrm{d}}}
