@@ -1,6 +1,10 @@
 \RequirePackage[displaymath, mathlines]{lineno}
-\usepackage[final]{graphicx}
-\usepackage{wasysym}
+%\usepackage[final]{graphicx}
+%\usepackage{wasysym}
+\usepackage[tbtags]{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+
 \usepackage{color, hyperref}
 \definecolor{linkcolor}{rgb}{0,0,0.2}
 \hypersetup{colorlinks=true,linkcolor=linkcolor,citecolor=linkcolor,
@@ -8,21 +12,29 @@
 \hypersetup{pageanchor=false}
 
 \usepackage{indentfirst}
-\usepackage[tbtags]{amsmath}
-\usepackage{amsfonts}
-\usepackage{amssymb}
+%\usepackage{amsfonts}
+
 \usepackage{booktabs}
 \usepackage{url}
 
+\usepackage{multirow}
+\usepackage{xspace}
+\usepackage{enumitem}
+\usepackage[final]{graphicx}
+\usepackage{wasysym}
+%\usepackage[tbtags]{amsmath}
+\usepackage{footmisc}
+
 % Custom AAS macros:
 \usepackage{aas_macros}
+\usepackage{lsstdesc_macros}
 
 % Bibliography:
 \usepackage{natbib}
 \bibliographystyle{apj}
 
 % Algorithms:
-\usepackage{algorithmic,algorithm}
+\usepackage{algorithmic, algorithm}
 
 % Commands:
 
@@ -33,19 +45,19 @@
 
 % Foreign text:
 \newcommand{\foreign}[1]{\emph{#1}}
-\newcommand{\etal}{\foreign{et\,al.}}
-\newcommand{\etc}{\foreign{etc.}}
+%\newcommand{\etal}{\foreign{et\,al.}}
+%\newcommand{\etc}{\foreign{etc.}}
 
 % Project references:
 \newcommand{\project}[1]{{\textsc{#1}}}
 \newcommand{\lsst}{\project{LSST}}
 \newcommand{\desc}{\project{LSST-DESC}}
 \newcommand{\coin}{\project{COIN}}
-\newcommand{\plasticc}{\project{PLAsTiCC}}
+\newcommand{\qp}{\texttt{qp}}
 
 % LaTeX object referencing:
 \newcommand{\chapid}{no chapter}
-\newcommand{\figref}[1]{\ref{\chapid:fig:#1}}
+%\newcommand{\figref}[1]{\ref{\chapid:fig:#1}}
 \newcommand{\Fig}[1]{Figure~\figref{#1}}
 \newcommand{\fig}[1]{\Fig{#1}}
 \newcommand{\figlabel}[1]{\label{\chapid:fig:#1}}
@@ -83,10 +95,10 @@
 \newcommand{\aimtodo}[1]{\todo{AIM}{red}{#1}}
 
 % Math:
-\newcommand{\dd}{\ensuremath{\,\mathrm{d}}}
+%\newcommand{\dd}{\ensuremath{\,\mathrm{d}}}
 \newcommand{\bvec}[1]{{\ensuremath{\boldsymbol{#1}}}}
 \newcommand{\paramvector}[1]{\bvec{#1}}
-\newcommand{\unit}[1]{\mathrm{#1}}
+%\newcommand{\unit}[1]{\mathrm{#1}}
 
 % Probabilities:
 \newcommand{\like}{\mathscr{L}}
