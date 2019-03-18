@@ -1,8 +1,6 @@
 \renewcommand{\chapid}{chippr}
 
 % Chapter specific commands:
-\newcommand{\thisplain}{chippr}
-\newcommand{\github}{\project{GitHub}}
 
 % Math:
 
@@ -357,8 +355,8 @@ In the test case of \Sect{sec:fake} it shall be set to a narrow Gaussian shown i
 The true survey size $J$ is a Poisson random variable distributed about a target survey size of $J'$.
 
 \begin{figure}
-	\includegraphics[width=0.5\textwidth]{figs/sig2/physPz.pdf}\\
-	\includegraphics[width=0.5\textwidth]{figs/delt/physPz.pdf}
+	\includegraphics[width=0.5\textwidth]{figures/chippr/sig2_physPz.pdf}\\
+	\includegraphics[width=0.5\textwidth]{figures/chippr/delt_physPz.pdf}
 	\caption{The physically-motivated true redshift distribution used in the mock data tests is chosen to have recognizable features of different scales so the quality of recovery can be easily determined.  
 		The top panel shows a physically motivated true $N(z)$ for the fiducial test, and the bottom panel shows a toy model of a highly featured true $N(z)$.}
 	\figlabel{fig:physpz}
@@ -377,7 +375,7 @@ for the physically-motivated process originating the data, which states that the
 \Fig{fig:nullpzsgen} illustrates this procedure by showing the probability distribution $p(z'_{j}|z^{*}_{j})$ for a random galaxy $j$.
 
 \begin{figure}
-	\includegraphics[width=0.5\textwidth]{figs/sig2/zobsvztru.pdf}
+	\includegraphics[width=0.5\textwidth]{figures/chippr/sig2_zobsvztru.pdf}
 	\caption{Top panel: This plot depicts $p(z'_{j}|z^{*}_{j})$ for a randomly chosen galaxy $j$ with areas of high probability in darker grayscale shades.  
 		The colored dots represent coordinates at which the function is evaluated to produce the horizontal slices shown in the bottom panel.  
 		Bottom panel: In colors are plotted several examples of individual photo-$z$ posteriors in the fiducial case with their MLE redshifts (dashed lines) and true redshifts (solid lines); these represent horizontal slices through the top panel.}
@@ -397,7 +395,7 @@ p(z_{j}|\vec{d}_{j}) \propto p(\vec{d}_{j}|z_{j})\ p(z_{j}|\vec{\theta}^{*}),
 A random sampling of such interim redshift posteriors is shown in \Fig{fig:nullpzs}.  
 
 \begin{figure}
-	\includegraphics[width=0.5\textwidth]{figs/sig2/samplepzs.pdf}
+	\includegraphics[width=0.5\textwidth]{figures/chippr/sig2_samplepzs.pdf}
 	\caption{In colors are plotted several examples of individual photo-$z$ posteriors in the fiducial case with their MLE redshifts (dashed lines) and true redshifts (solid lines).}
 	\figlabel{fig:nullpzs}
 \end{figure}
@@ -416,8 +414,8 @@ The first two test cases deviate from the fiducial case by varying the factor $g
 Examples of interim photo-$z$ posteriors are plotted in \Fig{fig:sigspzs}.
 
 \begin{figure}
-	\includegraphics[width=0.5\textwidth]{figs/sig1/samplepzs.pdf}\\
-	\includegraphics[width=0.5\textwidth]{figs/sig4/samplepzs.pdf}
+	\includegraphics[width=0.5\textwidth]{figures/chippr/sig1_samplepzs.pdf}\\
+	\includegraphics[width=0.5\textwidth]{figures/chippr/sig4_samplepzs.pdf}
 	\caption{As in \Fig{fig:nullpzs}, randomly sampled interim photo-$z$ posteriors are plotted in colors, along with the true redshift (solid line) and the maximum a posteriori redshift (dashed line).  
 		Samples are shown for the precise case (top panel) and the imprecise case (bottom panel).}
 	\figlabel{fig:sigspzs}
@@ -427,7 +425,7 @@ The next test case deviates from the fiducial case by increasing the standard de
 An illustration of the data generation process analogous to \Fig{fig:nullpzs} is shown in \Fig{fig:varspzs}.
 
 \begin{figure}
-	\includegraphics[width=0.5\textwidth]{figs/vars/zobsvztru.pdf}
+	\includegraphics[width=0.5\textwidth]{figures/chippr/vars_zobsvztru.pdf}
 	\caption{Same as \Fig{fig:nullpzsgen} but with standard deviation increasing linearly with true redshift.}
 	\figlabel{fig:varspzs}
 \end{figure}
@@ -448,7 +446,7 @@ The components are summed and normalized to yield the likelihood, which is then 
 An illustration of this method is shown in \Fig{fig:multpzsgen}. 
 
 \begin{figure}
-	\includegraphics[width=0.5\textwidth]{figs/mult/zobsvztru.pdf}
+	\includegraphics[width=0.5\textwidth]{figures/chippr/mult_zobsvztru.pdf}
 	\caption{As in \Fig{fig:nullpzsgen} but for multimodal likelihoods.  
 		Top panel: This plot depicts $p(z'_{j}|z^{*}_{j})$ for a randomly chosen galaxy $j$ with areas of high probability in darker grayscale shades.  
 		The colored dots represent coordinates at which the function is evaluated to produce the likelihoods shown in the bottom panel.  
@@ -461,8 +459,8 @@ Here $K$ samples are taken.
 Some examples of both types of multimodal interim photo-$z$ posteriors are shown in \Fig{fig:allpzs}.  
 
 \begin{figure}
-	\includegraphics[width=0.5\textwidth]{figs/mult/samplepzs.pdf}\\
-	\includegraphics[width=0.5\textwidth]{figs/samp/samplepzs.pdf}
+	\includegraphics[width=0.5\textwidth]{figures/chippr/mult_samplepzs.pdf}\\
+	\includegraphics[width=0.5\textwidth]{figures/chippr/samp_samplepzs.pdf}
 	\caption{Same as \Fig{fig:nullpzs} but for multiple likelihood components (top panel) and sampled posteriors (bottom panel).}
 	\figlabel{fig:allpzs}
 \end{figure}
@@ -506,8 +504,8 @@ The interim prior used for this set of interim photo-$z$ posteriors is the rewei
 In these cases the true $N(z)$ is not known, but the fully probabilistic method presented here may still be compared to what is obtained by alternative approaches.
 
 \begin{figure}
-	\includegraphics[width=0.5\textwidth]{figs/boss/samplepzs.pdf}\\
-	\includegraphics[width=0.5\textwidth]{figs/bias/samplepzs.pdf}
+	\includegraphics[width=0.5\textwidth]{figures/chippr/boss_samplepzs.pdf}\\
+	\includegraphics[width=0.5\textwidth]{figures/chippr/bias_samplepzs.pdf}
 	\caption{Same as \Fig{fig:nullpzs} but for real data.  
 		A pseudo-random sampling of BOSS DR 10 photo-$z$ posteriors produced by \citet{Sheldon2012} (top panel) are clearly much noisier than those of the fiducial case.  
 		A random sampling of the brightest half of the pseudo-random BOSS DR10 sample (bottom panel) corresponds to much cleaner photo-$z$ posteriors.}
@@ -530,7 +528,7 @@ The sampler is initialized with $M=100$ walkers each with a value chosen from a 
 An example of such samples from the prior are shown in \Fig{fig:prior}.
 
 \begin{figure}
-	\includegraphics[width=0.5\textwidth]{figs/null/priorsamps.pdf}
+	\includegraphics[width=0.5\textwidth]{figures/chippr/null_priorsamps.pdf}
 	\caption{This figure shows samples (colored lines) of $p(z|\vec{\theta})$ where each $\vec{\theta}$ is drawn from the hyperprior distribution $p(\vec{\theta})$ defined in \Sect{sec:exp} with \Eq{eq:priorcov}.}
 	\label{fig:prior}
 \end{figure}
@@ -599,14 +597,14 @@ Here we present the results of the informative tests of \Sect{sec:exp}, summariz
 In the fiducial case, hierarchical inference preserves features in the redshift distribution function, whereas stacking tends to smear it out.  
 
 \begin{figure}
-	\includegraphics[width=0.5\textwidth]{figs/null/samps.pdf}
+	\includegraphics[width=0.5\textwidth]{figures/chippr/null_samps.pdf}
 	\caption{This test was conducted with a flat interim prior (gray line) and produced a mean of samples (thick, black line) that accurately reproduces the truth.  
 		It can be seen that the samples (colored lines) are an excellent estimator of the true $N(z)$ (thin, black line) with the true values falling within the error bars ($1\sigma$ in dark gray, $2\sigma$ in light gray).}
 	\label{fig:null-samp}
 \end{figure}
 
 \begin{figure}
-	\includegraphics[width=0.5\textwidth]{figs/null/comps.pdf}
+	\includegraphics[width=0.5\textwidth]{figures/chippr/null_comps.pdf}
 	\caption{The mean of the samples (thick, solid line) and marginalized MLE (thick, dotted line) are the best estimators of the true distribution (thin, solid line), and the error bars ($1\sigma$ in dark gray, $2\sigma$ in light gray) appear to be accurate.  
 		Stacking (thick, dashed line) overestimates $N(z)$ at the tails and underestimates $N(z)$ at the peaks.  
 		The two point estimators considered here, marginalized MAP (thin, dashed line) and marginalized expected value (thin, dotted line) fall between these two 
@@ -624,7 +622,7 @@ However, in both these cases, the value of the mean of the samples was virtually
 Even in the best case of $g=1$, the alternative methods are still negatively affected; in the case of $g=4$, it can be plainly seen that the marginalized maximum a posteriori estimator experiences instability at the edges of the distribution and the other alternatives estimate a substantially broader distribution than the accurate sampler.
 
 \begin{figure}
-	\includegraphics[width=0.5\textwidth]{figs/sig1/comps.pdf}
+	\includegraphics[width=0.5\textwidth]{figures/chippr/sig1_comps.pdf}
 	\caption{Here it is shown that the alternative methods erase features in estimating the true $N(z)$ (thin, solid line) even in the case of optimistically precise photo-$z$ interim posteriors.  
 		Stacking (thick, dashed line), the marginalized maximum a posteriori estimator (thin, dashed line), and the marginalized expected value (thin, dotted line) all smooth the features of the distribution, an effect that is reflected in the KLD.  
 		The mean of posterior samples (thick, solid line) and marginalized MMLE (thick, dotted line) perform better than the alternatives, with the error bars ($1\sigma$ in dark gray, $2\sigma$ in light gray) on the mean of samples being appropriately shrunken.}
@@ -632,7 +630,7 @@ Even in the best case of $g=1$, the alternative methods are still negatively aff
 \end{figure}
 
 \begin{figure}
-	\includegraphics[width=0.5\textwidth]{figs/sig4/comps.pdf}
+	\includegraphics[width=0.5\textwidth]{figures/chippr/sig4_comps.pdf}
 	\caption{The alternative estimators erase features in estimating the true $N(z)$ (thin, solid line) more severely for noisier interim photo-$z$ posteriors.  
 		The marginalized maximum a posteriori estimator (thin, dashed line), stacked estimator (thick, dashed line), and marginalized expected value (thin, dotted line) estimate overly smooth redshift distributions.  
 		The mean of posterior samples (thick, solid line) and marginalized maximum likelihood estimator (thick, dotted line) perform far better than the alternatives, with the error bars ($1\sigma$ in dark gray, $2\sigma$ in light gray) on the posterior samples being appropriately inflated.}
@@ -644,7 +642,7 @@ In \Fig{fig:vars-comp}, one can see that systematics are present in all point es
 However the distribution of posterior samples is broader in regions where the mean is farther from the truth, whereas the point estimators cannot accurately estimate error bars.
 
 \begin{figure}
-	\includegraphics[width=0.5\textwidth]{figs/vars/comps.pdf}
+	\includegraphics[width=0.5\textwidth]{figures/chippr/vars_comps.pdf}
 	\caption{The mean of sampled values (thick, solid line) recovers the general features of the true $N(z)$ (thin, solid line), with larger error bars ($1\sigma$ in dark gray, $2\sigma$ in light gray) in regions where it deviates more from the truth.  
 		The marginalized maximum a posteriori estimator (thin, dashed line) follows the same skewed yet featureless distribution of the stacked estimator (thick, dashed line) but with an overestimate of probability at the edges of the distribution.  
 		The marginalized expected value estimator (thin, dotted line) is truly featureless without even the skew reflecting the increased uncertainties at higher redshift.  
@@ -667,7 +665,7 @@ It can be seen that the lessened quality of the data does not impact the accurac
 However, both the error bars on the mean of posterior samples and the alternative point estimators are worse in the sense of being broader.
 
 \begin{figure}
-	\includegraphics[width=0.5\textwidth]{figs/mult/comps.pdf}
+	\includegraphics[width=0.5\textwidth]{figures/chippr/mult_comps.pdf}
 	\caption{Both the mean of posterior samples (thick, solid line) and marginalized maximum likelihood estimator (thick, dotted line) do a good job of recovering the true redshift distribution function (thin, solid line).  
 		The stacked estimator (thick, dashed line), marginalized maximum a posteriori estimator (thin, dashed line), and marginalized expected value estimator (thick, dotted line) are smoother and fail to recover the features of the true redshift distribution.  
 		The error bars ($1\sigma$ in dark gray, $2\sigma$ in light gray) on the mean of posterior samples include the true value of the hyperparameters.}
@@ -679,10 +677,10 @@ It can be seen that the lessened quality of the data does impart some systematic
 The alternative point estimators still fail to recover features of the true redshift distribution.
 
 \begin{figure}
-	\includegraphics[width=0.5\textwidth]{figs/samp/comps.pdf}
+	\includegraphics[width=0.5\textwidth]{figures/chippr/samp_comps.pdf}
 	\caption{In the case of sampled interim photo-$z$ posteriors, the mean of posterior samples (thick, solid line) and marginalized maximum likelihood estimator (thick, dotted line) do a good job of recovering the true redshift distribution function (thin, solid line), though the error bars ($1\sigma$ in dark gray, $2\sigma$ in light gray) of the posterior samples appear to be underestimated.  
 		The stacked estimator (thick, dashed line), marginalized maximum a posteriori estimator (thin, dashed line), and marginalized expected value estimator (thick, dotted line) are smoother and fail to recover the features of the true redshift distribution.}
-	\siglabel{fig:samp-comp}
+	\figlabel{fig:samp-comp}
 \end{figure}
 
 %\clearpage
@@ -695,7 +693,7 @@ Other estimators predict a broader distribution than the truth, with stacking br
 Though the sampler does not consider components of the hyperparameter vector to be independent, it is flexible enough to provide good constraints on the true $N(z)$.
 
 \begin{figure}
-	\includegraphics[width=0.5\textwidth]{figs/delt/comps.pdf}
+	\includegraphics[width=0.5\textwidth]{figures/chippr/delt_comps.pdf}
 	\caption{In this case, the marginalized maximum likelihood estimator (thick, dotted line) recovers the true $N(z)$ (thin, solid line) better than the mean of posterior samples (thick, solid line), though the error bars ($1\sigma$ in dark gray, $2\sigma$ in light gray) do include the true values of the hyperparameters. 
 		The stacked estimator (thick, dashed line) is the worst estimator of the true redshift distribution function, while the marginalized maximum a posteriori estimator (thin, dashed line) and marginalized expected value estimator (thin, dotted line) are not quite as broad.}
 	\figlabel{fig:toy-comp}
@@ -710,7 +708,7 @@ The result for a unimodal, low-$z$-favoring interim prior is shown in \Fig{fig:i
 The methods that account for the nontrivial interim prior (the marginalized maximum likelihood estimator and the sampler) yield substantially less biased results than the methods that do not, and those methods are strongly biased towards the interim prior distribution.  
 
 \begin{figure}
-	\includegraphics[width=0.5\textwidth]{figs/uint/comps.pdf}
+	\includegraphics[width=0.5\textwidth]{figures/chippr/uint_comps.pdf}
 	\caption{The mean of the sampled values (thick, solid line) and marginalized maximum likelihood estimator (thick, dotted line) are unaffected by the nontrivial interim prior, with appropriate error bars ($1\sigma$ in dark gray, $2\sigma$ in light gray) on the samples from the posterior distribution of hyperparameters.  
 		However, the alternatives yield biased estimates, both smoothing the features of the true $N(z)$ (thin, solid line) and showing a bias to low redshift values favored by the interim prior (gray line).  
 		Stacking (thick, dashed line) does the worst of the three alternatives, with the marginalized maximum a posteriori estimator (thin, dashed line) and marginalized expected value (thin, dotted line) doing slightly better.}
@@ -718,7 +716,7 @@ The methods that account for the nontrivial interim prior (the marginalized maxi
 \end{figure}
 
 \begin{figure}
-	\includegraphics[width=0.5\textwidth]{figs/bint/comps.pdf}
+	\includegraphics[width=0.5\textwidth]{figures/chippr/bint_comps.pdf}
 	\caption{\textbf{I am redoing this test with the interim prior tweaked to provide full coverage over the whole redshift range to eliminate the 
 			underestimate in the last bin}.  
 			The mean of the sampled values (thick, solid line) and marginalized maximum likelihood estimator (thick, dotted line) are unaffected by the nontrivial interim prior, with appropriate error bars ($1\sigma$ in dark gray, $2\sigma$ in light gray) on the samples from the posterior distribution of hyperparameters.  
@@ -736,7 +734,7 @@ The most striking feature of \Fig{fig:dataparam} aside from the stark difference
 Because the data itself exhibits high uncertainty at high $z$ in the form of local maxima of the photo-$z$ interim posteriors, a reflection of the inherent degeneracies that give rise to catastrophic photo-$z$ errors, it is natural that there be large errors in that region.  
 
 \begin{figure}
-	\includegraphics[width=0.5\textwidth]{figs/boss/samps.pdf}
+	\includegraphics[width=0.5\textwidth]{figures/chippr/boss_samps.pdf}
 	\caption{Samples from the full posterior (colored lines) of the subsample differ substantially from the interim prior (gray).  
 		The mean of samples (thick, black line) and associated error bars ($1\sigma$ in dark gray, $2\sigma$ in light gray) are in line with the sampled values.}
 	\figlabel{fig:dataparam}
@@ -748,7 +746,7 @@ Given that stacking has been validated by the results' similarity to the interim
 The result of marginalized maximum likelihood estimation is also shown to be numerically unstable, a possible effect of the extreme multimodality of the data.  
 
 \begin{figure}
-	\includegraphics[width=0.5\textwidth]{figs/boss/comps.pdf}
+	\includegraphics[width=0.5\textwidth]{figures/chippr/boss_comps.pdf}
 	\caption{It can be seen that the stacked estimator (thick, dashed line) almost perfectly reproduces the interim prior (gray line), while the marginalized maximum a posteriori estimator (thin, dashed line) and marginalized expected value estimator (thin, dotted line) do so with some instability.  
 		The marginalized maximum likelihood estimator (thick, dotted line) is most unstable, while the mean of the posterior samples (thick, solid line) predicts a very different redshift distribution function than the interim prior, with a peculiar feature in the error bars ($1\sigma$ in dark gray, $2\sigma$ in light gray) at high redshift.}
 	\figlabel{fig:datacomp}
@@ -760,14 +758,14 @@ Recall that samples of photo-$z$ interim posteriors are shown in the lower panel
 The results of the inference are shown in \Fig{fig:biasparam} and \Fig{fig:biascomp}.  
 
 \begin{figure}
-	\includegraphics[width=0.5\textwidth]{figs/bias/samps.pdf}
+	\includegraphics[width=0.5\textwidth]{figures/chippr/bias_samps.pdf}
 	\caption{Samples from the full posterior (colored lines) of the biased subsample still differ substantially from the interim prior (gray).  
 		The mean of samples (thick, black line) and associated error bars ($1\sigma$ in dark gray, $2\sigma$ in light gray) are in line with the sampled values.}
 	\figlabel{fig:biasparam}
 \end{figure}
 
 \begin{figure}
-	\includegraphics[width=0.5\textwidth]{figs/bias/comps.pdf}
+	\includegraphics[width=0.5\textwidth]{figures/chippr/bias_comps.pdf}
 	\caption{The mean of posterior samples (thick, solid line) differs from the interim prior (gray line) more than the alternative estimators, exhibiting some features at low redshift.  
 		It can be seen that the stacked estimator (thick, dashed line) is most biased towards the interim prior, though the effect is also seen in the marginalized maximum a posteriori estimator (thin, dashed line) and marginalized expectation value estimator (thin, dotted line).  
 		The marginalized MLE (thick, dotted line) is still highly unstable.  
