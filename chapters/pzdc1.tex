@@ -6,10 +6,11 @@
  Add your own macros here:
 
 % projects
-\newcommand{\proj}[1]{\textsc{#1}}
-\newcommand{\des}{\proj{DES}}
-\newcommand{\sdss}{\proj{SDSS}}
-\newcommand{\buzz}{\proj{Buzzard}}
+\newcommand{\des}{\project{DES}}
+\newcommand{\kids}{\project{KiDS}}
+\newcommand{\hsc}{\project{HSC}}
+\newcommand{\wfirst}{\project{WFIRST}}
+\newcommand{\buzz}{\project{Buzzard}}
 
 % can easily change these to specify posterior throughout, etc
 \newcommand{\chisq}{$\chi^{2}$}
@@ -48,7 +49,7 @@ Furthermore, we raise attention to the limitations of established metrics for as
 
 \section{Introduction}
 
-The current and next generations of large-scale galaxy surveys, including the Dark Energy Survey \citep[\proj{DES},][]{Abbott:05}, the Kilo-Degree Survey \citep[\proj{KiDS},][]{de_Jong:13}, Hyper Suprime-Cam Survey \citep[\proj{HSC},][]{Aihara:2018a,Aihara:2018b}, Large Synoptic Survey Telescope \citep[\lsst,][]{Abell:09}, Euclid \citep{Laureijs:11}, and Wide-Field Infrared Survey Telescope \citep[\proj{WFIRST},][]{Green:12}, present a paradigm shift from spectroscopic to photometric galaxy catalogues of substantially larger size at a cost of lacking complete spectroscopically confirmed redshifts ($z$).
+The current and next generations of large-scale galaxy surveys, including the Dark Energy Survey \citep[\des,][]{Abbott:05}, the Kilo-Degree Survey \citep[\kids,][]{de_Jong:13}, Hyper Suprime-Cam Survey \citep[\hsc,][]{Aihara:2018a,Aihara:2018b}, Large Synoptic Survey Telescope \citep[\lsst,][]{Abell:09}, Euclid \citep{Laureijs:11}, and Wide-Field Infrared Survey Telescope \citep[\wfirst,][]{Green:12}, present a paradigm shift from spectroscopic to photometric galaxy catalogues of substantially larger size at a cost of lacking complete spectroscopically confirmed redshifts ($z$).
 
 Effective astrophysical inference using the catalogues resulting from these ongoing and upcoming missions, however, necessitates accurate and precise photometric redshift (\pz) estimation methodologies.
 As an example, in order for \pz\ systematics to not dominate the statistical noise floor of \lsst's main cosmological sample of $\sim 10^{7}$ galaxies, the \lsst\ Science Requirements Document (SRD)\footnote{available at \url{https://docushare.lsstcorp.org/docushare/dsweb/Get/LPM-17}} specifies that individual galaxy \pz s must have root-mean-square error $\sigma_z < 0.02 (1+z)$, $3 \sigma$ catastrophic outlier rate below $10\%$, and bias below $0.003$.
