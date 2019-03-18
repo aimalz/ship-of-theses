@@ -1,7 +1,13 @@
-Upcoming optical telescope surveys, among them the Large Synoptic Survey Telescope (\textsc{LSST}), will produce tremendous catalogs of purely photometric data from galaxies, transients, and as yet undiscovered physical phenomena fainter than have ever been observed before, few of which will ever be spectroscopically confirmed.
-Existing analysis techniques in cosmology and population-level studies of galaxies and transients make assumptions regarding the nature of the data that will not hold in this new uncertainty-dominated regime.
-This thesis explores new methodologies for cosmology and the time-domain sky using the probabilistic descriptions appropriate for the data quality anticipated of next-generation observational astrophysics missions. 
+Upcoming optical telescope surveys, among them the Large Synoptic Survey Telescope (LSST), will produce tremendous galaxy catalogs of purely photometric data.
+Spectroscopic confirmation will be impossible not only due to the sheer number of galaxies, but also due to the unprecedented depth of the data, which will include a substantial population of faint, low signal-to-noise ratio galaxies.
+Existing analysis techniques in cosmology and population-level studies of galaxies make assumptions regarding the nature of the data that will not hold in this new uncertainty-dominated regime.
+This thesis develops new methodologies for cosmology using probabilistic descriptions appropriate for the data quality anticipated of next-generation observational astrophysics missions. 
 
-[couple sentence synopsis of each chapter, grouped thematically]
+I begin with a mathematically rigorous application of probabilistic redshift estimates in cosmology.
+I present two original proofs covering the only circumstances in which the ubiquitous heuristic approach can lead to the correct answer.
+I introduce Cosmological Hierarchical Inference with Probabilistic Photometric Redshifts (CHIPPR), a simple probabilistic graphical model and accompanying derivation that enables the use of an existing catalog of redshift posteriors in an inference of the redshift distribution.
+I implement CHIPPR in a public code and demonstrate it on realistically complex forward-modeled mock data as well as BOSS DR10.
 
-[do I deliver anything with this thesis?]
+Next, I present a comprehensive comparison of twelve approaches to probabilistic photometric redshift estimation, presenting novel discoveries of the impact of the assumptions implicit to the method by which the redshift probabilities are derived and the limitations of established performance metrics of such probabilistic data products in assessing the quality of the procedures for deriving them.
+I also address a practical concern regarding how redshift probabilities are to actually be used, answering the question of how probabilistic data products should be stored and delivered to users in order to ensure that scientific progress can be made, as well as how to go about answering that question for a generic science application.
+
