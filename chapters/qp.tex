@@ -3,23 +3,10 @@
 % Chapter specific commands:
 \newcommand{\thisplain}{qp}
 \newcommand{\this}{\project{\thisplain}}
-\newcommand{\qp}{\texttt{qp}}
 \newcommand{\mgdata}{bright\xspace}
 \newcommand{\Mgdata}{Bright\xspace}
 \newcommand{\ssdata}{faint\xspace}
 \newcommand{\Ssdata}{Faint\xspace}
-
-% Math:
-%\newcommand{\model}{\ensuremath{\vector{\Theta}}}
-%\newcommand{\data}{\ensuremath{\vector{D}}}
-%\newcommand{\nuisance}{\ensuremath{\vector{\alpha}}}
-%\newcommand{\link}{\ensuremath{X}}
-%\newcommand{\ensemble}{S}
-%\newcommand{\colorens}[1]{\ensemble^{(#1)}}
-%\newcommand{\red}{\colorens{0}}
-%\newcommand{\blue}{\colorens{1}}
-%\renewcommand{\vector}[1]{#1}
-%\renewcommand{\matrix}[1]{#1}
 
 % LSST-DESC
 \newcommand*\patchAmsMathEnvironmentForLineno[1]{%
@@ -201,7 +188,7 @@ very similar to step functions, and we exclude at this time the mixture model
 format because it is only appropriate when the underlying PDFs are actually 
 mixture models, which we do not guarantee in this study.
 The three formats we investigate are illustrated on a multimodal PDF in 
-Figure~\ref{fig:qp}.
+\Fig{fig:qp}.
 \begin{figure}
 	\begin{center}
 		\includegraphics[width=\columnwidth]{figures/qp/demo_pz.pdf}
@@ -502,17 +489,17 @@ of $N_{g}$ galaxies is to average the \pz s according to
 a procedure producing what we call the stacked estimator $\hat{n}(z)$ of the 
 redshift distribution function \citep{harnois-deraps_kids-450:_2017, 
 	hoyle_dark_2017}.\footnote{
-	Equation~\ref{eq:nz} is sometimes modified by weights specific to each galaxy 
+	\Eq{eq:nz} is sometimes modified by weights specific to each galaxy 
 	based on the relative prevalence of galaxies with similar photometry in a 
 	reference population \citep{sheldon_photometric_2012, 
 		troster_cross-correlation_2017}
 }
 Note that to avoid introducing any preferred treatment between formats, 
-Equation~\ref{eq:nz} uses the representation $\hat{p}(z)$ reconstructed from 
+\Eq{eq:nz} uses the representation $\hat{p}(z)$ reconstructed from 
 the stored parameters even when a given format may have a more efficient or 
 principled way to obtain such an ensemble estimator directly from the stored 
 parameters, e.g. adding the histogram components or combining all samples.
-While we do not recommend the approach of Equation~\ref{eq:nz} to estimate the 
+While we do not recommend the approach of \Eq{eq:nz} to estimate the 
 redshift distribution (see \citet{choi_cfhtlens_2016} for justification and 
 Malz et al., in preparation for alternative methods), we use it here to 
 generically demonstrate how one would optimize the choice of \pz\ 
@@ -606,7 +593,7 @@ additions of a photometric redshift maximum of 3.5 and an $i$-band magnitude
 prior.
 The \pz s from BPZ are in the form of $N_{ff} = 351$ evaluations of the 
 probability density on a regular grid of redshifts $0.01 < z < 3.51$, a 
-subsample of which are shown in the left panel of Figure~\ref{fig:example_pzs}.
+subsample of which are shown in the left panel of \Fig{fig:example_pzs}.
 As the figure shows, the \pz s from this dataset tend to be unimodal and 
 sharply peaked, as if coming from brighter photometric data due to the 
 conservative cuts in photometric magnitudes of this dataset.
@@ -631,7 +618,7 @@ and a spanning template set via a simple k-means clustering algorithm based on
 $100$ of the SDSS SEDs used to create the Buzzard catalog.
 BPZ produces \pz s in the format of probability density evaluations on a 
 regular grid of $N_{ff}=211$ redshifts $0.005\leq z\leq2.105$, a subsample of 
-which are plotted in the right panel of Figure~\ref{fig:example_pzs}.
+which are plotted in the right panel of \Fig{fig:example_pzs}.
 The exceptional depth and known degeneracies (e.~g.~the Lyman/Balmer break 
 degeneracy) lead us to expect the presence of multimodal \pz s observed in the 
 figure.
@@ -659,7 +646,7 @@ capacity.
 We compare our three formats on the basis of the distributions of the KLD 
 calculated for every \pz\ in the dataset.
 An example of an individual \pz\ KLD distribution for the \mgdata dataset with 
-$N_{f}=10$ is shown in Figure~\ref{fig:individual}.
+$N_{f}=10$ is shown in \Fig{fig:individual}.
 \begin{figure}
 	\begin{center}
 		\includegraphics[width=\columnwidth]{figures/qp/individual_kld.pdf}
@@ -678,10 +665,10 @@ $N_{f}=10$ is shown in Figure~\ref{fig:individual}.
 \end{figure}
 
 To distill what is observed in the ten instantiations of plots like 
-Figure~\ref{fig:individual} for both datasets and all parametrizations, we 
+\Fig{fig:individual} for both datasets and all parametrizations, we 
 compare the moments of the distributions of metric values for the distribution 
 of the KLDs of individual \pz s under each parametrization, summarized in 
-Figure~\ref{fig:kld_moments}.
+\Fig{fig:kld_moments}.
 While it is obvious that one would like the mean (first moment) of the KLD 
 distribution to be low, interpretation of higher-order moments is less clear.
 To meaningfully interpret the KLDs of individual \pz s, it will be necessary 
@@ -709,7 +696,7 @@ acceptable degree of information loss.
 	\end{center}
 \end{figure*}
 
-Figure~\ref{fig:kld_moments} is rich in information.
+\Fig{fig:kld_moments} is rich in information.
 For both datasets, the behavior of the first three log-moments of the log-KLD 
 distribution is highly correlated for a given format and number of parameters.
 The error bars on the log-KLD log-moments increase at high $N_{f}$ for all 
@@ -736,7 +723,7 @@ the lowest $N_{f}$ and steadily decrease in a manner similar to the other
 formats, except at the highest $N_{f}$ values where the histogram format's 
 log-KLD log-moments decrease much more quickly.
 
-In Figure~\ref{fig:pz_moment_errs}, we also examine the percent error on the 
+In \Fig{fig:pz_moment_errs}, we also examine the percent error on the 
 first three moments of the \pz s under each approximation, using the base-10 
 log for interpretability.
 Because the distribution of moment percent errors is highly non-Gaussian due to 
@@ -802,7 +789,7 @@ format and $N_{f}=100$ with the histogram format.
 \subsection{Stacked $\hat{n}(z)$ estimator}
 \sectlabel{sec:stacked_results}
 
-Figure~\ref{fig:stacked} shows an example of $\hat{n}(z)$ of \pz s 
+\Fig{fig:stacked} shows an example of $\hat{n}(z)$ of \pz s 
 reconstructed from just $N_{f}=10$ parameters under each of our three 
 approximation formats, evaluated on the same fine grid as the input \pz s.
 The strong features in the curve are due to the very small sample size of $100$ 
@@ -832,11 +819,11 @@ is lowest for the quantile format and highest for the histogram format.
 \end{figure}
 
 Again, due to the variation between $N_{g}=100$ galaxy subsamples, we repeat 
-the procedure that produced Figure~\ref{fig:stacked} 10 times to generate a 
+the procedure that produced \Fig{fig:stacked} 10 times to generate a 
 distribution over the KLD of the stacked estimator of the redshift distribution 
 for each format for each dataset.
 The $\hat{n}(z)$ KLD values for each parametrization on both mock datasets are 
-collected and plotted in Figure~\ref{fig:kld}, with error regions based on the 
+collected and plotted in \Fig{fig:kld}, with error regions based on the 
 variance between the 10 instantiations.
 \begin{figure*}
 	\begin{center}
@@ -857,7 +844,7 @@ variance between the 10 instantiations.
 			\figlabel{fig:kld}}
 	\end{center}
 \end{figure*}
-Figure~\ref{fig:kld} shows that the two datasets clearly share some features:
+\Fig{fig:kld} shows that the two datasets clearly share some features:
 \begin{enumerate}
 	\item As expected, the KLD drops as the number of stored parameters increases, 
 	for all formats.
@@ -889,13 +876,13 @@ metric:
 We also address the relative, marginal, and absolute performance and 
 consistency thereof of the KLD on $\hat{n}(z)$ for each parametrization as a 
 function of format and $N_{f}$ for each dataset.
-To guide this process, we interpret Figure~\ref{fig:kld} in the context of 
+To guide this process, we interpret \Fig{fig:kld} in the context of 
 constraints on storage allocation imposed by the survey and constraints on the 
 acceptable degree of information loss imposed by the science requirements, 
 which we anticipate establishing in the future.
 
 A constraint on storage resources corresponds to a vertical line at a given 
-$N_{f, \mathrm{lim}}$ in Fig. \ref{fig:kld}; the best format would be the one 
+$N_{f, \mathrm{lim}}$ in \Fig{fig:kld}; the best format would be the one 
 that achieves the lowest KLD at $N_{f, \mathrm{lim}}$.
 For example, if $N_{f, \mathrm{lim}}=10$ stored parameters, the quantile format 
 would be optimal for the \mgdata dataset because it has the lowest KLD value by 
@@ -911,7 +898,7 @@ possible to request additional storage capacity for the survey's \pz s.
 
 A constraint on the acceptable loss of information due to compression and 
 reconstruction of \pz s corresponds to a horizontal line at some 
-$\mathrm{KLD}_{\mathrm{lim}}$ in Figure~\ref{fig:kld}; the best parametrization 
+$\mathrm{KLD}_{\mathrm{lim}}$ in \Fig{fig:kld}; the best parametrization 
 would correspond to the format that achieves $\mathrm{KLD}_{\mathrm{lim}}$ at 
 the lowest $N_{f}$.
 For example, if the brighter dataset has $\mathrm{KLD}_{\mathrm{lim}}=10^{-2}$ 
@@ -929,7 +916,7 @@ the redshift distribution, as these may be more useful for understanding error
 propagation in cosmology due to \pz\ storage parametrization than the KLD, for 
 which no such infrastructure yet exists.
 The percent error on the first three moments of the stacked estimator of the 
-redshift distribution function is shown in Figure~\ref{fig:nz_moment_errs}.
+redshift distribution function is shown in \Fig{fig:nz_moment_errs}.
 Because the distribution of moment percent errors is highly non-Gaussian due to 
 the small number of instantiations considered, we substitute the interquartile 
 range for traditional $1\sigma$ Gaussian error bars.
@@ -955,7 +942,7 @@ range for traditional $1\sigma$ Gaussian error bars.
 	\end{center}
 \end{figure*}
 In this metric, the significant impact of data properties is quite apparent.
-To explain this, we draw the reader's attention to Figure~\ref{fig:stacked} and 
+To explain this, we draw the reader's attention to \Fig{fig:stacked} and 
 note that the actual redshift distribution for both datasets is similar, but 
 the redshift range over which they are defined is larger for the \mgdata 
 dataset than the \ssdata dataset.
@@ -996,7 +983,7 @@ The histogram format's overestimation of higher moments at low $N_{f}$ in the
 \ssdata dataset is caused by the bulk of the probability density of 
 $\hat{n}^{r}(z)$ falling almost evenly into the two low redshift bins with far 
 less probability in the highest bin.
-As was hinted at in Figure~\ref{fig:kld_moments}, the quantile 
+As was hinted at in \Fig{fig:kld_moments}, the quantile 
 parametrization's \pz\ KLD distribution has large moments, and the KLD is most 
 sensitive to a poor approximation of the tails of the distribution.
 Both the underestimation of the $\hat{n}(z)$ moments at low $N_{f}$ and the 
@@ -1124,7 +1111,7 @@ and accuracy must be related to how close $\mu$ is to $\mu_{0}$.
 If $\mu\approx\mu_{0}$, we can say $\mathrm{KLD}\sim\log[r] + \frac{1}{2}r^{-2} 
 - \frac{1}{2}$ where $r^{-1}\equiv\frac{\sigma_{0}}{\sigma}$ is a measure of 
 \textit{precision}, whose behavior is illustrated in 
-Figure~\ref{fig:precision}, alongside that of the RMSE.  We observe that an 
+\Fig{fig:precision}, alongside that of the RMSE.  We observe that an 
 overestimated variance increases the KLD as the log of the square root of the 
 ratio of the estimated variance to the true variance.
 
@@ -1142,7 +1129,7 @@ ratio of the estimated variance to the true variance.
 
 When $\sigma\approx\sigma_{0}$, $\mathrm{KLD}\sim t^{2}$ in terms of the 
 \textit{tension} $t\equiv\frac{(\mu-\mu_{0})^{2}}{\sigma^{2}}$, whose 
-concordance is illustrated in Figure~\ref{fig:tension}.
+concordance is illustrated in \Fig{fig:tension}.
 There is some limiting tension $t_{\mathrm{lim}}\approx2$ below which the RMSE 
 is more sensitive than the KLD and above which the KLD is more sensitive than 
 the RMSE.
