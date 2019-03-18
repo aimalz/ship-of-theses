@@ -3,9 +3,9 @@
 % Chapter specific commands:
 \newcommand{\chippr}{\texttt{chippr}}
 \newcommand{\Chippr}{\project{CHIPPR}}
-\newcommand{\nz}{$n(z)$}
 
 % Math:
+\newcommand{\nz}{$n(z)$}
 
 \chapter{How to obtain the redshift distribution from probabilistic redshift estimates\chaplabel{chippr}}
 
@@ -97,11 +97,142 @@ Additionally, $N(z)$ has been the subject of inference using photo-$z$ probabili
 	Q: How does the result of \chippr compare to established estimators in terms of the precision on cosmological constraints?
 \end{itemize}
 
+\section{If stacking is wrong, why does it feel so right?}
+\sectlabel{sec:pedantry}
+
+The constraining power of current and upcoming telescope missions is contingent on our ability to obtain redshift estimates for large numbers of faint galaxies.
+In the absence of spectroscopic redshifts, unreliable photometric redshift point estimates (photo-$z$s) have been superceded by photo-$z$ probability density functions (PDFs) that encapsulate their nontrivial uncertainties.
+Initial applications of photo-$z$ PDFs in weak gravitational lensing studies of cosmology have employed naive methodologies for obtaining the redshift distribution function $N(z)$.
+Though computationally straightforward, such techniques violate the laws of probability, triggering a proliferation of mathematically self-consistent models of varying complexity answering the question, ``What is the right way to obtain the redshift distribution function $N(z)$ from a catalog of photometric redshift PDFs?''
+However, adoption of these principled models has been slow, perhaps due to a gap in understanding between those developing the methods and those applying them to real data.
+This letter aims to bridge that gap by addressing the contrapositive of the more common presentation of such models, answering the question, ``Under what conditions do traditional stacking methods recover the true redshift distribution function $N(z)$?''
+
+\subsection{Definitions}
+\label{sec:def}
+
+\begin{enumerate}
+	\item state space $N(z)$ can take any value $N_{z} = 0, \dots, N_{tot}$, so $N_{tot}+1$ possibilities
+	\item probability $n(z) \equiv p(z) = \frac{N_{z}}{N_{tot}}$, $\int n(z) dz = \int p(z) dz = 1$
+	\item independent $p(z_{i} \cap z_{j}) = p(z_{i}) p(z_{j})$, not in general $(p(z_{i}) + p(z_{j})) / 2$
+	\item disjoint $p(\sim z) = 1 - p(z)$, $p(z_{i} \cup z_{j}) = p(z_{i}) p(\sim z_{j}) + p(\sim z_{i}) p(z_{j}) + p(z_{i}) p(z_{j}) = p(z_{i})(1 - p(z_{j})) + (1 - p(z_{j}))p(z_{j}) + p(z_{i}) p(z_{j})$, also $p(z_{i} \cup z_{j}) = 1 - p(\sim z_{i} \cap \sim z_{j}) = 1 - p(\sim z_{i}) p(\sim z_{j}) = 1 - (1 - p(z_{i})) (1 -p(z_{j}))$
+	\item expected value $\langle N_{z} \rangle = \frac{1}{N_{tot}+1} \sum_{N_{z} = 0}^{N_{tot}} N_{z} p(N_{z})$
+	%; note that $\hat{n}(z) = \langle p(z) \rangle$ assuming $p(p(z)) = \mathcal{U}(0, 1)$
+\end{enumerate}
+
+galaxies have true redshifts in nature, so for every redshift $z$, there is a set $\mathbb{S}^{z}$ of $\textbf{N}_{z}$ galaxies that really do have redshift $z$\\
+if we think there are $N_{z}$ galaxies with redshift $z$, there are $N_{z}!$ possible sets $k$ of galaxies that could lead to $N_{z}$ having redshift $z$\\
+each such set $\mathbb{S}_{k}^{z}$ corresponds to exactly one corresponding set $\mathbb{S}_{k}^{\sim z}$ by the disjoint property of the state space
+
+\subsection{Derivation}
+\label{sec:pedanticmath}
+
+proof by construction: the redshift distribution can be framed as an application of the binomial theorem
+
+\subsubsection{A two-redshift universe of identical galaxies}
+
+every photo-z PDF is the same and only two redshifts in the universe $\to$ flipping a single coin a finite number of times\\
+every possible set $\mathbb{S}^{z}_{k}$ of $N_{z}$ galaxies with redshift $z$ corresponds to a set $\mathbb{S}^{\sim z}_{k}$ of $N_{tot}-N_{z}$ galaxies with redshift other than $z$\\
+the binomial theorem states that $p(N_{z}) = \comb{N_{tot}}{N_{z}} \times p(z)^{N_{z}} \times (1-p(z))^{N_{tot}-N_{z}}$ for $\comb{N_{tot}}{N_{z}} \equiv \frac{N_{tot}!}{N_{z}! (N_{tot}-N_{z})!}$
+
+\subsubsection{A many-redshift universe of identical galaxies}
+
+every photo-z PDF is the same and many possible redshifts $\to$ the birthday problem\\
+now let's consider a set $\mathbb{S}^{z}$ of $\textbf{N}_{z}$ galaxies with redshift $z$, which can be defined individually for all redshifts $z$\\
+holding $\textbf{N}_{z}$ constant, there are $\mathbb{N}_{z}!$ possible combinations of galaxies in the set $\mathbb{S}^{z}$
+the birthday problem is solved by $p(N_{z}) = 1 - p(z)^{N_{tot}} \times \perm{N_{tot}}{N_{z}}$ for $\perm{N_{tot}}{N_{z}} \equiv \frac{N_{tot}!}{(N_{tot}-N_{z})!} = N_{z}!\comb{N_{tot}}{N_{z}}$
+
+\subsubsection{A many-redshift universe of different galaxies}
+
+now consider many possible photo-z PDFs and many possible redshifts
+
+Figure: isolating one redshift slice of $N(z)$
+
+\begin{align}
+p(N_{z}) &= %\sum_{permutation\ k}^{N_{tot}!} \left[ \prod_{i_{k} = 0}^{N_{z}} p(z_{i_{k}}) \prod_{j_{k} = N_{z} + 1}^{N_{tot}} 1 - p(z_{j_{k}}) \right]\\
+\sum_{combination\ k}^{N_{tot}! / N_{z}! (N_{tot} - N_{z})!} \left[ \prod_{i_{k} \in \mathbb{S}_{z}} p(z_{i_{k}}) \prod_{j_{k} \in \mathbb{S}_{\sim z}} 1 - p(z_{j_{k}}) \right]
+\end{align}
+
+Figure: posterior samples of $N_{z}$ for that slice
+
+\subsection{Results}
+\sectlabel{sec:res}
+
+the stacked estimator of the redshift distribution yields a single redshift distribution function $\hat{N}_{z}$ rather than the probability distribution $p(N_{z})$, so here we'll use the reduction of \Eq{eq:complete} to its expected value $\langle N_{z} \rangle$
+
+\begin{align}
+\eqlabel{eq:complete}
+\langle N_{z} \rangle &= \sum_{N_{z} = 0}^{N_{tot}} N_{z} \sum_{combination\ k}^{N_{tot}! / N_{z}! (N_{tot} - N_{z})!} \left[ \prod_{i_{k} \in S_{z}} p(z_{i_{k}}) \prod_{j_{k} \in \mathbb{S}_{\sim z}} 1 - p(z_{j_{k}}) \right]
+\end{align}
+
+let's explore what assumptions must hold for \Eq{eq:complete} to be equivalent to \Eq{eq:stackwithdata}
+
+\subsubsection{Perfectly informative data}
+\sectlabel{sec:informative}
+
+``$p(z)$'' is misleading, must be posterior conditioned on data $p(z \mid d_{i})$, and $p(z_{i})$ doesn't make sense because the domain of $z$ is the same for any galaxy $i$
+
+\begin{align}
+\label{eq:stackwithdata}
+\hat{N}(z) &= \sum_{i = 0}^{N_{tot}} p(z \mid d_{i})
+\end{align}
+
+consider perfectly informative PDFs $p(z \mid d_{i}) = \delta(z, z_{i})$
+
+\begin{align}
+\label{eq:data}
+\langle N_{z} \rangle &= \sum_{N_{z} = 0}^{N_{tot}} N_{z} \sum_{combination\ k}^{N_{tot}! / N_{z}! (N_{tot} - N_{z})!} \left[ \prod_{i_{k} \in \mathbb{S}_{z}} p(z \mid d_{i_{k}}) \prod_{j_{k} \in \mathbb{S}_{\sim z}} 1 - p(z \mid d_{j_{k}}) \right]\\
+&= \sum_{N_{z} = 0}^{N_{tot}} N_{z} \sum_{combination\ k}^{N_{tot}! / N_{z}! (N_{tot} - N_{z})!} \left[ \prod_{i_{k} \in \mathbb{S}_{z}} \delta(z, z_{i_{k}}) \prod_{j_{k} \in \mathbb{S}_{\sim z}} 1 - \delta(z, z_{j_{k}}) \right]\\
+&= \textbf{N}_{z} \left[ \prod_{i_{k} \in \mathbb{S}_{\textbf{N}_{z}}} \delta(z, z_{i_{k}}) \prod_{j_{k} \in S_{N_{tot} - \textbf{N}_{z}}} 1 - \delta(z, z_{j_{k}}) \right]\\
+&= \textbf{N}_{z} \times (1 + 0)\\
+\end{align}
+
+every term is 0 except where $z=z_{jk}$, where it is 1, which only occurs for the true configuration is the PDFs are delta functions centered at the truth, so $\langle N_{z}\rangle = \hat{N}_{z}$, a histogram of spec-zs
+
+what happens when we deviate away from this assumption of $p(z \mid d_{i}) = \delta(z, z_{i})$?
+
+Figure:\\
+left: rugplot, smoothing/histogram, recover $N(z)$\\
+right: broadening of \zpdf s broadens $N(z)$
+
+in realistic circumstances of photometry being noisy and less informative, stacking is guaranteed to yield an overly broad $N(z)$.
+
+\subsubsection{Perfectly uninformative data}
+\label{sec:prior}
+
+if PDFs were solely dependent on data, $p(z \mid d_{i})$ would be same for all codes [CITE PZDC1], so they really must be implicit posteriors conditioned on data and assumptions $p(z \mid d_{i}, \tilde{N}_{z})$
+
+\begin{align}
+\label{eq:stackwithprior}
+\hat{N}(z) &= \sum_{i = 0}^{N_{tot}} p(z \mid d_{i}, \tilde{N}_{z})
+\end{align}
+
+if the data is perfectly uninformative, $p(z \mid d, \tilde{N}_{z}) = \frac{\tilde{N}_{z}}{N_{tot}}$
+
+\begin{align}
+\label{eq:prior}
+\langle N_{z} \rangle &= \sum_{N_{z} = 0}^{N_{tot}} N_{z} \sum_{combination\ k}^{N_{tot}! / N_{z}! (N_{tot} - N_{z})!} \left[ \prod_{i_{k} \in S_{N_{z}}} p(z \mid d_{i_{k}}, \tilde{N}_{z}) \prod_{j_{k} \in S_{N_{tot} - N_{z}}} 1 - p(z \mid d_{j_{k}}, \tilde{N}_{z}) \right]\\
+&= \sum_{N_{z} = 0}^{N_{tot}} N_{z} \sum_{combination\ k}^{N_{tot}! / N_{z}! (N_{tot} - N_{z})!} \left[ \prod_{i_{k} \in S_{N_{z}}} \frac{\tilde{N}_{z}}{N_{tot}} \prod_{j_{k} \in S_{N_{tot} - N_{z}}} 1 - \frac{\tilde{N}_{z}}{N_{tot}} \right]\\
+&= \sum_{N_{z} = 0}^{N_{tot}} N_{z} \sum_{combination\ k}^{N_{tot}! / N_{z}! (N_{tot} - N_{z})!} \left[ \left(\frac{\tilde{N}_{z}}{N_{tot}}\right)^{N_{z}} \left(1 - \frac{\tilde{N}_{z}}{N_{tot}}\right)^{N_{tot}-N_{z}} \right]\\
+&= \sum_{N_{z} = 0}^{N_{tot}} N_{z} \frac{N_{tot}!}{N_{z}! (N_{tot} - N_{z})!} \left[ \left(\frac{\tilde{N}_{z}}{N_{tot}}\right)^{N_{z}} \left(1 - \frac{\tilde{N}_{z}}{N_{tot}}\right)^{N_{tot}-N_{z}} \right]\\
+\end{align}
+
+this expression always reduces to the result of stacking
+
+Figure: sum of same $N_{z}$ building up to that times $N_{tot}$
+
+\subsection{Discussion}
+\sectlabel{sec:disco}
+
+i just showed when the right procedure is equivalent to stacking, but in that final case, it only approaches the true $\textbf{N}_{z}$ when $\tilde{n}(z) = \frac{\textbf{N}_{z}}{N_{tot}}$, i.e. when the truth is already known and baked into the PDFs.\\
+if this were true, we would not need to take more data!
+
+The conditions of \Sect{sec:informative} and \Sect{sec:prior} sort of occurred in the past but will never occur for ongoing and upcoming surveys, hence why we must not stack!
+
 %\clearpage
 \section{Method}
 \sectlabel{sec:meth}
 
-\textcolor{blue}{Q: How can we improve the effectiveness of using \pzpdf s in inference?\\
+\aim{Q: How can we improve the effectiveness of using \pzpdf s in inference?\\
 	A: Hierarchical inference is the only self-consistent way.}
 
 Consider a survey of $J$ galaxies $j$, each with photometric data $\vec{d}_{j}$; thus the entire survey over some solid angle $\Omega$ produces the ensemble of photometric magnitudes (or colors) and their associated observational errors $\{\vec{d}_{j}\}$.  
@@ -384,7 +515,7 @@ In general, derivatives will not be available for the full posterior distributio
 %accessible with any optimization code.
 
 %\clearpage
-\section{Model Specifics}
+\subsection{Implementation}
 \sectlabel{sec:exp}
 
 We ran several tests of this approach to demonstrate its usage and validity using a procedure outlined in this section.  
@@ -393,7 +524,7 @@ In \Sect{sec:mcmc} we describe the algorithm used to compute the full log-poster
 In \Sect{sec:diag} we outline the measures used to evaluate the performance of the method.
 
 %\clearpage
-\subsection{Implementation Details}
+\subsubsection{Code}
 \sectlabel{sec:mcmc}
 
 In this study, we compare the results of \Eq{eqn:fullpost} to those of the two most common approaches to estimating \nz\ from a catalog of \pzpdf s: the distribution $n(z_{\mathrm{max}})$ of the redshifts at maximum posterior probability (i.e. the modes of the \pzpdf s), and the stacked estimator
@@ -469,7 +600,7 @@ a weighted sum of the mean $w_{k}$ of the variances within individual walkers' c
 Convergence is achieved when the statistic approaches unity.  
 
 %\clearpage
-\subsection{Diagnostics}
+\subsubsection{Diagnostics}
 \sectlabel{sec:diag}
 
 The results of the computation described in \Sect{sec:mcmc} are evaluated for accuracy on the basis of some quantitative measures.  
@@ -496,18 +627,7 @@ Finally, we explicitly review the assumptions made by this approach.
 	%draws from photo-$z$ PDFs do not match marginal distributions in $z_true$ vs. $z_phot$ space, i.e. toy model with $z_phot$ drawn from an uglier space but pdfs evaluated in lsst-limits space
 \end{itemize}
 
-\section{Mock data generation}
-\sectlabel{sect:mockdata_howto}
 
-\textul{Plots: flow chart of forward model}
-
-\begin{figure*}
-	\begin{center}
-		\includegraphics[width=0.75\textwidth]{figures/chippr/flowchart.png}
-		\caption{In appendix?}
-		\figlabel{fig:flowchart}
-	\end{center}
-\end{figure*}
 
 \subsection{Data}
 \sectlabel{sec:alldata}
@@ -565,6 +685,16 @@ Two additional cases with SDSS-III BOSS DR10 data described in \Sect{sec:data} a
 	\caption{This table summarizes the validation tests using the shorthand names by which the tests are referenced.}
 	\tablabel{tab:key}
 \end{table}
+
+\textul{Plots: flow chart of forward model}
+
+\begin{figure*}
+	\begin{center}
+		\includegraphics[width=0.75\textwidth]{figures/chippr/flowchart.png}
+		\caption{In appendix?}
+		\figlabel{fig:flowchart}
+	\end{center}
+\end{figure*}
 
 %\clearpage
 \subsubsection{Fiducial Data}
@@ -876,7 +1006,7 @@ The methods that account for the nontrivial interim prior (the marginalized maxi
 \end{figure}
 
 %\clearpage
-\subsection{Data}
+\subsection{Real Data}
 \sectlabel{sec:boss}
 
 The results of the inference of the redshift distribution function from a pseudo-random sample of BOSS DR10 data described in \Sect{sec:data} are shown in \Fig{fig:dataparam} and \Fig{fig:datacomp}.  
@@ -930,16 +1060,16 @@ This may be due to the way the interim prior was chosen, such that it was influe
 Second, the high-redshift feature in the error bars is not present once a magnitude cut is imposed.  
 From this one can conclude that the signal and associated error bars in that region were caused by the sampler's assignment high redshifts to poorly constrained interim photo-$z$ posteriors corresponding to the dimmest galaxies. 
 
-\section{Results}
+\section{Results and discussion}
 \sectlabel{sec:results}
 
-\textcolor{blue}{Q: How does the result of \chippr\ compare to established estimators in terms of the accuracy of $n(z)$?\\
+\aim{Q: How does the result of \chippr\ compare to established estimators in terms of the accuracy of $n(z)$?\\
 	A: \chippr\ yields the best possible $n(z)$, conditional on the accuracy of the photo-$z$ PDFs used.}
 
 \subsection{LSST Requirements}
 \sectlabel{sec:lsstdemo}
 
-\textcolor{blue}{LSST specs: biased to 0.003, 10\% uniform outliers, z-dependent scatter of 0.05}
+\aim{LSST specs: biased to 0.003, 10\% uniform outliers, z-dependent scatter of 0.05}
 
 \begin{figure*}
 	\begin{center}
@@ -953,7 +1083,7 @@ From this one can conclude that the signal and associated error bars in that reg
 \subsection{Violations of the model}
 \sectlabel{sec:violations}
 
-\textcolor{blue}{mischaracterized interim prior, with idealized or realistic data?}
+\aim{mischaracterized interim prior, with idealized or realistic data?}
 
 \begin{figure*}
 	\begin{center}
@@ -964,7 +1094,7 @@ From this one can conclude that the signal and associated error bars in that reg
 	\end{center}
 \end{figure*} 
 
-\section{Discussion}
+\subsection{Discussion}
 \sectlabel{sec:discussion}
 
 \begin{figure*}
@@ -1028,4 +1158,5 @@ Future work will also include the extension of this fully probabilistic approach
 \section{Chapter acknowledgements}
 
 AIM thanks Elisabeth Krause for assistance with the \texttt{CosmoLike} code, Mohammadjavad Vakili for insightful input on statistics, Geoffrey Ryan for advice on debugging, and Boris Leistedt for helpful comments provided in the preparation of this paper.
+I thank Phil Marshall, David Hogg, Rachel Mandelbaum, Eduardo Rozo, David Alonso, Daniel Gruen, Boris Leistedt, Josh Speagle, and Mark Manera for helpful feedback provided in the preparation of this letter.
 This work was completed under the generous nutritional support of the Center for Computational Astrophysics.
