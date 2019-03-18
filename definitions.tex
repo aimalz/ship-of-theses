@@ -1,6 +1,5 @@
 \RequirePackage[displaymath, mathlines]{lineno}
-%\usepackage[final]{graphicx}
-%\usepackage{wasysym}
+
 \usepackage[tbtags]{amsmath}
 \usepackage{amssymb}
 \usepackage{amsfonts}
@@ -12,18 +11,16 @@
 \hypersetup{pageanchor=false}
 
 \usepackage{indentfirst}
-%\usepackage{amsfonts}
-
 \usepackage{booktabs}
 \usepackage{url}
-
 \usepackage{multirow}
 \usepackage{xspace}
 \usepackage{enumitem}
 \usepackage[final]{graphicx}
 \usepackage{wasysym}
-%\usepackage[tbtags]{amsmath}
+
 \usepackage{footmisc}
+\usepackage{soul}
 
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric, arrows}
@@ -49,7 +46,8 @@
 
 % General formatting:
 \newcommand{\paper}{Chapter}
-\newcommand{\textul}[1]{{\underline{#1}}}
+%\newcommand{\textul}[1]{{\underline{#1}}}
+\newcommand{\mathul}[1]{\underline{#1}}
 \newcommand{\enquote}[1]{{``{#1}''}}
 
 % Foreign text:
@@ -101,7 +99,7 @@
 \newcommand{\chaplabel}[1]{\label{chap:#1}}
 
 \newcommand{\todo}[3]{{\color{#2}\emph{#1}: #3}}
-\newcommand{\aimtodo}[1]{\todo{AIM}{red}{#1}}
+\newcommand{\aim}[1]{\todo{AIM}{red}{#1}}
 
 % Math:
 %\newcommand{\dd}{\ensuremath{\,\mathrm{d}}}

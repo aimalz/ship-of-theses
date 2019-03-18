@@ -1,25 +1,37 @@
 \renewcommand{\chapid}{chippr}
 
 % Chapter specific commands:
+\newcommand{\chippr}{\texttt{chippr}}
+\newcommand{\Chippr}{\project{CHIPPR}}
+\newcommand{\nz}{$n(z)$}
 
 % Math:
 
-\chapter{Inference of galaxy population statistics given photometric redshift 
-	probability distribution functions\chaplabel{chippr}}
+\chapter{How to obtain the redshift distribution from probabilistic redshift estimates\chaplabel{chippr}}
 
 This \paper\ represents joint work with [people] published in [place] as [citation].
 
 \section{Chapter abstract}
 
-Ongoing and upcoming galaxy surveys aiming to constrain cosmological parameters will produce photometric redshift (photo-$z$) probability distribution functions (PDFs), which are, generally, posteriors under some interim prior.  
-We present a fully probabilistic approach to obtain the posterior distribution on a one-point statistic of redshift from a survey providing photo-$z$ interim posteriors and their interim prior.  
-The technique uses a probabilistic graphical model corresponding to the hierarchical Bayesian relation of photo-$z$ PDFs to a posterior distribution over the one-point statistic.  
-This mathematically consistent method is applied to the redshift distribution function $N(z)$ necessary for the calculation of cosmological parameters from weak lensing surveys, validated on synthetic data, and tested on a small subset of BOSS DR10 data.  
-It is demonstrated that this method improves accuracy, both qualitatively and as quantified by the Kullback-Leibler Divergence, compared to popular alternatives (such as stacking of photo-$z$ PDFs and conversion of photo-$z$ PDFs to point estimators of redshift).  
-The method can be straightforwardly generalized to other one-point statistics of redshift including distribution functions over luminosity, mass, star formation rate, etc.
+A trustworthy estimate of the redshift distribution $n(z)$ is crucial for weak-lensing cosmology as we know it.
+Spectroscopic redshifts for the dim and numerous galaxies of weak-lensing surveys are expected to be inaccessible, making photometric redshifts (photo-$z$s) the next-best alternative.
+The nontrivial systematics affecting photo-$z$ estimation have motivated the weak-lensing community to favor photo-$z$ probability density functions (PDFs) as a more comprehensive alternative to photo-$z$ point estimates.
+However, analytic methods for utilizing these new data products in cosmological inference are still evolving.
+The ubiquitous methodology known as stacking produces a systematically biased estimator of $n(z)$ that worsens with decreasing signal-to-noise, the very regime where photo-$z$ PDFs are most necessary.
+We introduce a mathematically rigorous probabilistic graphical model (PGM) of hierarchical inference of $n(z)$, which is provably the only self-consistent way to combine photo-$z$ PDFs to produce an estimator of $n(z)$.
+The novel Cosmological Hierarchical Inference with Probabilistic Photometric Redshifts (CHIPPR) model yields a more accurate characterization of $n(z)$ by correctly propagating the redshift uncertainty information beyond the best-fit estimator produced by traditional procedures.
+We conclude by propagating these effects to constraints in the space of cosmological parameters.
 
 \section{Introduction}
 \sectlabel{sec:intro}
+
+\aim{Brief literature review addressing how \pzpdf s are currently used in cosmology}
+
+\aim{Q: What is the status quo?\\
+	A: The future of galaxy surveys is \pz s, and \pzpdf s rightfully replace \pz s; however, usage of \pzpdf s is limited.}
+
+\aim{Q: Why should we question existing methods?\\
+	A: Stacking is bad and only looks like it works because of assumptions that don't hold when the data is as bad as we anticipate.  Cite pedantic doc?}
 
 Photometric redshift (photo-$z$) estimation has been a staple of studies of galaxy evolution, large-scale structure, and cosmology since its conception decades ago \citep{Baum1962}.  
 An extremely coarse spectrum in the form of photometry in a handful of broadband filters can be an effective substitute for the time-intensive process of obtaining a spectroscopic redshift (spec-$z$), a procedure that may only be applied to relatively bright galaxies.  
@@ -74,14 +86,28 @@ Additionally, $N(z)$ has been the subject of inference using photo-$z$ probabili
 \Sect{sec:exp} will describe how the model given in \Sect{sec:meth} is implemented.  
 \Sect{sec:valid} will discuss the results of applying the fully probabilistic approach to mock and real datasets.
 
+\begin{itemize}
+	\item
+	Q: How can we improve the effectiveness of using \pzpdf s in inference?\\
+	A: Hierarchical inference is the only self-consistent way; see flow chart for outline of how it works in practice.
+	\item
+	Q: How does the result of \chippr compare to established estimators in terms of the accuracy of \nz ?\\
+	A: \chippr\ yields the best possible \nz , conditional on the accuracy of the \pzpdf s used.
+	\item
+	Q: How does the result of \chippr compare to established estimators in terms of the precision on cosmological constraints?
+\end{itemize}
+
 %\clearpage
 \section{Method}
 \sectlabel{sec:meth}
 
+\textcolor{blue}{Q: How can we improve the effectiveness of using \pzpdf s in inference?\\
+	A: Hierarchical inference is the only self-consistent way.}
+
 Consider a survey of $J$ galaxies $j$, each with photometric data $\vec{d}_{j}$; thus the entire survey over some solid angle $\Omega$ produces the ensemble of photometric magnitudes (or colors) and their associated observational errors $\{\vec{d}_{j}\}$.  
 Each galaxy $j$ has a redshift $z_{j}$ that we would like to learn; redshift is a parameter in this case.  
 The distribution of the ensemble of redshifts $\{z_{j}\}$ may be described by the hyperparameters defining the redshift distribution function $N(z)$ that we would like to quantify.  
-This situation may be considered to be a probabilistic generative model, illustrated by the directed acyclic graph of \Fig{fig:flow}.  
+This situation may be considered to be a probabilistic generative model, illustrated by the directed acyclic graph of \Fig{fig:pgm}.  
 
 \begin{figure}
 	\vspace{0.5cm}
@@ -103,7 +129,7 @@ This situation may be considered to be a probabilistic generative model, illustr
 			The redshifts $\{z_{j}\}$ of all galaxies in the survey are parameters independently drawn from $N(z)$. 
 			The photometric data $\vec{d}_{j}$ encircled in bold are observable quantities determined by the corresponding galaxy's redshift $z_{j}$.  
 			Because the data $\vec{d}_{j}$ of each galaxy can be used to infer its redshift $z_{j}$, $N(z)$ may be inferred from the collection of $\{\vec{d}_{j}\}$.}
-		\figlabel{fig:flow}
+		\figlabel{fig:pgm}
 	\end{center}
 \end{figure}
 
@@ -124,6 +150,54 @@ In the following sections, we will present and compare methods for calculating $
 %\clearpage
 \subsection{Probabilistic Model Generalities}
 \sectlabel{sec:prob}
+
+%We begin by reframing the redshift distribution \nz\ from a probabilistic perspective.
+%Here we define a redshift distribution \nz\ as the normalized probability density
+%\begin{equation}
+%\label{eqn:nz}
+%\int_{-\infty}^{\infty}\ n(z)\ dz\ \equiv\ \frac{1}{J}\ \int_{-\infty}^{\infty}\ \sum_{j=1}^{J}\ \delta(z_{j},\ z)\ dz = 1
+%\end{equation}
+%of finding a galaxy $j$ in a catalog of $J$ galaxies having a redshift $z$.
+%We may without loss of generality impose a parametrization
+%\begin{equation}
+%\label{eqn:fz}
+%f_{\phi}(z)\ \equiv\ n(z)
+%\end{equation}
+%in terms of some parameter vector $\phi$.
+%We believe that galaxy redshifts are indeed drawn from \nz, making it a probability density over redshift; this fact can also be confirmed from dimensional analysis of Equation~\ref{eqn:nz}.
+%Therefore, it can be rewritten as
+%\begin{equation}
+%\label{eqn:pz}
+%z_{j}\ \sim\ \Pr(z \mid \phi)\ \equiv\ f_{\phi}(z),
+%\end{equation}
+%a probability density over redshift conditioned on the parameters defining \nz.
+%Note that $z_{j}$ does not depend on $z_{j'}$, a statement of the causal independence of galaxy redshifts from one another.
+%
+%In addition to believing \nz\ is a PDF from which redshifts are drawn, we also believe that there is some PDF from which photometric data $d$, which may be any combination of fluxes, magnitudes, colors, and their observational errors, are drawn.
+%Such a PDF over data is a likelihood
+%\begin{equation}
+%\label{eqn:pzpdf}
+%d\ \sim\ \Pr(d \mid z)
+%\end{equation}
+%conditioned on redshift.
+%This assumption that the data are drawn from some function of the redshift forms the foundation upon which \pz\ estimation is based.
+%Note that galaxies may have different observational data $d$ despite sharing the same redshift and that the data $d_{j}$ of one galaxy is causally independent of the redshifts $z_{j'}$ and data $d_{j'}$ of other galaxies.
+%
+%This description of the physical system corresponds to a forward model by which we actually believe photometry is generated:
+%\begin{enumerate}
+%	\item There exists a redshift distribution \nz\ with parameters $\phi$.
+%	\item Galaxy redshifts $\{z_{j}\}$ are independent draws from $\Pr(z \mid \phi)$.
+%	\item Galaxy photometry $d_{j}$ is drawn from the likelihoods $\Pr(d | z_{j})$.
+%\end{enumerate}
+%A forward model such as this corresponds to a probabilistic graphical model (PGM), represented by a directed acyclic graph (DAG) as in Figure~\ref{fig:pgm}.
+%\begin{figure}
+%	\begin{center}
+%		\includegraphics[width=0.25\textwidth]{fig/pgm.png}
+%		\caption{The PGM}
+%		\label{fig:pgm}
+%	\end{center}
+%\end{figure}
+%A DAG conveys the causal relationships between physical parameters and, like a Feynman diagram in the context of particle physics, is a shorthand for mathematical relationships between variables.
 
 We begin by parametrizing $N(z)$ in terms of $\vec{\theta}$, comprising some set of hyperparameters that define the form $N(z)$ may take in whatever basis we choose.  
 At this point, these hyperparameters are quite general and may represent coefficients in a high-order polynomial as a function of redshift, a set of means and variances defining Gaussians that sum to the desired distribution, a set of histogram heights that describe a binned version of the redshift distribution function, etc.  
@@ -237,6 +311,36 @@ First, the photometric data are not a set of independent measurements; the data 
 Second, the reported interim photo-$z$ posterior distributions may not be trustworthy; there is not yet agreement on the best technique to obtain photo-$z$ probability distributions, and the interim prior may not be appropriate or even known to us as consumers of interim photo-$z$ posteriors.  
 Third, the hyperprior may be quite arbitrary and poorly motivated if the underlying physics is complex, and it can only be appropriate if our prior beliefs about the redshift distribution function are accurate.
 
+\subsection{Application to cosmology}
+\sectlabel{sec:application}
+
+The problem facing cosmologists is to determine the true parameters $\phi_{0}$ of \nz\ from observing the photometry $\{d_{j}\}$ of a large sample of galaxies $j$.
+To self-consistently propagate the uncertainty in the redshifts, however, it is more appropriate to estimate the posterior $\Pr(\phi \mid \{d_{j}\})$ over all possible parameters $\phi$ (and thus potential redshift distributions \nz ) conditioned on all the observed data $\{d_{j}\}$ available in a generic catalog.
+
+In order to use the DAG of \Fig{fig:pgm} to derive an expression for $\Pr(\phi \mid \{d_{j}\})$ in terms of \pzpdf s, we must introduce two more concepts, confusingly named the implicit prior and the prior probability density.
+
+When we constrain the redshift of a galaxy using its observed photometric data $d_{j}$, we are effectively estimating a posterior $\Pr(z \mid d_{j})$.
+However, to do this, we must have a model for the general relationship between redshifts and photometry, whether empirical, as is the case for machine learning \pzpdf\ methods, or analytic, as is the case for template-based \pzpdf\ methods.
+Such a relationship is defined in the space of probability density over redshift, so it must be able to be parameterized by the same functional form $f_{\phi}(z)$ as \nz .
+It is thus natural to write it as $\Pr(z \mid \phi^{*})$, where $\phi^{*}$ is the parameters for this relationship under some generic \pzpdf\ method.
+We call $\Pr(z \mid \phi^{*})$ the \textit{implicit prior}, as it is rarely explicitly known nor chosen by the researcher; for template-based methods where it can be chosen to be ``realistic,'' it may be appropriate to call it an \textit{interim prior}.
+Because the implicit prior is unavoidable, the \pzpdf s reported by any method are really \textit{implicit-weighted posteriors} $\Pr(z \mid d, \phi^{*})$.
+
+The prior probability density $\Pr(\phi)$ is a more familiar concept in astronomy; to progress, we will have to choose a prior probability density over all possible parameters $\phi$.
+This prior need not be excessively proscriptive; for example, it may be chosen to enforce smoothness at physically motivated scales in redshift without imposing any particular region as over- or under-dense.
+
+With these definitions, we obtain the desired expression for $\Pr(\phi \mid \{d_{j}\})$,
+\begin{align}
+\begin{split}
+\eqlabel{eqn:fullpost}
+\ln[\Pr(\phi \mid \{d_{j}\})] & \propto \ln[\Pr(\phi)] + \ln \left[\int dz \right.\\
+& \left. \exp \left[\sum_{j=1}^{J} \left(\ln[\Pr(z \mid d_{j}, \phi^{*})] \right. \right. \right.\\
+& \left. \left. \left. + \ln[\Pr(z \mid \phi)] - \ln[\Pr(z \mid \phi^{*})]\ \right)\ \right]\ \right] ,
+\end{split}
+\end{align}
+which is the heart of \chippr.
+The entire derivation of \Eq{eqn:fullpost} is provided in \Sect{app:math}.
+
 %\clearpage
 \subsection{Alternative Approaches}
 \sectlabel{sec:sheldon}
@@ -287,6 +391,123 @@ We ran several tests of this approach to demonstrate its usage and validity usin
 In \Sect{sec:alldata} we describe the method by which interim photo-$z$ log-posteriors $\{\ln[p(z_{j}|\vec{d}_{j})]\}_{J}$ are synthesized as well as the real datasets considered for comparison.  
 In \Sect{sec:mcmc} we describe the algorithm used to compute the full log-posterior distribution $\ln[p(\vec{\theta}|\{\vec{d}_{j}\})]$.  
 In \Sect{sec:diag} we outline the measures used to evaluate the performance of the method.
+
+%\clearpage
+\subsection{Implementation Details}
+\sectlabel{sec:mcmc}
+
+In this study, we compare the results of \Eq{eqn:fullpost} to those of the two most common approaches to estimating \nz\ from a catalog of \pzpdf s: the distribution $n(z_{\mathrm{max}})$ of the redshifts at maximum posterior probability (i.e. the modes of the \pzpdf s), and the stacked estimator
+\begin{align}
+\eqlabel{eqn:stacked}
+\hat{n}(z) &\equiv \frac{1}{J}\ \sum_{j=1}^{J}\ \Pr(z \mid d_{j}, \phi^{*}) .
+\end{align}
+
+We perform this comparison on mock data in the form of catalogs of emulated \pzpdf s generated via the forward model discussed above and presented in detail in \Sect{sec:data}.
+The mock data emulates the three sources of error of highest concern to the \pz\ community: intrinsic scatter, catastrophic outliers, and systematic bias.
+\Fig{fig:mega_scatter} illustrates these three effects individually at ten times the tolerance of the upcoming Large Synoptic Survey Telescope (LSST).
+\begin{figure*}
+	\begin{center}
+		\includegraphics[width=0.3\textwidth]{figures/chippr/hivarsigmas_scatter.png}
+		\includegraphics[width=0.3\textwidth]{figures/chippr/uouthi_scatter.png}
+		\includegraphics[width=0.3\textwidth]{figures/chippr/neghivarbias_scatter.png}
+		\caption{intrinsic scatter (left), uniform outliers (center), bias (right);
+			Not sure how best to broach the subject of nonuniform outliers and bias as model misspecification
+		}
+		\figlabel{fig:mega_scatter}
+	\end{center}
+\end{figure*}
+Tests including all three effects at the tolerance levels of LSST are presented in \Sect{sec:results}.
+
+The testing procedure is implemented in \texttt{Python} and is made public as Cosmological Hierarchical Inference with Probabilistic Photometric Redshifts (CHIPPR).  
+The code takes as input a \texttt{csv} file containing the basis for the binning of redshift space, a specification of the interim prior $\vec{\theta}^{*}$, and a catalog of $J$ interim photo-$z$ log-posteriors $\{\ln[p(z_{j}|\vec{d}_{j},\vec{\theta}^{*})]\}_{J}$ in the step-function basis.
+
+The \texttt{emcee} \citep{Foreman-Mackey2013} implementation of ensemble sampling is applied to sample the full log-posterior of (\ref{eq:final}).   
+For each of some $W$ walkers at each iteration $i$, a proposal distribution $\vec{\theta}^{i}$ generated from the hyperprior distribution and evaluated for acceptance to or rejection from the desired log-posterior distribution.  
+Two threshold conditions are defined, one designating all previous samples to be ignored as as products of a "burn-in" phase and another indicating when a sufficient number of "post-burn" samples have been accepted.  
+In this case, the first threshold (described in \Sect{sec:acorr}) is defined in terms of sub-runs of $I_{0}=10^{3}$ accepted samples, and the second is defined as an accumulation of $I_{tot}=10^{4}$ samples.
+
+The sampler is initialized with $M=100$ walkers each with a value chosen from a Gaussian distribution of identity covariance around a sample from the hyperprior distribution.  
+An example of such samples from the prior are shown in \Fig{fig:prior}.
+
+\begin{figure}
+	\includegraphics[width=0.5\textwidth]{figures/chippr/null_priorsamps.pdf}
+	\caption{This figure shows samples (colored lines) of $p(z|\vec{\theta})$ where each $\vec{\theta}$ is drawn from the hyperprior distribution $p(\vec{\theta})$ defined in \Sect{sec:exp} with \Eq{eq:priorcov}.}
+	\label{fig:prior}
+\end{figure}
+
+The input/output format chosen for this work is \texttt{HDF5} because of its efficiency for large amounts of data.  
+The resulting output is a set of $I$ ordered \texttt{hickle} files enumerated by $\rho$ containing the state information after each sub-run.  
+The state information includes $\frac{I_{0}}{s}$ actual samples $\vec{\theta}_{i}$ for a pre-specified chain thinning factor $s$ and their full posterior probabilities $p(\vec{\theta}_{i}|\{\vec{d}_{j}\})$ as well as the autocorrelation times and acceptance fractions calculated for each element of $\vec{\theta}$ over the entire sub-run.  
+
+%\clearpage
+\subsubsection{Convergence Criteria}
+\sectlabel{sec:acorr}
+
+In addition to qualitative visual inspection of the chains, two quantities that probe the convergence of the sampler are used in this study, the autocorrelation time and the Gelman-Rubin convergence criterion.  
+%\Fig{fig:chains} shows the %evolution of the values of one parameter of one walker over the course of all %iterations of the sampler.
+
+%\begin{figure}
+%%\includegraphics[width=0.5\textwidth]{figs/null/chain0.pdf}
+%\caption{This figure shows the evolution of one walker's parameter values for 
+%one element of the parameter vector $\vec{\theta}$ as a function of iteration 
+%number, demonstrating the completion of the burn-in phase.}
+%\label{fig:chains}
+%\end{figure}
+
+The autocorrelation time is effectively a measure of the efficiency of the method and can be described as the expected number of iterations necessary to accept a new sample independent of the current accepted sample.  
+A sampler that converges faster will have a smaller autocorrelation time, and smaller autocorrelation times are preferable because it means fewer iterations are wasted on non-independent samples when independent samples are desired.  
+See \citet{Foreman-Mackey2013} for a more complete exploration of the autocorrelation time.  
+In all tests discussed here, autocorrelation times across walkers and parameters were approximately 20, meaning two samples 20 or more iterations apart were independent, a satisfactory level of efficiency.  
+Low autocorrelation times are a necessary but not always sufficient convergence condition, as the autocorrelation times calculated for tests in this paper were constant across all sub-runs, even those that were obviously burning in.  
+
+The Gelman-Rubin statistic
+\begin{equation}
+\eqlabel{eq:gr}
+R_{k} = \sqrt{\frac{(1-\frac{2}{I_{0}})w_{k}+\frac{2}{I_{0}}b_{k}}{w_{k}}},
+\end{equation}
+a weighted sum of the mean $w_{k}$ of the variances within individual walkers' chains and the variance $b_{k}$ between chains of different walkers $m$, is calculated over each sub-run $i$ to determine the duration of the burn-in period.  
+Convergence is achieved when the statistic approaches unity.  
+
+%\clearpage
+\subsection{Diagnostics}
+\sectlabel{sec:diag}
+
+The results of the computation described in \Sect{sec:mcmc} are evaluated for accuracy on the basis of some quantitative measures.  
+Beyond visual inspection of samples, we calculate summary statistics to quantitatively compare different estimators' precision and accuracy.  
+Since MCMC samples of hyperparameters are Gaussian distributions, we can quantify the breadth of the distribution for each hyperparameter using the standard deviation regardless of whether the true values are known.  
+
+In simulated cases where the true parameter values are known, we calculate the Kullback-Leibler divergence (KLD), given by 
+\begin{equation}
+\eqlabel{eq:kl}
+KL_{\dagger,\ddagger} = \int\ p(z|\theta^{\dagger})\ \ln\left[\frac{p(z|\theta^{\dagger})}{p(z|\theta^{\ddagger})}\right]\ dz,
+\end{equation}
+which measures a distance between parameter values $\vec{\theta}^{\dagger}$ and $\vec{\theta}^{\ddagger}$ that is invariant under changes of variables.  
+We note that $KL_{\dagger,\ddagger}\neq KL_{\ddagger,\dagger}$, so both must be calculated, and the minimum of the two is reported in this study.  
+In simulated tests, $\vec{\theta}^{\ddagger}$ is the true value and $\vec{\theta}^{\dagger}$ is the value produced by one of the methods in question.  
+
+\subsection{Limitations}
+\sectlabel{sec:limitations}
+
+Finally, we explicitly review the assumptions made by this approach.
+\begin{itemize}
+	\item prior $\Pr(\phi)$
+	\item implicit prior $\phi^{*}$ known
+	\item \pzpdf s are accurate posteriors
+	%draws from photo-$z$ PDFs do not match marginal distributions in $z_true$ vs. $z_phot$ space, i.e. toy model with $z_phot$ drawn from an uglier space but pdfs evaluated in lsst-limits space
+\end{itemize}
+
+\section{Mock data generation}
+\sectlabel{sect:mockdata_howto}
+
+\textul{Plots: flow chart of forward model}
+
+\begin{figure*}
+	\begin{center}
+		\includegraphics[width=0.75\textwidth]{figures/chippr/flowchart.png}
+		\caption{In appendix?}
+		\figlabel{fig:flowchart}
+	\end{center}
+\end{figure*}
 
 \subsection{Data}
 \sectlabel{sec:alldata}
@@ -514,77 +735,6 @@ In these cases the true $N(z)$ is not known, but the fully probabilistic method 
 \end{figure}
 
 %\clearpage
-\subsection{Implementation Details}
-\sectlabel{sec:mcmc}
-
-The testing procedure is implemented in \texttt{Python} and is made public as Cosmological Hierarchical Inference with Probabilistic Photometric Redshifts (CHIPPR).  
-The code takes as input a \texttt{csv} file containing the basis for the binning of redshift space, a specification of the interim prior $\vec{\theta}^{*}$, and a catalog of $J$ interim photo-$z$ log-posteriors $\{\ln[p(z_{j}|\vec{d}_{j},\vec{\theta}^{*})]\}_{J}$ in the step-function basis.
-
-The \texttt{emcee} \citep{Foreman-Mackey2013} implementation of ensemble sampling is applied to sample the full log-posterior of (\ref{eq:final}).   
-For each of some $W$ walkers at each iteration $i$, a proposal distribution $\vec{\theta}^{i}$ generated from the hyperprior distribution and evaluated for acceptance to or rejection from the desired log-posterior distribution.  
-Two threshold conditions are defined, one designating all previous samples to be ignored as as products of a "burn-in" phase and another indicating when a sufficient number of "post-burn" samples have been accepted.  
-In this case, the first threshold (described in \Sect{sec:acorr}) is defined in terms of sub-runs of $I_{0}=10^{3}$ accepted samples, and the second is defined as an accumulation of $I_{tot}=10^{4}$ samples.
-
-The sampler is initialized with $M=100$ walkers each with a value chosen from a Gaussian distribution of identity covariance around a sample from the hyperprior distribution.  
-An example of such samples from the prior are shown in \Fig{fig:prior}.
-
-\begin{figure}
-	\includegraphics[width=0.5\textwidth]{figures/chippr/null_priorsamps.pdf}
-	\caption{This figure shows samples (colored lines) of $p(z|\vec{\theta})$ where each $\vec{\theta}$ is drawn from the hyperprior distribution $p(\vec{\theta})$ defined in \Sect{sec:exp} with \Eq{eq:priorcov}.}
-	\label{fig:prior}
-\end{figure}
-
-The input/output format chosen for this work is \texttt{HDF5} because of its efficiency for large amounts of data.  
-The resulting output is a set of $I$ ordered \texttt{hickle} files enumerated by $\rho$ containing the state information after each sub-run.  
-The state information includes $\frac{I_{0}}{s}$ actual samples $\vec{\theta}_{i}$ for a pre-specified chain thinning factor $s$ and their full posterior probabilities $p(\vec{\theta}_{i}|\{\vec{d}_{j}\})$ as well as the autocorrelation times and acceptance fractions calculated for each element of $\vec{\theta}$ over the entire sub-run.  
-
-%\clearpage
-\subsubsection{Convergence Criteria}
-\sectlabel{sec:acorr}
-
-In addition to qualitative visual inspection of the chains, two quantities that probe the convergence of the sampler are used in this study, the autocorrelation time and the Gelman-Rubin convergence criterion.  
-%\Fig{fig:chains} shows the %evolution of the values of one parameter of one walker over the course of all %iterations of the sampler.
-
-%\begin{figure}
-%%\includegraphics[width=0.5\textwidth]{figs/null/chain0.pdf}
-%\caption{This figure shows the evolution of one walker's parameter values for 
-%one element of the parameter vector $\vec{\theta}$ as a function of iteration 
-%number, demonstrating the completion of the burn-in phase.}
-%\label{fig:chains}
-%\end{figure}
-
-The autocorrelation time is effectively a measure of the efficiency of the method and can be described as the expected number of iterations necessary to accept a new sample independent of the current accepted sample.  
-A sampler that converges faster will have a smaller autocorrelation time, and smaller autocorrelation times are preferable because it means fewer iterations are wasted on non-independent samples when independent samples are desired.  
-See \citet{Foreman-Mackey2013} for a more complete exploration of the autocorrelation time.  
-In all tests discussed here, autocorrelation times across walkers and parameters were approximately 20, meaning two samples 20 or more iterations apart were independent, a satisfactory level of efficiency.  
-Low autocorrelation times are a necessary but not always sufficient convergence condition, as the autocorrelation times calculated for tests in this paper were constant across all sub-runs, even those that were obviously burning in.  
-
-The Gelman-Rubin statistic
-\begin{equation}
-\eqlabel{eq:gr}
-R_{k} = \sqrt{\frac{(1-\frac{2}{I_{0}})w_{k}+\frac{2}{I_{0}}b_{k}}{w_{k}}},
-\end{equation}
-a weighted sum of the mean $w_{k}$ of the variances within individual walkers' chains and the variance $b_{k}$ between chains of different walkers $m$, is calculated over each sub-run $i$ to determine the duration of the burn-in period.  
-Convergence is achieved when the statistic approaches unity.  
-
-%\clearpage
-\subsection{Diagnostics}
-\sectlabel{sec:diag}
-
-The results of the computation described in \Sect{sec:mcmc} are evaluated for accuracy on the basis of some quantitative measures.  
-Beyond visual inspection of samples, we calculate summary statistics to quantitatively compare different estimators' precision and accuracy.  
-Since MCMC samples of hyperparameters are Gaussian distributions, we can quantify the breadth of the distribution for each hyperparameter using the standard deviation regardless of whether the true values are known.  
-
-In simulated cases where the true parameter values are known, we calculate the Kullback-Leibler divergence (KLD), given by 
-\begin{equation}
-\eqlabel{eq:kl}
-KL_{\dagger,\ddagger} = \int\ p(z|\theta^{\dagger})\ \ln\left[\frac{p(z|\theta^{\dagger})}{p(z|\theta^{\ddagger})}\right]\ dz,
-\end{equation}
-which measures a distance between parameter values $\vec{\theta}^{\dagger}$ and $\vec{\theta}^{\ddagger}$ that is invariant under changes of variables.  
-We note that $KL_{\dagger,\ddagger}\neq KL_{\ddagger,\dagger}$, so both must be calculated, and the minimum of the two is reported in this study.  
-In simulated tests, $\vec{\theta}^{\ddagger}$ is the true value and $\vec{\theta}^{\dagger}$ is the value produced by one of the methods in question.  
-
-\clearpage
 \section{Validation Tests}
 \sectlabel{sec:valid}
 
@@ -778,7 +928,52 @@ There are two notable differences between the unbiased and biased subsamples of 
 First, the stacked and point estimators are less biased toward the interim prior.  
 This may be due to the way the interim prior was chosen, such that it was influenced strongly by the dimmest galaxies.  
 Second, the high-redshift feature in the error bars is not present once a magnitude cut is imposed.  
-From this one can conclude that the signal and associated error bars in that region were caused by the sampler's assignment high redshifts to poorly constrained interim photo-$z$ posteriors corresponding to the dimmest galaxies.  
+From this one can conclude that the signal and associated error bars in that region were caused by the sampler's assignment high redshifts to poorly constrained interim photo-$z$ posteriors corresponding to the dimmest galaxies. 
+
+\section{Results}
+\sectlabel{sec:results}
+
+\textcolor{blue}{Q: How does the result of \chippr\ compare to established estimators in terms of the accuracy of $n(z)$?\\
+	A: \chippr\ yields the best possible $n(z)$, conditional on the accuracy of the photo-$z$ PDFs used.}
+
+\subsection{LSST Requirements}
+\sectlabel{sec:lsstdemo}
+
+\textcolor{blue}{LSST specs: biased to 0.003, 10\% uniform outliers, z-dependent scatter of 0.05}
+
+\begin{figure*}
+	\begin{center}
+		\includegraphics[width=0.45\textwidth]{figures/chippr/lsst_scatter.png}
+		\includegraphics[width=0.45\textwidth]{figures/chippr/lsst_log_estimators.png}
+		\caption{Using LSST numbers}
+		\figlabel{fig:lsstdemo}
+	\end{center}
+\end{figure*}
+
+\subsection{Violations of the model}
+\sectlabel{sec:violations}
+
+\textcolor{blue}{mischaracterized interim prior, with idealized or realistic data?}
+
+\begin{figure*}
+	\begin{center}
+		\includegraphics[width=0.45\textwidth]{figures/chippr/wrong_scatter.png}
+		\includegraphics[width=0.45\textwidth]{figures/chippr/wrong_log_estimators.png}
+		\caption{this is for wrong implicit prior, not bias, haven't done that one yet}
+		\figlabel{fig:mischaracterized}
+	\end{center}
+\end{figure*} 
+
+\section{Discussion}
+\sectlabel{sec:discussion}
+
+\begin{figure*}
+	\begin{center}
+		\includegraphics[width=0.99\textwidth]{figures/chippr/final_plot.png}
+		\caption{propagation to cosmology}
+		\figlabel{fig:cornerplot}
+	\end{center}
+\end{figure*}
 
 \section{Conclusion}
 \sectlabel{sec:con}
@@ -832,6 +1027,5 @@ Future work will also include the extension of this fully probabilistic approach
 
 \section{Chapter acknowledgements}
 
-I express gratitude to
-[helpful people here]
-for their contributions to this work.
+AIM thanks Elisabeth Krause for assistance with the \texttt{CosmoLike} code, Mohammadjavad Vakili for insightful input on statistics, Geoffrey Ryan for advice on debugging, and Boris Leistedt for helpful comments provided in the preparation of this paper.
+This work was completed under the generous nutritional support of the Center for Computational Astrophysics.
