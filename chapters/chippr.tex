@@ -12,7 +12,6 @@
 \chapter{How to obtain the redshift distribution from probabilistic redshift estimates\chaplabel{chippr}}
 
 This \paper\ represents joint work with [people] published in [place] as [citation].
-I aim to develop a clear methodology guiding the use of photo-$z$ PDFs in inference so they may best be utilized by the community.
 
 \section{Chapter abstract}
 
@@ -47,6 +46,14 @@ The redshift distribution function \Nz\ serves as an ideal statistic upon which 
 \Nz\ is necessary for calculations of two-point correlation functions of weak gravitational lensing and counting statistics that are used to probe dark energy \citep{Masters2015}.  
 The observed \Nz\ also been used to validate survey selection functions used in generation of realistic, multi-purpose mock catalogs \citep{Norberg2002}.  
 Additionally, \Nz\ has been the subject of inference using photo-$z$ probability distributions before \citep{Sheldon2012, Hildebrandt2012, Kelly2014, Benjamin2013, Bonnett2015a, Viironen2015, Asorey2016, Leistedt2016}, so comparisons to the literature may easily be made. 
+
+The established way to calculate \Nz\ is by ``stacking'' according to
+\begin{align}
+\label{eq:stackwithdata}
+\hat{N}(z) &= \sum_{i = 0}^{N_{tot}} p(z \mid d_{i}) .
+\end{align}
+The stacked estimator $\hat{N}(z)$ of the redshift distribution is effectively an average of the \pzpdf\ catalog and, as I will show in this Chapter, not in general mathematically valid.
+I aim to develop a clear methodology guiding the use of \pzpdf s in inference so they may be utilized effectively by the cosmology community.
 
 \textbf{New paragraph here: Say what precision is needed for N(z) for future weak lensing surveys. Say what precision the mass function is needed (in, say cluster studies) for precision cosmology.}
 
@@ -170,48 +177,46 @@ p(N) &= \sum_{combination\ k}^{N_{tot}! / N! (N_{tot} - N)!} \left[ \prod_{i_{k}
 \subsection{Results}
 \sectlabel{sec:res}
 
-let's explore what assumptions must hold for \Eq{eq:complete} to be equivalent to \Eq{eq:stackwithdata}
+Here I explore what assumptions must hold for \Eq{eq:general} to be equivalent to \Eq{eq:stackwithdata}.
 
 \subsubsection{Perfectly informative data}
 \sectlabel{sec:informative}
 
-``$p(z)$'' is misleading, must be posterior conditioned on data $p(z \mid d_{i})$, and $p(z_{i})$ doesn't make sense because the domain of $z$ is the same for any galaxy $i$
-
-\begin{align}
-\label{eq:stackwithdata}
-\hat{N}(z) &= \sum_{i = 0}^{N_{tot}} p(z \mid d_{i})
-\end{align}
-
-consider perfectly informative PDFs $p(z \mid d_{i}) = \delta(z, z_{i})$
-
+\begin{theorem}
+	$\hat{N}(z)$ asymptotically approaches the true number $N'$ of galaxies with redshift $z$ under perfectly informative photometry, i.e. $p(z \gvn d_{i}) = \delta(z, z_{i})$.
+\end{theorem}
+\begin{proof}
 \begin{align}
 \label{eq:data}
-\langle N_{z} \rangle &= \sum_{N_{z} = 0}^{N_{tot}} N_{z} \sum_{combination\ k}^{N_{tot}! / N_{z}! (N_{tot} - N_{z})!} \left[ \prod_{i_{k} \in \mathbb{S}_{z}} p(z \mid d_{i_{k}}) \prod_{j_{k} \in \mathbb{S}_{\sim z}} 1 - p(z \mid d_{j_{k}}) \right]\\
-&= \sum_{N_{z} = 0}^{N_{tot}} N_{z} \sum_{combination\ k}^{N_{tot}! / N_{z}! (N_{tot} - N_{z})!} \left[ \prod_{i_{k} \in \mathbb{S}_{z}} \delta(z, z_{i_{k}}) \prod_{j_{k} \in \mathbb{S}_{\sim z}} 1 - \delta(z, z_{j_{k}}) \right]\\
-&= \textbf{N}_{z} \left[ \prod_{i_{k} \in \mathbb{S}_{\textbf{N}_{z}}} \delta(z, z_{i_{k}}) \prod_{j_{k} \in S_{N_{tot} - \textbf{N}_{z}}} 1 - \delta(z, z_{j_{k}}) \right]\\
-&= \textbf{N}_{z} \times (1 + 0)\\
+\langle N(z) \rangle &= \sum_{N_{z} = 0}^{N_{tot}} N \sum_{combination\ k}^{N_{tot}! / N! (N_{tot} - N)!} \left[ \prod_{i_{k} \in \mathbb{S}_{z}} p(z \gvn \data_{i_{k}}) \prod_{j_{k} \in \mathbb{S}_{\sim z}} 1 - p(z \gvn \data_{j_{k}}) \right]\\
+&= \sum_{N = 0}^{N_{tot}} N \sum_{combination\ k}^{N_{tot}! / N! (N_{tot} - N)!} \left[ \prod_{i_{k} \in \mathbb{S}_{z}} \delta(z, z_{i_{k}}) \prod_{j_{k} \in \mathbb{S}_{\sim z}} 1 - \delta(z, z_{j_{k}}) \right]\\
+&= N' \left[ \prod_{i_{k} \in \mathbb{S}_{N'}} \delta(z, z_{i_{k}}) \prod_{j_{k} \in S_{N_{tot} -N'}} 1 - \delta(z, z_{j_{k}}) \right]\\
+&= N' \times (1 + 0)\\
 \end{align}
 
 every term is 0 except where $z=z_{jk}$, where it is 1, which only occurs for the true configuration is the PDFs are delta functions centered at the truth, so $\langle N_{z}\rangle = \hat{N}_{z}$, a histogram of spec-zs
+\end{proof}
 
-what happens when we deviate away from this assumption of $p(z \mid d_{i}) = \delta(z, z_{i})$?
+\aim{what happens when we deviate away from this assumption of $p(z \mid d_{i}) = \delta(z, z_{i})$?
 
 Figure:\\
 left: rugplot, smoothing/histogram, recover $N(z)$\\
 right: broadening of \zpdf s broadens $N(z)$
 
-in realistic circumstances of photometry being noisy and less informative, stacking is guaranteed to yield an overly broad $N(z)$.
+in realistic circumstances of photometry being noisy and less informative, stacking is guaranteed to yield an overly broad $N(z)$.}
 
 \subsubsection{Perfectly uninformative data}
 \label{sec:prior}
 
+\begin{theorem}
 if PDFs were solely dependent on data, $p(z \mid d_{i})$ would be same for all codes [CITE PZDC1], so they really must be implicit posteriors conditioned on data and assumptions $p(z \mid d_{i}, \tilde{N}_{z})$
 
 \begin{align}
 \label{eq:stackwithprior}
 \hat{N}(z) &= \sum_{i = 0}^{N_{tot}} p(z \mid d_{i}, \tilde{N}_{z})
 \end{align}
-
+\end{theorem}
+\begin{proof}
 if the data is perfectly uninformative, $p(z \mid d, \tilde{N}_{z}) = \frac{\tilde{N}_{z}}{N_{tot}}$
 
 \begin{align}
@@ -223,8 +228,9 @@ if the data is perfectly uninformative, $p(z \mid d, \tilde{N}_{z}) = \frac{\til
 \end{align}
 
 this expression always reduces to the result of stacking
+\end{proof}
 
-Figure: sum of same $N_{z}$ building up to that times $N_{tot}$
+\aim{Figure: sum of same $N_{z}$ building up to that times $N_{tot}$}
 
 \subsection{Discussion}
 \sectlabel{sec:disco}
