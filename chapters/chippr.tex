@@ -65,24 +65,35 @@ Additionally, $N(z)$ has been the subject of inference using photo-$z$ probabili
 \section{If stacking is wrong, why does it feel so right?}
 \sectlabel{sec:pedantry}
 
-The constraining power of current and upcoming telescope missions is contingent on our ability to obtain redshift estimates for large numbers of faint galaxies.
-In the absence of spectroscopic redshifts, unreliable photometric redshift point estimates (photo-$z$s) have been superceded by photo-$z$ probability density functions (PDFs) that encapsulate their nontrivial uncertainties.
 Initial applications of photo-$z$ PDFs in weak gravitational lensing studies of cosmology have employed naive methodologies for obtaining the redshift distribution function $N(z)$.
 Though computationally straightforward, such techniques violate the laws of probability, triggering a proliferation of mathematically self-consistent models of varying complexity answering the question, ``What is the right way to obtain the redshift distribution function $N(z)$ from a catalog of photometric redshift PDFs?''
 However, adoption of these principled models has been slow, perhaps due to a gap in understanding between those developing the methods and those applying them to real data.
-This letter aims to bridge that gap by addressing the contrapositive of the more common presentation of such models, answering the question, ``Under what conditions do traditional stacking methods recover the true redshift distribution function $N(z)$?''
+This letter aims to bridge that gap by addressing the contrapositive of the more common presentation of such models, answering the question, ``Under what conditions do traditional stacking methods recover the true redshift distribution function?''
 
 \subsection{Definitions}
 \label{sec:def}
 
+We first establish some basic definitions:
 \begin{enumerate}
-	\item state space $N(z)$ can take any value $N_{z} = 0, \dots, N_{tot}$, so $N_{tot}+1$ possibilities
-	\item probability $n(z) \equiv p(z) = \frac{N_{z}}{N_{tot}}$, $\int n(z) dz = \int p(z) dz = 1$
-	\item independent $p(z_{i} \cap z_{j}) = p(z_{i}) p(z_{j})$, not in general $(p(z_{i}) + p(z_{j})) / 2$
-	\item disjoint $p(\sim z) = 1 - p(z)$, $p(z_{i} \cup z_{j}) = p(z_{i}) p(\sim z_{j}) + p(\sim z_{i}) p(z_{j}) + p(z_{i}) p(z_{j}) = p(z_{i})(1 - p(z_{j})) + (1 - p(z_{j}))p(z_{j}) + p(z_{i}) p(z_{j})$, also $p(z_{i} \cup z_{j}) = 1 - p(\sim z_{i} \cap \sim z_{j}) = 1 - p(\sim z_{i}) p(\sim z_{j}) = 1 - (1 - p(z_{i})) (1 -p(z_{j}))$
-	\item expected value $\langle N_{z} \rangle = \frac{1}{N_{tot}+1} \sum_{N_{z} = 0}^{N_{tot}} N_{z} p(N_{z})$
-	%; note that $\hat{n}(z) = \langle p(z) \rangle$ assuming $p(p(z)) = \mathcal{U}(0, 1)$
+	\item The \textit{state space} of a particular galaxy's redshift can be broken down into two states, that of redshift equal to $z$ and that of any other redshift $\sim z$.
+	\item The elements of the state space are \textit{disjoint} if one occurring means that all others do not occur; our single galaxy cannot have both redshift $z$ and a redshift $\sim z$.
+	\item If the \textit{probability density} of a galaxy having a particular redshift $z$ is $p(z) = \frac{N(z)}{N_{tot}} \equiv n(z)$ of finding a galaxy at a given redshift is the number of galaxies at that redshift divided by the total number of galaxies.
+	\item A probability density must satisfy the \textit{normalization} condition $\int p(z) dz = 1$, which is also $p(z) + p(\sim z) = 1$ for our single galaxy relative to a specific redshift $z$.
 \end{enumerate}
+These definitions pertain to the redshift of a single galaxy, but this document pertains to the redshifts of ensembles of galaxies.
+\begin{enumerate}
+	\item The number of galaxies at a particular redshift $N(z) = N_{z}$ is a \textit{summary statistic} of th
+	\item The probability of multiple \textit{statistically independent} events occurring is the product of the probabilities of the individual events; for example, the probability of finding a galaxy $i$ at $z_{i}$ and another galaxy $j$ at $z_{j}$ is $p(z_{i} \cap z_{j}) = p(z_{i}) p(z_{j})$ if the redshift of one is not causally dependent on the redshift of the other.
+	\item 
+\end{enumerate}
+
+The \textit{state space} of the redshift distribution $N(z)$ at some particular redshift $z$ encompasses all possible non-negative integers $N_{z} = 0, \dots, N_{tot}$, so $N_{tot}+1$ possibilities.
+The probability that either of two independent events occur is $p(z_{i} \cup z_{j}) = p(z_{i}) p(\sim z_{j}) + p(\sim z_{i}) p(z_{j}) + p(z_{i}) p(z_{j}) = p(z_{i})(1 - p(z_{j})) + (1 - p(z_{j}))p(z_{j}) + p(z_{i}) p(z_{j})$, also $p(z_{i} \cup z_{j}) = 1 - p(\sim z_{i} \cap \sim z_{j}) = 1 - p(\sim z_{i}) p(\sim z_{j}) = 1 - (1 - p(z_{i})) (1 -p(z_{j}))$
+expected value $\langle N_{z} \rangle = \frac{1}{N_{tot}+1} \sum_{N_{z} = 0}^{N_{tot}} N_{z} p(N_{z})$
+%; note that $\hat{n}(z) = \langle p(z) \rangle$ assuming $p(p(z)) = \mathcal{U}(0, 1)$
+
+
+what is wrong with $p(z_{i} \cap z_{j}) \neq (p(z_{i}) + p(z_{j})) / 2$? mixing normalization and independence concepts in wrong way
 
 galaxies have true redshifts in nature, so for every redshift $z$, there is a set $\mathbb{S}^{z}$ of $\textbf{N}_{z}$ galaxies that really do have redshift $z$\\
 if we think there are $N_{z}$ galaxies with redshift $z$, there are $N_{z}!$ possible sets $k$ of galaxies that could lead to $N_{z}$ having redshift $z$\\
