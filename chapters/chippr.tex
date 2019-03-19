@@ -4,11 +4,15 @@
 \newcommand{\Chippr}{\project{CHIPPR}}
 
 % Math:
+\newcommand{\Nz}{$N(z)$}
 \newcommand{\nz}{$n(z)$}
+\newcommand{\ndphi}{\ensuremath{\vec{\phi}}}% could change to bold
+\newcommand{\data}{\ensuremath{\vec{d}}}% could change to bold
 
 \chapter{How to obtain the redshift distribution from probabilistic redshift estimates\chaplabel{chippr}}
 
 This \paper\ represents joint work with [people] published in [place] as [citation].
+I aim to develop a clear methodology guiding the use of photo-$z$ PDFs in inference so they may best be utilized by the community.
 
 \section{Chapter abstract}
 
@@ -30,20 +34,19 @@ We conclude by propagating these effects to constraints in the space of cosmolog
 \aim{Q: Why should we question existing methods?\\
 	A: Stacking is bad and only looks like it works because of assumptions that don't hold when the data is as bad as we anticipate.}
 
-Though their potential to improve estimates of physical parameters is tremendous, photo-$z$ posterior probability distributions have been applied only to a limited extent.  
-This paper aims to develop a clear methodology guiding the use of photo-$z$ PDFs in inference so they may best be utilized by the community.
+Though their potential to improve estimates of physical parameters is tremendous, \pzpdf s have been applied only to a limited extent.  
 They have been used to form selection criteria of samples from galaxy surveys without propagation 
 through the calculations of physical parameters \citep{VanBreukelen2009,Viironen2015}.  
 Probability cuts on Bayesian quantities are not uncommon \citep{Leung2015, DiPompeo2015a}, but that procedure does not fully take advantage of all information contained in a probability distribution for parameter inference.  
 
-Despite the growing prevalence of photo-$z$ posterior production, no implementation of inference using photo-$z$ PDFs has yet been presented with a mathematically consistent methodology.  
-We present and validate a technique for the use of photo-$z$ posterior distributions in inference of arbitrary statistics relevant to cosmology, large-scale structure, and galaxy evolution.  
+Despite the growing prevalence of \pzpdf\ production, no implementation of inference using \pzpdf s has yet been presented with a mathematically consistent methodology.  
+We present and validate a technique for the use of \pzpdf\ in inference of arbitrary statistics relevant to cosmology, large-scale structure, and galaxy evolution.  
 For simplicity, we consider only one-point statistics, though future work will extend this methodology to higher-order statistics.
 
-The redshift distribution function $N(z)$ serves as an ideal statistic upon which to demonstrate this novel approach.  
-$N(z)$ is necessary for calculations of two-point correlation functions of weak gravitational lensing and counting statistics that are used to probe dark energy \citep{Masters2015}.  
-$N(z)$ for observed galaxies has also been used to validate survey selection functions used in generation of realistic, multi-purpose mock catalogs \citep{Norberg2002}.  
-Additionally, $N(z)$ has been the subject of inference using photo-$z$ probability distributions before \citep{Sheldon2012, Hildebrandt2012, Kelly2014, Benjamin2013, Bonnett2015a, Viironen2015, Asorey2016, Leistedt2016}, so comparisons to the literature may easily be made. 
+The redshift distribution function \Nz\ serves as an ideal statistic upon which to demonstrate this novel approach.  
+\Nz\ is necessary for calculations of two-point correlation functions of weak gravitational lensing and counting statistics that are used to probe dark energy \citep{Masters2015}.  
+The observed \Nz\ also been used to validate survey selection functions used in generation of realistic, multi-purpose mock catalogs \citep{Norberg2002}.  
+Additionally, \Nz\ has been the subject of inference using photo-$z$ probability distributions before \citep{Sheldon2012, Hildebrandt2012, Kelly2014, Benjamin2013, Bonnett2015a, Viironen2015, Asorey2016, Leistedt2016}, so comparisons to the literature may easily be made. 
 
 \textbf{New paragraph here: Say what precision is needed for N(z) for future weak lensing surveys. Say what precision the mass function is needed (in, say cluster studies) for precision cosmology.}
 
@@ -62,7 +65,7 @@ Additionally, $N(z)$ has been the subject of inference using photo-$z$ probabili
 	Q: How does the result of \chippr compare to established estimators in terms of the precision on cosmological constraints?
 \end{itemize}
 
-\section{If stacking is wrong, why does it feel so right?}
+\section{Pedagogical Framework}
 \sectlabel{sec:pedantry}
 
 Initial applications of photo-$z$ PDFs in weak gravitational lensing studies of cosmology have employed naive methodologies for obtaining the redshift distribution function $N(z)$.
@@ -73,21 +76,33 @@ This letter aims to bridge that gap by addressing the contrapositive of the more
 \subsection{Definitions}
 \label{sec:def}
 
-We first establish some basic definitions:
-\begin{enumerate}
-	\item The \textit{state space} of a particular galaxy's redshift can be broken down into two states, that of redshift equal to $z$ and that of any other redshift $\sim z$.
-	\item The elements of the state space are \textit{disjoint} if one occurring means that all others do not occur; our single galaxy cannot have both redshift $z$ and a redshift $\sim z$.
-	\item If the \textit{probability density} of a galaxy having a particular redshift $z$ is $p(z) = \frac{N(z)}{N_{tot}} \equiv n(z)$ of finding a galaxy at a given redshift is the number of galaxies at that redshift divided by the total number of galaxies.
-	\item A probability density must satisfy the \textit{normalization} condition $\int p(z) dz = 1$, which is also $p(z) + p(\sim z) = 1$ for our single galaxy relative to a specific redshift $z$.
-\end{enumerate}
-These definitions pertain to the redshift of a single galaxy, but this document pertains to the redshifts of ensembles of galaxies.
-\begin{enumerate}
-	\item The number of galaxies at a particular redshift $N(z) = N_{z}$ is a \textit{summary statistic} of th
-	\item The probability of multiple \textit{statistically independent} events occurring is the product of the probabilities of the individual events; for example, the probability of finding a galaxy $i$ at $z_{i}$ and another galaxy $j$ at $z_{j}$ is $p(z_{i} \cap z_{j}) = p(z_{i}) p(z_{j})$ if the redshift of one is not causally dependent on the redshift of the other.
-	\item 
-\end{enumerate}
+We first establish some basic definitions by considering the chance that a single galaxy has a given redshift $z$.
+\begin{definition}\label{def:binarystatespace}
+	The \textit{state space} of a particular galaxy's redshift can be broken down into two states, that of redshift equal to $z$ and that of any other redshift $\sim z$.
+\end{definition}
+\begin{definition}
+	The elements of the state space are \textit{disjoint} if one occurring means that all others do not occur; our single galaxy cannot have both redshift $z$ and a redshift $\sim z$.
+\end{definition}
+\begin{definition}\label{def:pdens}
+	The \textit{probability density function (PDF)} $p(z) \geq 0$ is the chance that a galaxy takes a redshift $z$.
+\end{definition}
+\begin{definition}\label{def:normalization}
+	A probability density must satisfy the \textit{normalization} condition $\int p(z) dz = 1$, which is also $p(z) + p(\sim z) = 1$ for our single galaxy relative to a specific redshift $z$.
+\end{definition}
 
-The \textit{state space} of the redshift distribution $N(z)$ at some particular redshift $z$ encompasses all possible non-negative integers $N_{z} = 0, \dots, N_{tot}$, so $N_{tot}+1$ possibilities.
+These definitions pertain to the redshift of a single galaxy, but this document concerns the distribution $N(z)$ of redshifts of an ensemble of $N_{tot}$ galaxies, quantified by a summary statistic $\ndphi$, which under some function $N(z) = f(\ndphi; z)$ provides the number of galaxies $N_{z}$ at a redshift $z$.
+The redshift distribution itself can be used to define a probability density $n(z) \equiv p(z \gvn \ndphi) = N(z) / N_{tot}$ of finding a galaxy at a given redshift under the parameter $\ndphi$.
+The state space of $N(z)$ is the set of non-negative integers $0, \dots, N_{tot}$, so $N_{tot}+1$ possibilities.
+The state space of $p(z \gvn \ndphi)$, however need only satisfy Definitions \ref{def:pdens} and \ref{def:normalization}.
+
+\aim{needs work after here}
+
+%\begin{proposition}
+%\end{proposition}
+
+\begin{definition}
+	The probability of multiple \textit{statistically independent} events occurring is the product of the probabilities of the individual events; for example, the probability of finding a galaxy $i$ at $z_{i}$ and another galaxy $j$ at $z_{j}$ is $p(z_{i} \cap z_{j}) = p(z_{i}) p(z_{j})$ if the redshift of one is not causally dependent on the redshift of the other.
+\end{definition}
 The probability that either of two independent events occur is $p(z_{i} \cup z_{j}) = p(z_{i}) p(\sim z_{j}) + p(\sim z_{i}) p(z_{j}) + p(z_{i}) p(z_{j}) = p(z_{i})(1 - p(z_{j})) + (1 - p(z_{j}))p(z_{j}) + p(z_{i}) p(z_{j})$, also $p(z_{i} \cup z_{j}) = 1 - p(\sim z_{i} \cap \sim z_{j}) = 1 - p(\sim z_{i}) p(\sim z_{j}) = 1 - (1 - p(z_{i})) (1 -p(z_{j}))$
 expected value $\langle N_{z} \rangle = \frac{1}{N_{tot}+1} \sum_{N_{z} = 0}^{N_{tot}} N_{z} p(N_{z})$
 %; note that $\hat{n}(z) = \langle p(z) \rangle$ assuming $p(p(z)) = \mathcal{U}(0, 1)$
@@ -99,46 +114,61 @@ galaxies have true redshifts in nature, so for every redshift $z$, there is a se
 if we think there are $N_{z}$ galaxies with redshift $z$, there are $N_{z}!$ possible sets $k$ of galaxies that could lead to $N_{z}$ having redshift $z$\\
 each such set $\mathbb{S}_{k}^{z}$ corresponds to exactly one corresponding set $\mathbb{S}_{k}^{\sim z}$ by the disjoint property of the state space
 
-\subsection{Derivation}
-\label{sec:pedanticmath}
+\aim{need to define \textit{expected value} of \Nz}
 
-proof by construction: the redshift distribution can be framed as an application of the binomial theorem
-
-\subsubsection{A two-redshift universe of identical galaxies}
-
-every photo-z PDF is the same and only two redshifts in the universe $\to$ flipping a single coin a finite number of times\\
-every possible set $\mathbb{S}^{z}_{k}$ of $N_{z}$ galaxies with redshift $z$ corresponds to a set $\mathbb{S}^{\sim z}_{k}$ of $N_{tot}-N_{z}$ galaxies with redshift other than $z$\\
-the binomial theorem states that $p(N_{z}) = \comb{N_{tot}}{N_{z}} \times p(z)^{N_{z}} \times (1-p(z))^{N_{tot}-N_{z}}$ for $\comb{N_{tot}}{N_{z}} \equiv \frac{N_{tot}!}{N_{z}! (N_{tot}-N_{z})!}$
-
-\subsubsection{A many-redshift universe of identical galaxies}
-
-every photo-z PDF is the same and many possible redshifts $\to$ the birthday problem\\
-now let's consider a set $\mathbb{S}^{z}$ of $\textbf{N}_{z}$ galaxies with redshift $z$, which can be defined individually for all redshifts $z$\\
-holding $\textbf{N}_{z}$ constant, there are $\mathbb{N}_{z}!$ possible combinations of galaxies in the set $\mathbb{S}^{z}$
-the birthday problem is solved by $p(N_{z}) = 1 - p(z)^{N_{tot}} \times \perm{N_{tot}}{N_{z}}$ for $\perm{N_{tot}}{N_{z}} \equiv \frac{N_{tot}!}{(N_{tot}-N_{z})!} = N_{z}!\comb{N_{tot}}{N_{z}}$
-
-\subsubsection{A many-redshift universe of different galaxies}
-
-now consider many possible photo-z PDFs and many possible redshifts
-
-Figure: isolating one redshift slice of $N(z)$
-
-\begin{align}
-p(N_{z}) &= %\sum_{permutation\ k}^{N_{tot}!} \left[ \prod_{i_{k} = 0}^{N_{z}} p(z_{i_{k}}) \prod_{j_{k} = N_{z} + 1}^{N_{tot}} 1 - p(z_{j_{k}}) \right]\\
-\sum_{combination\ k}^{N_{tot}! / N_{z}! (N_{tot} - N_{z})!} \left[ \prod_{i_{k} \in \mathbb{S}_{z}} p(z_{i_{k}}) \prod_{j_{k} \in \mathbb{S}_{\sim z}} 1 - p(z_{j_{k}}) \right]
-\end{align}
-
-Figure: posterior samples of $N_{z}$ for that slice
-
-\subsection{Results}
-\sectlabel{sec:res}
-
-the stacked estimator of the redshift distribution yields a single redshift distribution function $\hat{N}_{z}$ rather than the probability distribution $p(N_{z})$, so here we'll use the reduction of \Eq{eq:complete} to its expected value $\langle N_{z} \rangle$
+the stacked estimator of the redshift distribution yields a single redshift distribution function $\hat{N}_{z}$ rather than the probability distribution $p(N)$, so here we'll use the reduction of \Eq{eq:complete} to its expected value $\langle N_{z} \rangle$
 
 \begin{align}
 \eqlabel{eq:complete}
 \langle N_{z} \rangle &= \sum_{N_{z} = 0}^{N_{tot}} N_{z} \sum_{combination\ k}^{N_{tot}! / N_{z}! (N_{tot} - N_{z})!} \left[ \prod_{i_{k} \in S_{z}} p(z_{i_{k}}) \prod_{j_{k} \in \mathbb{S}_{\sim z}} 1 - p(z_{j_{k}}) \right]
 \end{align}
+
+\subsection{Derivation}
+\label{sec:pedanticmath}
+
+The following proofs establish the relationship between a catalog of individual galaxy redshift PDFs and the redshift distribution from a combinatorial perspective.
+\begin{definition}
+	 The number of possible subsets of $N$ galaxies that can be selected from a set of $N_{tot} \geq N$ galaxies is $\comb{N_{tot}}{N} \equiv \frac{N_{tot}!}{N! (N_{tot} - N)!}$.
+\end{definition}
+\begin{definition}
+	\aim{define orderings above and turn this into a proposition?}
+	The number of possible orderings of all $\comb{N_{tot}}{N}$ subsets of $N$ galaxies out of a set of $N_{tot} \geq N$ is $\perm{N_{tot}}{N} \equiv \frac{N_{tot}!}{(N_{tot}-N)!} = N!\comb{N_{tot}}{N}$.
+\end{definition}
+
+\subsubsection{A universe of identical galaxies}
+
+\begin{theorem}
+Consider a universe in which all galaxies have the same \pzpdf $p(z \gvn \phi_{b})$ defined by a scalar $\phi_{b}$.
+If there are only two options in the state space, those of Definition \ref{def:binarystatespace}, then the problem is equivalent to that of counting successes after flipping a single coin with $p(z) = \phi_{b}$ a total of $N_{tot}$ times.
+The $N_{tot}$ coin flips build a set $\mathbb{S}_{z}$ of $N$ galaxies with redshift $z$ and $\mathbb{S}_{\sim z}$ of $N_{tot} - N$ galaxies with redshift $\sim z$.
+If we want the probability of $N$ successes, we sum over all combinations of galaxies that could define these sets.
+Bearing in mind that our galaxies have $p(\sim z) = 1 - \phi_{b}$, the probability of $N$ galaxies having redshift $z$ is given by the binomial theorem
+\begin{equation}
+\eqlabel{eq:binomial}
+p(N \gvn \phi_{b}) = \comb{N_{tot}}{N} \times \phi_{b}^{N} \times (1 - \phi_{b})^{N_{tot} - N} .
+\end{equation}
+\end{theorem}
+\begin{proof}
+	\aim{reproduce the proof to refer to in next section}
+\end{proof}
+We may generalize the two-redshift universe to a many-redshift universe by considering the generalization of the binomial theorem to the birthday problem, which asks for the probability that $N$ people in a room of $N_{tot}$ people share the same birthday.
+We will consider one redshift at a time to maintain the simple phase space; the proof of the birthday problem case is left as an exercise for the reader.
+%the birthday problem is solved by $p(N_{z}) = 1 - p(z)^{N_{tot}} \times \perm{N_{tot}}{N_{z}}$
+
+\subsubsection{A universe of unique galaxies}
+
+Of course galaxies do not share the same \pzpdf; the \pzpdf s differ because the photometry $\vec{d}_{i}$ differs.
+Now, each galaxy $i$ has $p(z \gvn \data_{i})$.
+\aim{Figure: isolating one redshift slice of $N(z)$}
+Now, the probability that the summary statistic $N(z)$ takes the value $N$ is 
+\begin{align}
+\eqlabel{eq:general}
+p(N) &= \sum_{combination\ k}^{N_{tot}! / N! (N_{tot} - N)!} \left[ \prod_{i_{k} \in \mathbb{S}_{z}} p(z \gvn \data_{i_{k}}) \prod_{j_{k} \in \mathbb{S}_{\sim z}} 1 - p(z \gvn \data_{j_{k}}) \right] .
+\end{align}
+\aim{Figure: posterior samples of $N_{z}$ for that slice}
+
+\subsection{Results}
+\sectlabel{sec:res}
 
 let's explore what assumptions must hold for \Eq{eq:complete} to be equivalent to \Eq{eq:stackwithdata}
 

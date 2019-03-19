@@ -3,6 +3,7 @@
 \usepackage[tbtags]{amsmath}
 \usepackage{amssymb}
 \usepackage{amsfonts}
+\usepackage{amsthm}
 
 \usepackage{color, hyperref}
 \definecolor{linkcolor}{rgb}{0,0,0.2}
@@ -114,6 +115,18 @@
 \newcommand{\todo}[3]{{\color{#2}\emph{#1}: #3}}
 \newcommand{\aim}[1]{\todo{AIM}{red}{#1}}
 
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+
+
 % Math:
 %\newcommand{\dd}{\ensuremath{\,\mathrm{d}}}
 \newcommand{\bvec}[1]{{\ensuremath{\boldsymbol{#1}}}}
@@ -121,21 +134,22 @@
 %\newcommand{\unit}[1]{\mathrm{#1}}
 
 % Probabilities:
-\newcommand\perm[2]{\ensuremath{_{#1}\mathrm{P}_{#2}}}
-\newcommand\comb[2]{\ensuremath{_{#1}\mathrm{C}_{#2}}}
+\newcommand{\perm}[2]{\ensuremath{_{#1}\mathrm{P}_{#2}}}
+\newcommand{\comb}[2]{\ensuremath{_{#1}\mathrm{C}_{#2}}}
 \newcommand{\like}{\mathscr{L}}
 \newcommand{\pr}[1]{\ensuremath{p(#1)}}
 \newcommand{\af}{\ensuremath{a_f}}
 \newcommand{\expect}[1]{\left<#1\right>}
 \newcommand{\normal}[2]{\mathcal{N} (#1, #2)}
+\newcommand{\gvn}{\vert}% could use | or \mid
 
 % misc science
 \newcommand{\sz}{spec-$z$}
 \newcommand{\Sz}{Spec-$z$}
 \newcommand{\pz}{photo-$z$}
 \newcommand{\Pz}{Photo-$z$}
-\newcommand{\pzpdf}{\pz\ PDF}
-\newcommand{\Pzpdf}{\Pz\ PDF}
+\newcommand{\pzpdf}{\pz\ PDF}% could change to posterior
+\newcommand{\Pzpdf}{\Pz\ PDF}% could change to posterior
 \newcommand{\zpdf}{redshift posterior}
 
 \sloppy\sloppypar
