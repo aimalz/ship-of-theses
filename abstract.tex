@@ -1,13 +1,13 @@
-Upcoming optical telescope surveys will produce tremendous galaxy catalogs of purely photometric data.
-Spectroscopic confirmation will be impossible not only due to the sheer number of galaxies, but also due to the unprecedented depth of the data, which will include a substantial population of faint, low signal-to-noise ratio galaxies.
+Upcoming optical astronomical surveys, among them the Large Synoptic Survey Telescope (\textsc{LSST}), will produce tremendous galaxy catalogs from purely photometric data.
+Spectroscopic confirmation will be impossible not only because of the sheer number of galaxies, but also because of the unprecedented depth of the data, which will include a substantial population of faint, low signal-to-noise galaxies.
 Existing analysis techniques in cosmology and population-level studies of galaxies make assumptions regarding the nature of the data that will not hold in this new uncertainty-dominated regime, rendering established statistical techniques invalid.
 This thesis develops new methodologies for cosmology using probabilistic descriptions appropriate for the noise-dominated data anticipated of next-generation observational astrophysics missions. 
 
 I begin with a mathematically rigorous application of probabilistic redshift estimates in cosmology.
-I present two original proofs covering the only circumstances in which the ubiquitous heuristic approach to estimating the redshift distribution from a catalog of redshift probabilities can recover the true redshift distribution.
-I introduce Cosmological Hierarchical Inference with Probabilistic Photometric Redshifts (CHIPPR), a probabilistic graphical model and accompanying public code that enables the use of an existing catalog of redshift posteriors in an inference of the redshift distribution.
+I present original proofs covering the only circumstances under which the ubiquitous heuristic approach to estimating the redshift distribution from a catalog of redshift probabilities can recover the true redshift distribution.
+I introduce Cosmological Hierarchical Inference with Probabilistic Photometric Redshifts (CHIPPR), a hierarchical Bayesian model and accompanying public code that enables the use of an existing catalog of redshift posteriors in an inference of the redshift distribution.
 I compare the performance of CHIPPR to traditional alternatives using instructive cases of forward-modeled mock data, from toy to realistically complex.
 
-Next, I present a comprehensive comparison of twelve approaches to probabilistic photometric redshift estimation, presenting novel discoveries of the impact of the assumptions implicit to the method by which the redshift probabilities are derived and the limitations of established performance metrics of such probabilistic data products in assessing the quality of the procedures for deriving them.
-I also answer the question of how probabilistic data products such as redshift probabilities should be stored and delivered to those aiming to use them in physical inference without excessive loss of precision given limited storage resources.
+Next, I present a comprehensive comparison of twelve approaches to probabilistic photometric redshift estimation, presenting novel discoveries of the impact of the assumptions implicit to the method by which the redshift probabilities are derived and the limitations of established performance metrics of such probabilistic data products.
+I also answer the question of how probabilistic data products such as redshift probabilities should be stored and delivered to those aiming to use them in physical inference without excessive loss of precision, given limited storage resources.
 
