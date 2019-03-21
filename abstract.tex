@@ -1,13 +1,14 @@
-Upcoming optical astronomical surveys, among them the Large Synoptic Survey Telescope (\textsc{LSST}), will produce tremendous galaxy catalogs from purely photometric data.
-Spectroscopic confirmation will be impossible not only because of the sheer number of galaxies, but also because of the unprecedented depth of the data, which will include a substantial population of faint, low signal-to-noise galaxies.
-Existing analysis techniques in cosmology and population-level studies of galaxies make assumptions regarding the nature of the data that will not hold in this new uncertainty-dominated regime, rendering established statistical techniques invalid.
-This thesis develops new methodologies for cosmology using probabilistic descriptions appropriate for the noise-dominated data anticipated of next-generation observational astrophysics missions. 
+Upcoming optical astronomical surveys, including the Large Synoptic Survey Telescope (LSST), will produce tremendous galaxy catalogs from purely photometric data.
+Spectroscopic redshift confirmation will be impossible not only because of the sheer number of galaxies, but also because of the unprecedented depth of the data, which will include a substantial population of faint, low signal-to-noise galaxies.
+Existing analysis techniques in cosmology and population-level studies of galaxies make assumptions regarding the nature of the data that will not hold in this new regime, rendering traditional statistical techniques invalid.
+This thesis develops novel methodologies for cosmology using probabilistic descriptions appropriate for the uncertainty-dominated data anticipated of next-generation observational astrophysics missions. 
 
-I begin with a mathematically rigorous application of probabilistic redshift estimates in cosmology.
-I present original proofs covering the only circumstances under which the ubiquitous heuristic approach to estimating the redshift distribution from a catalog of redshift probabilities can recover the true redshift distribution.
-I introduce Cosmological Hierarchical Inference with Probabilistic Photometric Redshifts (CHIPPR), a hierarchical Bayesian model and accompanying public code that enables the use of an existing catalog of redshift posteriors in an inference of the redshift distribution.
-I compare the performance of CHIPPR to traditional alternatives using instructive cases of forward-modeled mock data, from toy to realistically complex.
+I develop a statistically rigorous approach to a cosmological application of probabilistic photometric redshifts.
+I present original proofs covering the only circumstances under which a ubiquitous heuristic yields an accurate estimator of the redshift distribution from a sample of redshift probabilities.
+I introduce Cosmological Hierarchical Inference with Probabilistic Photometric Redshifts (CHIPPR), a hierarchical Bayesian model and accompanying public code that enables the use of an existing catalog of redshift posteriors in a mathematically self-consistent inference of the redshift distribution.
+I compare the performance of CHIPPR to familiar alternatives using instructive cases of forward-modeled mock data, from toy to realistically complex.
 
-Next, I present a comprehensive comparison of twelve approaches to probabilistic photometric redshift estimation, presenting novel discoveries of the impact of the assumptions implicit to the method by which the redshift probabilities are derived and the limitations of established performance metrics of such probabilistic data products.
-I also answer the question of how probabilistic data products such as redshift probabilities should be stored and delivered to those aiming to use them in physical inference without excessive loss of precision, given limited storage resources.
+Next, I present a comprehensive assessment of twelve approaches for estimating photometric redshift probabilities under controlled experimental conditions in the context of the LSST Dark Energy Science Collaboration.
+I demonstrate the impact of the assumptions implicit to the method by which the redshift probabilities are obtained, and I identify the limitations of established performance metrics of such probabilistic data products.
+I also answer the question of how probabilistic data products such as redshift probabilities should be stored and delivered to those aiming to use them in generic physical inference without undue loss of precision, given limited storage resources.
 
