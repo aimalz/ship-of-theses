@@ -27,34 +27,28 @@ Many techniques to obtain photo-$z$ probability distributions have been proposed
 An extension of the Bayesian photometric redshift (BPZ) method of \citet{Benitez2000} that produces posterior probability distributions (as opposed to a selection of local maxima) from an SED template library has been employed \citep{Hildebrandt2012, Kelly2014, Lopez-Sanjuan2015}.  
 \Pzpdf s have also been obtained by a variety of trustworthy data-driven approaches in the literature: $k$-nearest neighbor algorithms with \citep{Ball2008} and without \citep{Sheldon2012} inclusion of photometric measurement errors, neural networks \citep{Bonnett2015a}, self-organizing maps \citep{CarrascoKind2014a}, and prediction tree and random forest classification techniques \citep{Carliles2010, CarrascoKind2013}.  
 (The approaches of fitting to a training set and fitting to a template library are related by \citet{Budavari2009}.)  
-Hierarchical inference has also been applied to calculate \pz\ posteriors simultaneously with the overall redshift distribution function \citep{Leistedt2016}.  
+Hierarchical inference has also been applied to calculate \pzpdf s simultaneously with the overall redshift distribution function \citep{Leistedt2016}.  
 Some current work aims to vet photo-$z$ probability distribution generation methods \citep{Wittman2016}, but much remains to be done.  
-Of course, this brief review does not cover all ways to obtain \pz\ probability distribution functions; many more may be found in the literature, along with comparisons thereof \citep{Hildebrandt2010, Dahlen2013, Sanchez2013, Bonnett2015}.
+Of course, this brief review does not cover all ways to obtain \pzpdf s; many more may be found in the literature, along with comparisons thereof \citep{Hildebrandt2010, Dahlen2013, Sanchez2013, Bonnett2015}.
 
 \Pzpdf s have been produced by completed surveys \citep{Hildebrandt2012, Sheldon2012} and will be produced by ongoing and upcoming surveys \citep{LSSTScienceCollaboration2009, CarrascoKind2014a, Bonnett2015, Masters2015}.  
 \Pzpdf s are not without their own weaknesses, however, including the resources necessary to calculate and record them for large galaxy surveys \citep{CarrascoKind2014} and the method used to derive them.  
 The most important of these issues, however, is that use of them in the literature is inconsistent at best and incorrect at worst.  
 
+\clearpage
+
 \aim{[terms I should define up front: \pz s, probability density functions]}
 ``$p(z)$'' is misleading, must be posterior conditioned on data $p(z \gvn d_{i})$, and $p(z_{i})$ doesn't make sense because the domain of $z$ is the same for any galaxy $i$
 
-\clearpage
-
 \aim{[what interesting problems/opportunities are the context for my work?  (drawing conclusions about the universe from vast quantities of uncertainty-dominated, limitations of photometry lead to methodological challenges, what was tried so far and why isn't it good enough)]}
 
-\clearpage
-
 \aim{[what science can be done with that opportunity? (cosmology, and then some! the interesting problems are in testing LCDM, GR, inflation, also galaxy evolution)]}
-
-\clearpage
 
 \aim{[what I'm going to say in each chapter, one paragraph each, pose the problem I solve and say what chapter contains my solution]}
 
 \Chap{chippr} presents a mathematically rigorous methodology for inferring the redshift distribution function from a catalog of redshift posteriors.
 \Chap{pzdc1} contains a comprehensive comparison of twelve approaches to probabilistic photometric redshift estimation, presenting novel discoveries of the impact of the assumptions implicit to the method by which the redshift probabilities are derived and the limitations of established performance metrics of such probabilistic data products in assessing the quality of the procedures for deriving them.
 I also address in \Chap{qp} a practical concern regarding how redshift probabilities are to actually be used, answering the question of how probabilistic data products should be stored and delivered to users in order to ensure that scientific progress can be made, as well as how to go about answering that question for a generic science application.
-
-\clearpage
 
 [did I produce anything of value? if there's a product, maybe cite it here?]
 
@@ -65,12 +59,12 @@ Each \chapname\ was co-authored with collaborators but the writing in each \chap
 Here, I describe my specific contributions to each \chapname:
 \begin{enumerate}
 
-{\item For \chap{chippr}, I led the study under the supervision of David Hogg (NYU).}
+{\item For \chap{chippr}, I led the development, implementation, and validation of CHIPPR under the supervision of David Hogg (NYU) and developed the mathematical formalism with encouragement from Phil Marshall (SLAC).}
 
-{\item For \chap{pzdc1}, I chose, implemented, and interpreted the comparison metrics.
-	I wrote the paper collaboratively with Sam Schmidt and the \Pz\ Working Group of the \desc.
-	The mock data was produced by [just a few people] and the redshift probability estimates were obtained by [almost all the other people].}
+{\item For \chap{pzdc1}, I led the choice, evaluation, and interpretation of the comparison metrics, and I devised and implemented the \texttt{trainZ} technique of \pzpdf\ estimation.
+I wrote the paper collaboratively with Sam Schmidt and the \Pz\ Working Group of the \desc.
+The mock data was produced by [just a few people] and the \pzpdf s were calculated by [almost all the other people].}
 
-{\item For \chap{qp}, I developed the question and led the study under the supervision of Phil Marshall (SLAC), with contributions to the mock data production from Sam Schmidt (UC Davis), Melissa Graham (UW), Joe DeRose (Stanford), and Risa Wechsler (Stanford).}
+{\item For \chap{qp}, I conducted the investigation and wrote the \texttt{qp} code under the supervision of Phil Marshall (SLAC), with contributions to the mock data production by Sam Schmidt (UC Davis), Melissa Graham (UW), Joe DeRose (Stanford), and Risa Wechsler (Stanford).}
 
 \end{enumerate}
