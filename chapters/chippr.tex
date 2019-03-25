@@ -1,7 +1,8 @@
 \renewcommand{\chapid}{chippr}
 
 % Chapter specific commands:
-\newcommand{\Chippr}{\project{CHIPPR}}
+\newcommand{\Chippr}{\textit{CHIPPR}}
+\newcommand{\cosmolike}{\repo{CosmoLike}}
 
 % Math:
 \newcommand{\nz}{$n(z)$}
@@ -22,17 +23,11 @@ The nontrivial systematics affecting photo-$z$ estimation have motivated the wea
 However, analytic methods for utilizing these new data products in cosmological inference are still evolving.
 The ubiquitous methodology known as stacking produces a systematically biased estimator of $n(z)$ that worsens with decreasing signal-to-noise, the very regime where photo-$z$ PDFs are most necessary.
 We introduce a mathematically rigorous probabilistic graphical model (PGM) of hierarchical inference of $n(z)$, which is provably the only self-consistent way to combine photo-$z$ PDFs to produce an estimator of $n(z)$.
-The novel Cosmological Hierarchical Inference with Probabilistic Photometric Redshifts (CHIPPR) model yields a more accurate characterization of $n(z)$ by correctly propagating the redshift uncertainty information beyond the best-fit estimator produced by traditional procedures.
+The novel Cosmological Hierarchical Inference with Probabilistic Photometric Redshifts (\Chippr) model yields a more accurate characterization of $n(z)$ by correctly propagating the redshift uncertainty information beyond the best-fit estimator produced by traditional procedures.
 We conclude by propagating these effects to constraints in the space of cosmological parameters.
 
 \section{Introduction}
 \sectlabel{sec:intro}
-
-\aim{Q: What is the status quo?\\
-	A: The future of galaxy surveys is \pz s, and \pzpdf s rightfully replace \pz s; however, usage of \pzpdf s is limited.}
-
-\aim{Q: Why should we question existing methods?\\
-	A: Stacking is bad and only looks like it works because of assumptions that don't hold when the data is as bad as we anticipate.}
 
 Though their potential to improve estimates of physical parameters is tremendous, \pzpdf s have been applied only to a limited extent.  
 They have been used to form selection criteria of samples from galaxy surveys without propagation 
@@ -56,28 +51,28 @@ The established way to calculate \Nz\ is by ``stacking'' according to
 The stacked estimator $\hat{N}(z)$ of the redshift distribution is effectively an average of the \pzpdf\ catalog and, as I will show in this Chapter, not in general mathematically valid.
 I aim to develop a clear methodology guiding the use of \pzpdf s in inference so they may be utilized effectively by the cosmology community.
 
-\textbf{New paragraph here: Say what precision is needed for N(z) for future weak lensing surveys. Say what precision the mass function is needed (in, say cluster studies) for precision cosmology.}
+%\textbf{New paragraph here: Say what precision is needed for N(z) for future weak lensing surveys. Say what precision the mass function is needed (in, say cluster studies) for precision cosmology.}
 
-\Sect{sec:meth} will derive the framework for exploring the full posterior of distribution for $N(z)$ using photo-$z$ probability distribution functions.  
-\Sect{sec:exp} will describe how the model given in \Sect{sec:meth} is implemented.  
-\Sect{sec:valid} will discuss the results of applying the fully probabilistic approach to mock and real datasets.
+In \Sect{sec:pedantry}, I establish a mathematical formalism for \pzpdf s and present original proofs concerning the conditions under which the stacked estimator of the redshift distribution can be accurate.
+In \Sect{sec:meth}, I present the \Chippr\ model and \chippr\ implementation for characterizing the full posterior probability landscape of \Nz\ using \pzpdf s. 
+In \Sect{sec:valid}, I describe the experimental design for testing the fully probabilistic approach to mock and real datasets, the results of which are found in \Sect{sec:results}.
 
-\begin{itemize}
-	\item
-	Q: How can we improve the effectiveness of using \pzpdf s in inference?\\
-	A: Hierarchical inference is the only self-consistent way; see flow chart for outline of how it works in practice.
-	\item
-	Q: How does the result of \chippr compare to established estimators in terms of the accuracy of \nz ?\\
-	A: \chippr\ yields the best possible \nz , conditional on the accuracy of the \pzpdf s used.
-	\item
-	Q: How does the result of \chippr compare to established estimators in terms of the precision on cosmological constraints?
-\end{itemize}
+%\begin{itemize}
+%	\item
+%	Q: How can we improve the effectiveness of using \pzpdf s in inference?\\
+%	A: Hierarchical inference is the only self-consistent way; see flow chart for outline of how it works in practice.
+%	\item
+%	Q: How does the result of \chippr compare to established estimators in terms of the accuracy of \nz ?\\
+%	A: \chippr\ yields the best possible \nz , conditional on the accuracy of the \pzpdf s used.
+%	\item
+%	Q: How does the result of \chippr compare to established estimators in terms of the precision on cosmological constraints?
+%\end{itemize}
 
 \section{Pedagogical Framework}
 \sectlabel{sec:pedantry}
 
-Initial applications of photo-$z$ PDFs in weak gravitational lensing studies of cosmology have employed naive methodologies for obtaining the redshift distribution function $N(z)$.
-Though computationally straightforward, such techniques violate the laws of probability, triggering a proliferation of mathematically self-consistent models of varying complexity answering the question, ``What is the right way to obtain the redshift distribution function $N(z)$ from a catalog of photometric redshift PDFs?''
+Initial applications of \pzpdf s in weak gravitational lensing studies of cosmology have employed naive methodologies for obtaining the redshift distribution function \Nz.
+Though computationally straightforward, such techniques violate the laws of probability, triggering a proliferation of mathematically self-consistent models of varying complexity answering the question, ``What is the right way to obtain the redshift distribution function from a catalog of photometric redshift PDFs?''
 However, adoption of these principled models has been slow, perhaps due to a gap in understanding between those developing the methods and those applying them to real data.
 This letter aims to bridge that gap by addressing the contrapositive of the more common presentation of such models, answering the question, ``Under what conditions do traditional stacking methods recover the true redshift distribution function?''
 
@@ -1055,7 +1050,7 @@ From this one can conclude that the signal and associated error bars in that reg
 \subsection{LSST Requirements}
 \sectlabel{sec:lsstdemo}
 
-\aim{LSST specs: biased to 0.003, 10\% uniform outliers, z-dependent scatter of 0.05}
+The \lsst\ Science Requirements Document (SRD)\footnote{\url{https://docushare.lsstcorp.org/docushare/dsweb/Get/LPM-17}} states that the main cosmological sample of $\sim 10^{7}$ galaxies must have \pz s satisfying root-mean-square error $\sigma_z < 0.02 (1+z)$, $3 \sigma$ catastrophic outlier rate $< 10\%$, and bias $< 0.003$.
 
 \begin{figure*}
 	\begin{center}
@@ -1082,6 +1077,46 @@ From this one can conclude that the signal and associated error bars in that reg
 
 \subsection{Discussion}
 \sectlabel{sec:discussion}
+
+It is of interest to explore the impact of incorrectly estimated \nz\ on the inference of the cosmological parameters \textemdash how wrong will we be in our understanding of the universe if we don't perform a valid inference?
+To answer this question, I considered a set of tomographically binned \nz\ and cosmological parameter covariance matrices used for \desc\ forecasting.
+First, I binned them down to a piecewise constant parameterization with a manageable $15$ parameters for \chippr's sampling capabilities.
+Next, I drew $10^{4}$ true redshifts from the binned true \nz\ for each tomographic bin.
+The original, binned, and drawn \nz\ are shown in \Fig{fig:tomobins}
+
+\begin{figure*}
+	\begin{center}
+		\includegraphics[width=0.99\textwidth]{figures/chippr/cosmolike_inputs.png}
+		\caption{The \lsst-like tomographic binning and true redshift distribution.}
+		\figlabel{fig:tomobins}
+	\end{center}
+\end{figure*}
+
+Using the \lsst\ \pz\ requirements given in \Sect{sec:lsstdemo}, I emulated \pzpdf s corresponding to the $10^{4}$ true redshifts drawn from the true \nz\ in each bin using the procedure of \Fig{fig:flowchart}.
+I then ran \chippr\ as well as two other \nz\ estimation methods on the \pzpdf\ catalog for each tomographic bin.
+The estimates are given in \Fig{fig:per-bin-ests}.
+One can see that the excessive breadth of the stacked estimator and the histogram of the modes of the \pzpdf s.
+\Chippr, on the other hand, yields an estimate with error bars that include the truth in most bins and have a marginalized maximum likelihood solution far closer to the truth than the other estimators.
+
+\begin{figure*}
+	\begin{center}
+		\includegraphics[width=0.49\textwidth]{figures/chippr/0single_lsst_lin_estimators.png}\includegraphics[width=0.49\textwidth]{figures/chippr/1single_lsst_lin_estimators.png}\\
+		\includegraphics[width=0.49\textwidth]{figures/chippr/2single_lsst_lin_estimators.png}\includegraphics[width=0.49\textwidth]{figures/chippr/3single_lsst_lin_estimators.png}
+		\caption{The \chippr-derived and other estimators of \nz\ in each tomographic bin.}
+		\figlabel{fig:per-bin-ests}
+	\end{center}
+\end{figure*}
+
+I then used the different estimators of \nz\ in a cosmological forecasting procedure with \cosmolike.\aim{Cite Krause here}
+
+
+\begin{figure*}
+	\begin{center}
+		\includegraphics[width=0.99\textwidth]{figures/chippr/final_plot.png}
+		\caption{The result of propagating the estimators of \nz\ of \Fig{fig:per-bin-ests} to a subset of cosmological parameters.}
+		\figlabel{fig:cornerplot}
+	\end{center}
+\end{figure*}
 
 \begin{figure*}
 	\begin{center}
