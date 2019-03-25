@@ -78,7 +78,7 @@
 
 % LaTeX object referencing:
 \newcommand{\chapid}{no chapter}
-%\newcommand{\figref}[1]{\ref{\chapid:fig:#1}}
+\renewcommand{\figref}[1]{\ref{\chapid:fig:#1}}
 \newcommand{\Fig}[1]{Figure~\figref{#1}}
 \newcommand{\fig}[1]{\Fig{#1}}
 \newcommand{\figlabel}[1]{\label{\chapid:fig:#1}}
@@ -125,7 +125,6 @@
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{remark}[theorem]{Remark}
 \newtheorem{example}[theorem]{Example}
-
 
 % Math:
 %\newcommand{\dd}{\ensuremath{\,\mathrm{d}}}
