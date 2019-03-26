@@ -13,7 +13,9 @@
 
 \chapter{How to obtain the redshift distribution from probabilistic redshift estimates\chaplabel{chippr}}
 
-This \paper\ represents joint work with [people] published in [place] as [citation].
+This \paper\ contains work on the problem of obtaining the distribution of galaxy redshifts from catalogs of \pzpdf s, approaching the matter from two angles.
+The first portion addresses why established methodologies appear correct despite being invalid, work inspired by conversations with Phil Marshall during the summer of 2017.
+The second portion was incubated with David Hogg during the summer and fall of 2015 and has been publicly available on \github\ since its inception; I further developed the code and scope with Phil Marshall in the spring and fall of 2017.
 
 \section{Chapter abstract}
 
@@ -250,13 +252,11 @@ Each galaxy $j$ has a redshift $z_{j}$ that we would like to learn; redshift is 
 The distribution of the ensemble of redshifts $\{z_{j}\}$ may be described by the hyperparameters defining the redshift distribution function \Nz\ that we would like to quantify.  
 This situation may be considered to be a probabilistic generative model, illustrated by the directed acyclic graph of \Fig{fig:pgm}.  
 
-
-
 The redshift distribution function \Nz\ is the number of galaxies per unit redshift, effectively defining the evolution in the number of galaxies \citep{Menard2013}.  
 In the following sections, we will present and compare methods for estimating \Nz\ from photometric redshift probability distribution functions.  
 \Sect{sec:prob} contains the mathematical derivation of a probabilistic model for $N(z)$ dependent on photo-$z$ probability distribution functions, and \Sect{sec:sheldon} contrasts the probabilistic model with alternative methods.
 
-\subsection{Probabilistic Model Generalities}
+\subsection{Probabilistic Model}
 \sectlabel{sec:prob}
 
 %We begin by reframing the redshift distribution \nz\ from a probabilistic perspective.
@@ -310,6 +310,36 @@ A forward model such as this corresponds to a probabilistic graphical model (PGM
 	\end{center}
 \end{figure}
 A DAG conveys the causal relationships between physical parameters and, like a Feynman diagram in the context of particle physics, is a shorthand for mathematical relationships between variables.
+
+The problem facing cosmologists is to determine the true parameters $\phi_{0}$ of \nz\ from observing the photometry $\{d_{j}\}$ of a large sample of galaxies $j$.
+To self-consistently propagate the uncertainty in the redshifts, however, it is more appropriate to estimate the posterior $\Pr(\phi \mid \{d_{j}\})$ over all possible parameters $\phi$ (and thus potential redshift distributions \nz ) conditioned on all the observed data $\{d_{j}\}$ available in a generic catalog.
+
+In order to use the DAG of \Fig{fig:pgm} to derive an expression for $\Pr(\phi \mid \{d_{j}\})$ in terms of \pzpdf s, we must introduce two more concepts, confusingly named the implicit prior and the prior probability density.
+
+When we constrain the redshift of a galaxy using its observed photometric data $d_{j}$, we are effectively estimating a posterior $\Pr(z \mid d_{j})$.
+However, to do this, we must have a model for the general relationship between redshifts and photometry, whether empirical, as is the case for machine learning \pzpdf\ methods, or analytic, as is the case for template-based \pzpdf\ methods.
+Such a relationship is defined in the space of probability density over redshift, so it must be able to be parameterized by the same functional form $f_{\phi}(z)$ as \nz .
+It is thus natural to write it as $\Pr(z \mid \phi^{*})$, where $\phi^{*}$ is the parameters for this relationship under some generic \pzpdf\ method.
+We call $\Pr(z \mid \phi^{*})$ the \textit{implicit prior}, as it is rarely explicitly known nor chosen by the researcher; for template-based methods where it can be chosen to be ``realistic,'' it may be appropriate to call it an \textit{interim prior}.
+Because the implicit prior is unavoidable, the \pzpdf s reported by any method are really \textit{implicit-weighted posteriors} $\Pr(z \mid d, \phi^{*})$.
+
+The prior probability density $\Pr(\phi)$ is a more familiar concept in astronomy; to progress, we will have to choose a prior probability density over all possible parameters $\phi$.
+This prior need not be excessively proscriptive; for example, it may be chosen to enforce smoothness at physically motivated scales in redshift without imposing any particular region as over- or under-dense.
+
+With these definitions, we obtain the desired expression for $\Pr(\phi \mid \{d_{j}\})$,
+\begin{align}
+\begin{split}
+\eqlabel{eqn:fullpost}
+\ln[\Pr(\phi \mid \{d_{j}\})] & \propto \ln[\Pr(\phi)] + \ln \left[\int dz \right.\\
+& \left. \exp \left[\sum_{j=1}^{J} \left(\ln[\Pr(z \mid d_{j}, \phi^{*})] \right. \right. \right.\\
+& \left. \left. \left. + \ln[\Pr(z \mid \phi)] - \ln[\Pr(z \mid \phi^{*})]\ \right)\ \right]\ \right] ,
+\end{split}
+\end{align}
+which is the heart of \chippr.
+We now derive \Eq{eqn:fullpost}.
+
+\subsubsection{Derivation}
+\sectlabel{app:math}
 
 We begin by parametrizing $N(z)$ in terms of $\vec{\theta}$, comprising some set of hyperparameters that define the form $N(z)$ may take in whatever basis we choose.  
 At this point, these hyperparameters are quite general and may represent coefficients in a high-order polynomial as a function of redshift, a set of means and variances defining Gaussians that sum to the desired distribution, a set of histogram heights that describe a binned version of the redshift distribution function, etc.  
@@ -423,77 +453,17 @@ First, the photometric data are not a set of independent measurements; the data 
 Second, the reported interim photo-$z$ posterior distributions may not be trustworthy; there is not yet agreement on the best technique to obtain photo-$z$ probability distributions, and the interim prior may not be appropriate or even known to us as consumers of interim photo-$z$ posteriors.  
 Third, the hyperprior may be quite arbitrary and poorly motivated if the underlying physics is complex, and it can only be appropriate if our prior beliefs about the redshift distribution function are accurate.
 
-\subsection{Application to cosmology}
-\sectlabel{sec:application}
-
-The problem facing cosmologists is to determine the true parameters $\phi_{0}$ of \nz\ from observing the photometry $\{d_{j}\}$ of a large sample of galaxies $j$.
-To self-consistently propagate the uncertainty in the redshifts, however, it is more appropriate to estimate the posterior $\Pr(\phi \mid \{d_{j}\})$ over all possible parameters $\phi$ (and thus potential redshift distributions \nz ) conditioned on all the observed data $\{d_{j}\}$ available in a generic catalog.
-
-In order to use the DAG of \Fig{fig:pgm} to derive an expression for $\Pr(\phi \mid \{d_{j}\})$ in terms of \pzpdf s, we must introduce two more concepts, confusingly named the implicit prior and the prior probability density.
-
-When we constrain the redshift of a galaxy using its observed photometric data $d_{j}$, we are effectively estimating a posterior $\Pr(z \mid d_{j})$.
-However, to do this, we must have a model for the general relationship between redshifts and photometry, whether empirical, as is the case for machine learning \pzpdf\ methods, or analytic, as is the case for template-based \pzpdf\ methods.
-Such a relationship is defined in the space of probability density over redshift, so it must be able to be parameterized by the same functional form $f_{\phi}(z)$ as \nz .
-It is thus natural to write it as $\Pr(z \mid \phi^{*})$, where $\phi^{*}$ is the parameters for this relationship under some generic \pzpdf\ method.
-We call $\Pr(z \mid \phi^{*})$ the \textit{implicit prior}, as it is rarely explicitly known nor chosen by the researcher; for template-based methods where it can be chosen to be ``realistic,'' it may be appropriate to call it an \textit{interim prior}.
-Because the implicit prior is unavoidable, the \pzpdf s reported by any method are really \textit{implicit-weighted posteriors} $\Pr(z \mid d, \phi^{*})$.
-
-The prior probability density $\Pr(\phi)$ is a more familiar concept in astronomy; to progress, we will have to choose a prior probability density over all possible parameters $\phi$.
-This prior need not be excessively proscriptive; for example, it may be chosen to enforce smoothness at physically motivated scales in redshift without imposing any particular region as over- or under-dense.
-
-With these definitions, we obtain the desired expression for $\Pr(\phi \mid \{d_{j}\})$,
-\begin{align}
-\begin{split}
-\eqlabel{eqn:fullpost}
-\ln[\Pr(\phi \mid \{d_{j}\})] & \propto \ln[\Pr(\phi)] + \ln \left[\int dz \right.\\
-& \left. \exp \left[\sum_{j=1}^{J} \left(\ln[\Pr(z \mid d_{j}, \phi^{*})] \right. \right. \right.\\
-& \left. \left. \left. + \ln[\Pr(z \mid \phi)] - \ln[\Pr(z \mid \phi^{*})]\ \right)\ \right]\ \right] ,
-\end{split}
-\end{align}
-which is the heart of \chippr.
-The entire derivation of \Eq{eqn:fullpost} is provided in \Sect{app:math}.
-
 %\clearpage
-\subsection{Alternative Approaches}
-\sectlabel{sec:sheldon}
+\subsubsection{Model Limitations}
+\sectlabel{sec:limitations}
 
-It will be desirable to compare the result of this method to the estimates of the hyperparameters obtained by two popular alternatives used in the literature, known as stacking and point estimation.   
-These have been compared 
-to one another by \citet{Hildebrandt2012}, \citet{Benjamin2013}, and \citet{Asorey2016}.
-
-Stacking directly calculates the full posterior for the entire dataset using the interim photo-$z$ posteriors for each galaxy according to 
-\begin{equation}
-\eqlabel{eq:stack}
-f_{\hat{\theta}}(z) = \sum_{j=1}^{J}\ p(z_{j}|\vec{d}_{j},\vec{\theta}^{*})
-\end{equation}
-\citep{Lima2008}.  
-Stacking is considered the preferred method for obtaining $N(z)$ from a dataset of interim photo-$z$ posteriors \citep{Sheldon2012, Kelly2014, Benjamin2013, Bonnett2015a, Viironen2015, Asorey2016}.  
-However, it must be noted here that \Eq{eq:stack} is not in general mathematically valid.  
-(See \citet{Hogg2012} for a complete discussion.)  
-The estimator produced by stacking shall henceforth be referred to as the ``stacked'' estimator.
-
-Point estimation converts the interim photo-$z$ posteriors $p(z_{j}|\vec{d}_{j},\vec{\theta}^{*})$ into delta functions with all probability at a single estimated redshift.  
-Some variants of point estimation choose this single redshift to be that of maximum a posteriori probability $argmax[p(z_{j}|\vec{d}_{j},\vec{\theta}^{*})]$ or the expected value of redshift $E[z]=\int z_{j}\ p(z_{j}|\vec{d}_{j},\vec{\theta}^{*})\ dz_{j}$.  
-Stacking these modified interim photo-$z$ posteriors leads to the marginalized maximum a posteriori (MMAP) estimator and the marginalized expected value (MExp) estimator.
-
-It is worth discussing the relationship between point estimation and stacking.  
-When the point estimator of redshift is equal to the true redshift, stacking delta function photo-$z$ posteriors will indeed lead to an accurate recovery of the true redshift distribution function.  
-However, stacking is in general applied indiscriminately to broader photo-$z$ posteriors, and point estimators of redshift are not in general perfectly accurate.  
-It is for these reasons that alternatives are considered here.
-
-A final estimator of the hyperparameters is the maximum marginalized likelihood estimator (MMLE), the value of $\hat{\theta}$ maximizing the log posterior given by \Eq{eq:final} using any optimization code.  
-To compare with sampling, the MMLE also depends on the choice of the hyperprior distribution, and it does not produce a full posterior probability distribution over the 
-parameters of interest, only point estimators.  
-It must be noted that computation of the MMLE may be unstable depending on the strengths and weaknesses of the optimizer.  
-In general, derivatives will not be available for the full posterior distribution, restricting optimization methods used.
-%\begin{equation}
-%\label{eq:mmle}
-%\ln[p(\{\vec{d}_{j}\}|\vec{\theta})] \propto -\int\ f_{\vec{\theta}}(z)\ 
-%dz+\sum_{j=1}^{J}\ln\left[\int\ 
-%\exp\left[\ln[p(z_{j}|\vec{d}_{j},\vec{\theta}^{*})]+\ln[f_{\vec{\theta}}(z)]-\l
-%n[f_{\vec{\theta}^{*}}(z)]\right]\ dz\right],
-%\end{equation}
-%accessible with any optimization code.
+Finally, we explicitly review the assumptions made by this approach.
+\begin{itemize}
+	\item prior $\Pr(\phi)$
+	\item implicit prior $\phi^{*}$ known
+	\item \pzpdf s are accurate posteriors
+	%draws from photo-$z$ PDFs do not match marginal distributions in $z_true$ vs. $z_phot$ space, i.e. toy model with $z_phot$ drawn from an uglier space but pdfs evaluated in lsst-limits space
+\end{itemize}
 
 %\clearpage
 \subsection{Implementation}
@@ -580,8 +550,49 @@ R_{k} = \sqrt{\frac{(1-\frac{2}{I_{0}})w_{k}+\frac{2}{I_{0}}b_{k}}{w_{k}}},
 a weighted sum of the mean $w_{k}$ of the variances within individual walkers' chains and the variance $b_{k}$ between chains of different walkers $m$, is calculated over each sub-run $i$ to determine the duration of the burn-in period.  
 Convergence is achieved when the statistic approaches unity.  
 
+\subsection{Comparison with Alternative Approaches}
+\sectlabel{sec:sheldon}
+
+It will be desirable to compare the result of this method to the estimates of the hyperparameters obtained by two popular alternatives used in the literature, known as stacking and point estimation.   
+These have been compared 
+to one another by \citet{Hildebrandt2012}, \citet{Benjamin2013}, and \citet{Asorey2016}.
+
+Stacking directly calculates the full posterior for the entire dataset using the interim photo-$z$ posteriors for each galaxy according to 
+\begin{equation}
+\eqlabel{eq:stack}
+f_{\hat{\theta}}(z) = \sum_{j=1}^{J}\ p(z_{j}|\vec{d}_{j},\vec{\theta}^{*})
+\end{equation}
+\citep{Lima2008}.  
+Stacking is considered the preferred method for obtaining $N(z)$ from a dataset of interim photo-$z$ posteriors \citep{Sheldon2012, Kelly2014, Benjamin2013, Bonnett2015a, Viironen2015, Asorey2016}.  
+However, it must be noted here that \Eq{eq:stack} is not in general mathematically valid.  
+(See \citet{Hogg2012} for a complete discussion.)  
+The estimator produced by stacking shall henceforth be referred to as the ``stacked'' estimator.
+
+Point estimation converts the interim photo-$z$ posteriors $p(z_{j}|\vec{d}_{j},\vec{\theta}^{*})$ into delta functions with all probability at a single estimated redshift.  
+Some variants of point estimation choose this single redshift to be that of maximum a posteriori probability $argmax[p(z_{j}|\vec{d}_{j},\vec{\theta}^{*})]$ or the expected value of redshift $E[z]=\int z_{j}\ p(z_{j}|\vec{d}_{j},\vec{\theta}^{*})\ dz_{j}$.  
+Stacking these modified interim photo-$z$ posteriors leads to the marginalized maximum a posteriori (MMAP) estimator and the marginalized expected value (MExp) estimator.
+
+It is worth discussing the relationship between point estimation and stacking.  
+When the point estimator of redshift is equal to the true redshift, stacking delta function photo-$z$ posteriors will indeed lead to an accurate recovery of the true redshift distribution function.  
+However, stacking is in general applied indiscriminately to broader photo-$z$ posteriors, and point estimators of redshift are not in general perfectly accurate.  
+It is for these reasons that alternatives are considered here.
+
+A final estimator of the hyperparameters is the maximum marginalized likelihood estimator (MMLE), the value of $\hat{\theta}$ maximizing the log posterior given by \Eq{eq:final} using any optimization code.  
+To compare with sampling, the MMLE also depends on the choice of the hyperprior distribution, and it does not produce a full posterior probability distribution over the 
+parameters of interest, only point estimators.  
+It must be noted that computation of the MMLE may be unstable depending on the strengths and weaknesses of the optimizer.  
+In general, derivatives will not be available for the full posterior distribution, restricting optimization methods used.
+%\begin{equation}
+%\label{eq:mmle}
+%\ln[p(\{\vec{d}_{j}\}|\vec{\theta})] \propto -\int\ f_{\vec{\theta}}(z)\ 
+%dz+\sum_{j=1}^{J}\ln\left[\int\ 
+%\exp\left[\ln[p(z_{j}|\vec{d}_{j},\vec{\theta}^{*})]+\ln[f_{\vec{\theta}}(z)]-\l
+%n[f_{\vec{\theta}^{*}}(z)]\right]\ dz\right],
+%\end{equation}
+%accessible with any optimization code.
+
 %\clearpage
-\subsubsection{Diagnostics}
+\subsubsection{Comparison metrics}
 \sectlabel{sec:diag}
 
 The results of the computation described in \Sect{sec:mcmc} are evaluated for accuracy on the basis of some quantitative measures.  
@@ -597,42 +608,9 @@ which measures a distance between parameter values $\vec{\theta}^{\dagger}$ and 
 We note that $KL_{\dagger,\ddagger}\neq KL_{\ddagger,\dagger}$, so both must be calculated, and the minimum of the two is reported in this study.  
 In simulated tests, $\vec{\theta}^{\ddagger}$ is the true value and $\vec{\theta}^{\dagger}$ is the value produced by one of the methods in question.  
 
-\subsection{Limitations}
-\sectlabel{sec:limitations}
+\section{Validation and Results}
+\sectlabel{sec:valid}
 
-Finally, we explicitly review the assumptions made by this approach.
-\begin{itemize}
-	\item prior $\Pr(\phi)$
-	\item implicit prior $\phi^{*}$ known
-	\item \pzpdf s are accurate posteriors
-	%draws from photo-$z$ PDFs do not match marginal distributions in $z_true$ vs. $z_phot$ space, i.e. toy model with $z_phot$ drawn from an uglier space but pdfs evaluated in lsst-limits space
-\end{itemize}
-
-
-
-\subsection{Data}
-\sectlabel{sec:alldata}
-
-The parametrization of $N(z)$ chosen here is a step function formulation according to
-\begin{eqnarray}
-\eqlabel{eq:steps}
-f_{\vec{\theta}}(z)&=&\sum_{k=1}^{K}\exp[\theta_{k}]s(z;k)\\
-s(z;k)&=&\left\{\begin{array}{ccc}0&\text{for}&z<z_{k-1}\\(z_{k}-z_{k-1})^{-1} \equiv\Delta_{k}&\text{for}&z_{k-1}<z<z_{k}\\0&\text{for}&z_{k}<z\end{array}\right
-\}.
-\end{eqnarray}
-All tests in this paper will be conducted with $z_{0}=0.0$, $z_{K}=1.1$, and $K=35$, the endpoints and dimensionality of the published BOSS DR8 photo-$z$ interim posteriors \citet{Sheldon2012}.  
-We also define $\bar{z}_{k}\equiv(z_{k}+z_{k-1})/2$.
-
-The hyperprior distribution chosen here is a multivariate normal distribution with mean $\vec{\mu}$ equal to the interim prior $\vec{\theta}^{*}$ and covariance
-\begin{equation}
-\eqlabel{eq:priorcov}
-\Sigma_{k,k'} = q\ \exp[-\frac{e}{2}\ (\bar{z}_{k}-\bar{z}_{k'})^{2}]\ +\ t\delta(k,k')
-\end{equation}
-inspired by one used in Gaussian processes, where $k$ and $k'$ are indices ranging from $1$ to $K$ and $q=1.0$, $e=100.0$, and $t=q\cdot10^{-5}$ are constants chosen to permit draws from this prior distribution to produce shapes similar to that of a true $\tilde{\theta}$.  
-We adapt the full log-posterior of \Eq{eq:final} to the binning of redshift space chosen in \Sect{sec:mock}.
-
-In the following sections we motivate several informative tests, summarized in \Tab{tab:key}.  
-The code was tested on simulated datasets each of size $J'=10,000$.  
 The fiducial experiment of \Sect{sec:mock} is outlined first. 
 Seven other cases vary the shapes of the photo-$z$ likelihoods (\Sect{sec:imprecision} and \Sect{sec:inaccuracy}), the true redshift distribution function (\Sect{sec:fake-data}), and the interim prior (\Sect{sec:interim-data}).  
 Two additional cases with SDSS-III BOSS DR10 data described in \Sect{sec:data} are also considered.
@@ -676,6 +654,30 @@ Two additional cases with SDSS-III BOSS DR10 data described in \Sect{sec:data} a
 		\figlabel{fig:flowchart}
 	\end{center}
 \end{figure*}
+
+\subsection{Data}
+\sectlabel{sec:alldata}
+
+The parametrization of $N(z)$ chosen here is a step function formulation according to
+\begin{eqnarray}
+\eqlabel{eq:steps}
+f_{\vec{\theta}}(z)&=&\sum_{k=1}^{K}\exp[\theta_{k}]s(z;k)\\
+s(z;k)&=&\left\{\begin{array}{ccc}0&\text{for}&z<z_{k-1}\\(z_{k}-z_{k-1})^{-1} \equiv\Delta_{k}&\text{for}&z_{k-1}<z<z_{k}\\0&\text{for}&z_{k}<z\end{array}\right
+\}.
+\end{eqnarray}
+All tests in this paper will be conducted with $z_{0}=0.0$, $z_{K}=1.1$, and $K=35$, the endpoints and dimensionality of the published BOSS DR8 photo-$z$ interim posteriors \citet{Sheldon2012}.  
+We also define $\bar{z}_{k}\equiv(z_{k}+z_{k-1})/2$.
+
+The hyperprior distribution chosen here is a multivariate normal distribution with mean $\vec{\mu}$ equal to the interim prior $\vec{\theta}^{*}$ and covariance
+\begin{equation}
+\eqlabel{eq:priorcov}
+\Sigma_{k,k'} = q\ \exp[-\frac{e}{2}\ (\bar{z}_{k}-\bar{z}_{k'})^{2}]\ +\ t\delta(k,k')
+\end{equation}
+inspired by one used in Gaussian processes, where $k$ and $k'$ are indices ranging from $1$ to $K$ and $q=1.0$, $e=100.0$, and $t=q\cdot10^{-5}$ are constants chosen to permit draws from this prior distribution to produce shapes similar to that of a true $\tilde{\theta}$.  
+We adapt the full log-posterior of \Eq{eq:final} to the binning of redshift space chosen in \Sect{sec:mock}.
+
+In the following sections we motivate several informative tests, summarized in \Tab{tab:key}.  
+The code was tested on simulated datasets each of size $J'=10,000$.  
 
 %\clearpage
 \subsubsection{Fiducial Data}
@@ -844,10 +846,6 @@ In these cases the true $N(z)$ is not known, but the fully probabilistic method 
 		A random sampling of the brightest half of the pseudo-random BOSS DR10 sample (bottom panel) corresponds to much cleaner photo-$z$ posteriors.}
 	\figlabel{fig:datapzs}
 \end{figure}
-
-%\clearpage
-\section{Validation Tests}
-\sectlabel{sec:valid}
 
 Here we present the results of the informative tests of \Sect{sec:exp}, summarized in \Tab{tab:key}.  
 
@@ -1041,7 +1039,7 @@ This may be due to the way the interim prior was chosen, such that it was influe
 Second, the high-redshift feature in the error bars is not present once a magnitude cut is imposed.  
 From this one can conclude that the signal and associated error bars in that region were caused by the sampler's assignment high redshifts to poorly constrained interim photo-$z$ posteriors corresponding to the dimmest galaxies. 
 
-\section{Results and discussion}
+\section{Discussion}
 \sectlabel{sec:results}
 
 \aim{Q: How does the result of \chippr\ compare to established estimators in terms of the accuracy of $n(z)$?\\
@@ -1178,6 +1176,6 @@ Future work will also include the extension of this fully probabilistic approach
 
 \section{Chapter acknowledgements}
 
-AIM thanks Elisabeth Krause for assistance with the \texttt{CosmoLike} code, Mohammadjavad Vakili for insightful input on statistics, Geoffrey Ryan for advice on debugging, and Boris Leistedt for helpful comments provided in the preparation of this paper.
-I thank Phil Marshall, David Hogg, Rachel Mandelbaum, Eduardo Rozo, David Alonso, Daniel Gruen, Boris Leistedt, Josh Speagle, and Mark Manera for helpful feedback provided in the preparation of this letter.
+I thank Elisabeth Krause for assistance with the \texttt{CosmoLike} code, Mohammadjavad Vakili for statistical insights, Geoffrey Ryan for programming advice, and Boris Leistedt for other helpful comments in the development of \Chippr.
+I also thank David Alonso, Daniel Gruen, Boris Leistedt, Rachel Mandelbaum, Mark Manera, Eduardo Rozo, and Josh Speagle for additional feedback on the mathematical foundations of this work.
 This work was completed under the generous nutritional support of the Center for Computational Astrophysics.
