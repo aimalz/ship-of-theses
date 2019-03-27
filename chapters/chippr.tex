@@ -5,6 +5,7 @@
 \newcommand{\cosmolike}{\repo{CosmoLike}}
 
 % Math:
+\newcommand{\pzip}{\pz\ implicit posterior}
 \newcommand{\nz}{$n(z)$}
 \newcommand{\Nz}{$N(z)$}
 \newcommand{\stack}{$\hat{N}(z)$}
@@ -256,60 +257,77 @@ The redshift distribution function \Nz\ is the number of galaxies per unit redsh
 In the following sections, we will present and compare methods for estimating \Nz\ from photometric redshift probability distribution functions.  
 \Sect{sec:prob} contains the mathematical derivation of a probabilistic model for $N(z)$ dependent on photo-$z$ probability distribution functions, and \Sect{sec:sheldon} contrasts the probabilistic model with alternative methods.
 
+\subsection{Forward Model}
+\sectlabel{sec:forward}
+
+We begin by reframing the redshift distribution \nz\ from a probabilistic perspective.
+Here we define a redshift distribution \nz\ as the normalized probability density
+\begin{equation}
+\label{eqn:nz}
+\int_{-\infty}^{\infty}\ n(z)\ dz\ \equiv\ \frac{1}{J}\ \int_{-\infty}^{\infty}\ \sum_{j=1}^{J}\ \delta(z_{j},\ z)\ dz = 1
+\end{equation}
+of finding a galaxy $j$ in a catalog of $J$ galaxies having a redshift $z$.
+We believe that galaxy redshifts are indeed drawn from \nz, making it a probability density over redshift; this fact can also be confirmed from dimensional analysis of Equation~\ref{eqn:nz}.
+
+We may without loss of generality impose a parametrization
+\begin{equation}
+\label{eqn:fz}
+f(z; \phi)\ \equiv\ n(z)
+\end{equation}
+in terms of some parameter vector $\phi$.
+Upon doing so, we may rewrite \Eq{eqn:nz} as 
+\begin{equation}
+\label{eqn:pz}
+z_{j}\ \sim\ \pr(z \gvn \phi)\ \equiv\ f(z; \phi),
+\end{equation}
+a probability density over redshift conditioned on the parameters $\phi$ specifying \nz.
+Note that $z_{j}$ does not depend on the redshift $z_{j'}$ of some other galaxy $j' \neq j$, a statement of the causal independence of galaxy redshifts from one another.
+
+In addition to believing \nz\ is a PDF from which redshifts are drawn, we also believe that there is some higher dimensional probability space $\pr(z, \data)$ of redshift and photometric data vectors $\data$, which may be any combination of fluxes, magnitudes, colors, and their observational errors.
+In that sense \nz\ is equivalent to an integral
+\begin{equation}
+\label{eqn:integral}
+n(z)\ =\ \integral(pr(z, \data), \data)
+\end{equation}
+over the dimension of data in that joint probability space.
+Note that galaxies may have different observational data despite sharing the same redshift, and that galaxies at different redshifts may have identical photometry; the space $\pr(z, \data)$ need not be one-to-one.
+We assume a stronger version of statistical independence here, that draws $(z_{j}, \data_{j})$ are independent of draws $(z_{j'}, \data_{j'})$ in this space; the data and redshift of each galaxy are independent of those of other galaxies.
+
+However, this problem has additional causal structure that we can acknowledge.
+The photometry results from the redshifts, not the other way around.
+This is the fundamental assumption upon which \pz\ estimation is based.
+The forward model corresponds to first redshifts according to \Eq{eqn:pz} and then drawing data from the likelihood
+\begin{equation}
+\label{eqn:pzpdf}
+\data_{j}\ \sim\ \pr(\data \gvn z_{j})
+\end{equation}
+of photometry conditioned on redshift.
+The likelihoods can be thought of as cuts through the joint probability space of redshift and photometry, evaluated at the true redshifts.
+
+This description of the physical system corresponds to a forward model by which we actually believe photometry is generated:
+\begin{enumerate}
+	\item There exists a redshift distribution \nz\ with parameters $\phi$.
+	\item Galaxy redshifts $\{z_{j}\}$ are independent draws from $\pr(z \mid \phi)$.
+	\item Galaxy photometry $\data_{j}$ is drawn from the likelihoods $\pr(d | z_{j})$.
+\end{enumerate}
+
 \subsection{Probabilistic Model}
 \sectlabel{sec:prob}
 
-%We begin by reframing the redshift distribution \nz\ from a probabilistic perspective.
-%Here we define a redshift distribution \nz\ as the normalized probability density
-%\begin{equation}
-%\label{eqn:nz}
-%\int_{-\infty}^{\infty}\ n(z)\ dz\ \equiv\ \frac{1}{J}\ \int_{-\infty}^{\infty}\ \sum_{j=1}^{J}\ \delta(z_{j},\ z)\ dz = 1
-%\end{equation}
-%of finding a galaxy $j$ in a catalog of $J$ galaxies having a redshift $z$.
-%We may without loss of generality impose a parametrization
-%\begin{equation}
-%\label{eqn:fz}
-%f_{\phi}(z)\ \equiv\ n(z)
-%\end{equation}
-%in terms of some parameter vector $\phi$.
-%We believe that galaxy redshifts are indeed drawn from \nz, making it a probability density over redshift; this fact can also be confirmed from dimensional analysis of Equation~\ref{eqn:nz}.
-%Therefore, it can be rewritten as
-%\begin{equation}
-%\label{eqn:pz}
-%z_{j}\ \sim\ \Pr(z \mid \phi)\ \equiv\ f_{\phi}(z),
-%\end{equation}
-%a probability density over redshift conditioned on the parameters defining \nz.
-%Note that $z_{j}$ does not depend on $z_{j'}$, a statement of the causal independence of galaxy redshifts from one another.
-%
-%In addition to believing \nz\ is a PDF from which redshifts are drawn, we also believe that there is some PDF from which photometric data $d$, which may be any combination of fluxes, magnitudes, colors, and their observational errors, are drawn.
-%Such a PDF over data is a likelihood
-%\begin{equation}
-%\label{eqn:pzpdf}
-%d\ \sim\ \Pr(d \mid z)
-%\end{equation}
-%conditioned on redshift.
-%This assumption that the data are drawn from some function of the redshift forms the foundation upon which \pz\ estimation is based.
-%Note that galaxies may have different observational data $d$ despite sharing the same redshift and that the data $d_{j}$ of one galaxy is causally independent of the redshifts $z_{j'}$ and data $d_{j'}$ of other galaxies.
-%
-%This description of the physical system corresponds to a forward model by which we actually believe photometry is generated:
-%\begin{enumerate}
-%	\item There exists a redshift distribution \nz\ with parameters $\phi$.
-%	\item Galaxy redshifts $\{z_{j}\}$ are independent draws from $\Pr(z \mid \phi)$.
-%	\item Galaxy photometry $d_{j}$ is drawn from the likelihoods $\Pr(d | z_{j})$.
-%\end{enumerate}
-A forward model such as this corresponds to a probabilistic graphical model (PGM), represented by a directed acyclic graph (DAG) as in \Fig{fig:pgm}.
+A forward model such as that of \Sect{sec:forward} corresponds to a probabilistic graphical model (PGM), represented by a directed acyclic graph (DAG) as in \Fig{fig:pgm}.
+A DAG conveys the causal relationships between physical parameters and, like a Feynman diagram in the context of particle physics, is a shorthand for mathematical relationships between variables.
+
 \begin{figure}
 	\begin{center}
 		\includegraphics[width=0.25\textwidth]{figures/chippr/pgm.png}
-		\caption{This directed acyclic graph illustrates the CHIPPR model presented in this paper.  
-			The redshift distribution function $N(z)$ exists independent of the survey of $J$ galaxies, indicated as a box.  
-			The redshifts $\{z_{j}\}$ of all galaxies in the survey are parameters independently drawn from $N(z)$. 
-			The photometric data $\data_{j}$ encircled in bold are observable quantities determined by the corresponding galaxy's redshift $z_{j}$.  
-			Because the data $\data_{j}$ of each galaxy can be used to infer its redshift $z_{j}$, $N(z)$ may be inferred from the collection of $\{\data_{j}\}$}
+		\caption{This directed acyclic graph illustrates the CHIPPR model, where circles indicate random variables.
+			The redshift distribution function parameterized by $\phi$ exists independent of the survey of $J$ galaxies, indicated as a box.  
+			The redshifts $\{z_{j}\}$ of all galaxies in the survey are parameters independently drawn from the redshift distribution as a function of $\phi$. 
+			The photometric data $\data_{j}$ for each galaxy is drawn from a function of its redshift $z_{j}$.  
+			Because $\{\data_{j}\}$ are observed, the circle is shaded.}
 		\figlabel{fig:pgm}
 	\end{center}
 \end{figure}
-A DAG conveys the causal relationships between physical parameters and, like a Feynman diagram in the context of particle physics, is a shorthand for mathematical relationships between variables.
 
 The problem facing cosmologists is to determine the true parameters $\phi_{0}$ of \nz\ from observing the photometry $\{d_{j}\}$ of a large sample of galaxies $j$.
 To self-consistently propagate the uncertainty in the redshifts, however, it is more appropriate to estimate the posterior $\Pr(\phi \mid \{d_{j}\})$ over all possible parameters $\phi$ (and thus potential redshift distributions \nz ) conditioned on all the observed data $\{d_{j}\}$ available in a generic catalog.
@@ -438,32 +456,25 @@ The argument of the integral in the log-posterior of \Eq{eq:final} depends solel
 p(z_{j}|\vec{\theta}) = \frac{f_{\vec{\theta}}(z_{j})}{\int\ f_{\vec{\theta}}(z_{j})\ dz_{j}}.
 \end{equation}
 Since we cannot know constant of proportionality, we sample the desired full log-posterior $\ln[p(\vec{\theta}|\{\vec{d}_{j}\})]$ using Monte Carlo-Markov chain (MCMC) methods.  
-The method outlined here is valid regardless of how the interim photo-$z$ log-posteriors are calculated so the many approaches to producing photo-$z$ probability distributions will not be discussed; though the matter is outside the scope of this paper, reviews of various methods have been presented in the literature \citep{Sheldon2012, Ball2008, CarrascoKind2013, CarrascoKind2014a}.
-
-To be clear, the following assumptions must be made in order to apply this method:
-
-\begin{enumerate}
-	\item Photometric measurements of galaxies are independent Poisson draws from the set of all galaxies such that \Eq{eq:indiedat} and \Eq{eq:indie} hold.
-	\item We take the reported interim photo-$z$ posteriors to be accurate estimates of the true photo-$z$ posteriors and assume we are given the interim prior used to produce them.
-	\item We must assume a log-hyperprior constraining the underlying probability distribution of the hyperparameters, which is informed by our prior beliefs about the true redshift distribution function.
-\end{enumerate}
-
-These assumptions have known limitations.  
-First, the photometric data are not a set of independent measurements; the data are correlated not only by the conditions of the experiment under which they were observed but also by redshift covariances resulting from physical processes governing underlying galaxy spectra and their relation to the redshift distribution function.  
-Second, the reported interim photo-$z$ posterior distributions may not be trustworthy; there is not yet agreement on the best technique to obtain photo-$z$ probability distributions, and the interim prior may not be appropriate or even known to us as consumers of interim photo-$z$ posteriors.  
-Third, the hyperprior may be quite arbitrary and poorly motivated if the underlying physics is complex, and it can only be appropriate if our prior beliefs about the redshift distribution function are accurate.
+The method outlined here is valid regardless of how the interim photo-$z$ log-posteriors are obtained so the many approaches to producing photo-$z$ probability distributions will not be discussed; though the matter is outside the scope of this paper, reviews of various methods have been presented in the literature \citep{Sheldon2012, Ball2008, CarrascoKind2013, CarrascoKind2014a}, and will be briefly reviewed in \Chap{pzdc1}.
 
 %\clearpage
 \subsubsection{Model Limitations}
 \sectlabel{sec:limitations}
 
-Finally, we explicitly review the assumptions made by this approach.
-\begin{itemize}
-	\item prior $\Pr(\phi)$
-	\item implicit prior $\phi^{*}$ known
-	\item \pzpdf s are accurate posteriors
-	%draws from photo-$z$ PDFs do not match marginal distributions in $z_true$ vs. $z_phot$ space, i.e. toy model with $z_phot$ drawn from an uglier space but pdfs evaluated in lsst-limits space
-\end{itemize}
+Finally, we explicitly review the assumptions made by this approach, which are as follows:
+
+\begin{enumerate}
+	\item Photometric measurements of galaxies are independent Poisson draws from the set of all galaxies such that \Eq{eq:indiedat} and \Eq{eq:indie} hold.
+	\item We take the reported \pzip s to be accurate, free of model misspecification; draws thereof must not be inconsistent with the distribution of photometry and redshifts.
+	Furthermore, we must be given the implicit prior $\phi^{*}$ used to produce the \pzip s.
+	\item We must assume a hyperprior distribution $\Pr(\phi)$ constraining the underlying probability distribution of the hyperparameters, which is informed by our prior beliefs about the true redshift distribution function.
+\end{enumerate}
+
+These assumptions have known limitations.  
+First, the photometric data are not a set of independent measurements; the data are correlated not only by the conditions of the experiment under which they were observed (instrument and observing conditions) but also by redshift covariances resulting from physical processes governing underlying galaxy spectra and their relation to the redshift distribution function.
+Second, the reported \pzip s may not be trustworthy; there is not yet agreement on the best technique to obtain \pzpdf s, and the implicit prior may not be appropriate or even known to us as consumers of \pzip s.  
+Third, the hyperprior may be quite arbitrary and poorly motivated if the underlying physics is complex, and it can only be appropriate if our prior beliefs about \nz\ are accurate.
 
 %\clearpage
 \subsection{Implementation}
@@ -608,7 +619,7 @@ which measures a distance between parameter values $\vec{\theta}^{\dagger}$ and 
 We note that $KL_{\dagger,\ddagger}\neq KL_{\ddagger,\dagger}$, so both must be calculated, and the minimum of the two is reported in this study.  
 In simulated tests, $\vec{\theta}^{\ddagger}$ is the true value and $\vec{\theta}^{\dagger}$ is the value produced by one of the methods in question.  
 
-\section{Validation and Results}
+\section{Validation}
 \sectlabel{sec:valid}
 
 The fiducial experiment of \Sect{sec:mock} is outlined first. 
@@ -1039,7 +1050,7 @@ This may be due to the way the interim prior was chosen, such that it was influe
 Second, the high-redshift feature in the error bars is not present once a magnitude cut is imposed.  
 From this one can conclude that the signal and associated error bars in that region were caused by the sampler's assignment high redshifts to poorly constrained interim photo-$z$ posteriors corresponding to the dimmest galaxies. 
 
-\section{Discussion}
+\section{Results}
 \sectlabel{sec:results}
 
 \aim{Q: How does the result of \chippr\ compare to established estimators in terms of the accuracy of $n(z)$?\\
