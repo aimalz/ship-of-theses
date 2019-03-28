@@ -3,14 +3,14 @@
 % Chapter specific commands:
 \newcommand{\Chippr}{\textit{CHIPPR}}
 \newcommand{\cosmolike}{\repo{CosmoLike}}
+\newcommand{\emcee}{\repo{emcee}}
 
 % Math:
 \newcommand{\pzip}{\pz\ implicit posterior}
 \newcommand{\nz}{$n(z)$}
 \newcommand{\Nz}{$N(z)$}
 \newcommand{\stack}{$\hat{N}(z)$}
-\newcommand{\ndphi}{\ensuremath{\vec{\phi}}}% could change to bold
-\newcommand{\data}{\ensuremath{\vec{d}}}% could change to bold
+\newcommand{\ndphi}{\bvec{\phi}}
 
 \chapter{How to obtain the redshift distribution from probabilistic redshift estimates\chaplabel{chippr}}
 
@@ -18,7 +18,7 @@ This \paper\ contains work on the problem of obtaining the distribution of galax
 The first portion addresses why established methodologies appear correct despite being invalid, work inspired by conversations with Phil Marshall during the summer of 2017.
 The second portion was incubated with David Hogg during the summer and fall of 2015 and has been publicly available on \github\ since its inception; I further developed the code and scope with Phil Marshall in the spring and fall of 2017.
 
-\section{Chapter abstract}
+\section*{Chapter abstract}
 
 A trustworthy estimate of the redshift distribution \nz\ is crucial for weak-lensing cosmology as we know it.
 Spectroscopic redshifts for the dim and numerous galaxies of weak-lensing surveys are expected to be inaccessible, making photometric redshifts (photo-$z$s) the next-best alternative.
@@ -272,15 +272,15 @@ We believe that galaxy redshifts are indeed drawn from \nz, making it a probabil
 We may without loss of generality impose a parametrization
 \begin{equation}
 \label{eqn:fz}
-f(z; \phi)\ \equiv\ n(z)
+f(z; \ndphi)\ \equiv\ n(z)
 \end{equation}
-in terms of some parameter vector $\phi$.
+in terms of some parameter vector $\ndphi$.
 Upon doing so, we may rewrite \Eq{eqn:nz} as 
 \begin{equation}
 \label{eqn:pz}
-z_{j}\ \sim\ \pr(z \gvn \phi)\ \equiv\ f(z; \phi),
+z_{j}\ \sim\ \pr(z \gvn \ndphi)\ \equiv\ f(z; \ndphi),
 \end{equation}
-a probability density over redshift conditioned on the parameters $\phi$ specifying \nz.
+a probability density over redshift conditioned on the parameters $\ndphi$ specifying \nz.
 Note that $z_{j}$ does not depend on the redshift $z_{j'}$ of some other galaxy $j' \neq j$, a statement of the causal independence of galaxy redshifts from one another.
 
 In addition to believing \nz\ is a PDF from which redshifts are drawn, we also believe that there is some higher dimensional probability space $\pr(z, \data)$ of redshift and photometric data vectors $\data$, which may be any combination of fluxes, magnitudes, colors, and their observational errors.
@@ -321,22 +321,22 @@ A DAG conveys the causal relationships between physical parameters and, like a F
 	\begin{center}
 		\includegraphics[width=0.25\textwidth]{figures/chippr/pgm.png}
 		\caption{This directed acyclic graph illustrates the CHIPPR model, where circles indicate random variables.
-			The redshift distribution function parameterized by $\phi$ exists independent of the survey of $J$ galaxies, indicated as a box.  
-			The redshifts $\{z_{j}\}$ of all galaxies in the survey are parameters independently drawn from the redshift distribution as a function of $\phi$. 
+			The redshift distribution function parameterized by $\ndphi$ exists independent of the survey of $J$ galaxies, indicated as a box.  
+			The redshifts $\{z_{j}\}$ of all galaxies in the survey are parameters independently drawn from the redshift distribution as a function of $\ndphi$. 
 			The photometric data $\data_{j}$ for each galaxy is drawn from a function of its redshift $z_{j}$.  
 			Because $\{\data_{j}\}$ are observed, the circle is shaded.}
 		\figlabel{fig:pgm}
 	\end{center}
 \end{figure}
 
-The problem facing cosmologists is to determine the true parameters $\phi_{0}$ of \nz\ from observing the photometry $\{d_{j}\}$ of a large sample of galaxies $j$.
-To self-consistently propagate the uncertainty in the redshifts, however, it is more appropriate to estimate the posterior $\Pr(\phi \mid \{d_{j}\})$ over all possible parameters $\phi$ (and thus potential redshift distributions \nz ) conditioned on all the observed data $\{d_{j}\}$ available in a generic catalog.
+The problem facing cosmologists is to determine the true values of $\ndphi$ from observing the photometry $\{\data_{j}\}$ of a large sample of $J$ galaxies $j$.
+To self-consistently propagate the uncertainty in the redshifts, however, it is more appropriate to estimate the posterior $\pr(\ndphi \gvn \{\data_{j}\})$ over all possible values of $\ndphi$ conditioned on all the observed data $\{\data_{j}\}$ available in a generic catalog.
 
-In order to use the DAG of \Fig{fig:pgm} to derive an expression for $\Pr(\phi \mid \{d_{j}\})$ in terms of \pzpdf s, we must introduce two more concepts, confusingly named the implicit prior and the prior probability density.
+In order to use the DAG of \Fig{fig:pgm} to derive an expression for $\pr(\ndphi \gvn \{\data_{j}\})$ in terms of \pzpdf s, we must introduce two more concepts, confusingly named the implicit prior and the prior probability density.
 
-When we constrain the redshift of a galaxy using its observed photometric data $d_{j}$, we are effectively estimating a posterior $\Pr(z \mid d_{j})$.
+When we constrain the redshift of a galaxy using its observed photometric data $\data_{j}$, we are effectively estimating a posterior $\Pr(z \mid d_{j})$.
 However, to do this, we must have a model for the general relationship between redshifts and photometry, whether empirical, as is the case for machine learning \pzpdf\ methods, or analytic, as is the case for template-based \pzpdf\ methods.
-Such a relationship is defined in the space of probability density over redshift, so it must be able to be parameterized by the same functional form $f_{\phi}(z)$ as \nz .
+Such a relationship is defined in the space of probability density over redshift, so it must be able to be parameterized by the same functional form $f_{\ndphi}(z)$ as \nz .
 It is thus natural to write it as $\Pr(z \mid \phi^{*})$, where $\phi^{*}$ is the parameters for this relationship under some generic \pzpdf\ method.
 We call $\Pr(z \mid \phi^{*})$ the \textit{implicit prior}, as it is rarely explicitly known nor chosen by the researcher; for template-based methods where it can be chosen to be ``realistic,'' it may be appropriate to call it an \textit{interim prior}.
 Because the implicit prior is unavoidable, the \pzpdf s reported by any method are really \textit{implicit-weighted posteriors} $\Pr(z \mid d, \phi^{*})$.
@@ -480,44 +480,38 @@ Third, the hyperprior may be quite arbitrary and poorly motivated if the underly
 \subsection{Implementation}
 \sectlabel{sec:exp}
 
-We ran several tests of this approach to demonstrate its usage and validity using a procedure outlined in this section.  
-In \Sect{sec:alldata} we describe the method by which interim photo-$z$ log-posteriors $\{\ln[p(z_{j}|\vec{d}_{j})]\}_{J}$ are synthesized as well as the real datasets considered for comparison.  
-In \Sect{sec:mcmc} we describe the algorithm used to compute the full log-posterior distribution $\ln[p(\vec{\theta}|\{\vec{d}_{j}\})]$.  
-In \Sect{sec:diag} we outline the measures used to evaluate the performance of the method.
+I implemented the \Chippr\ model in code in order to perform tests of its validity and to compare its performance to that of traditional alternatives.
+In \Sect{sec:mcmc}, I describe the publicly available \chippr\ library.
+In \Sect{sec:acorr}, I outline how \chippr\ can be used to sample the full log-posterior distribution $\ln[\pr(\ndphi \gvn \{\data_{j}\})]$.
 
 %\clearpage
 \subsubsection{Code}
 \sectlabel{sec:mcmc}
 
-In this study, we compare the results of \Eq{eqn:fullpost} to those of the two most common approaches to estimating \nz\ from a catalog of \pzpdf s: the distribution $n(z_{\mathrm{max}})$ of the redshifts at maximum posterior probability (i.e. the modes of the \pzpdf s), and the stacked estimator
-\begin{align}
-\eqlabel{eqn:stacked}
-\hat{n}(z) &\equiv \frac{1}{J}\ \sum_{j=1}^{J}\ \Pr(z \mid d_{j}, \phi^{*}) .
-\end{align}
+\chippr\ is a \python\ library that includes an implementation of the \Chippr\ model as well as an extensive suite of tools for comparing \Chippr\ to other approaches.
+\aim{Cite GitHub here.}
 
-We perform this comparison on mock data in the form of catalogs of emulated \pzpdf s generated via the forward model discussed above and presented in detail in \Sect{sec:data}.
-The mock data emulates the three sources of error of highest concern to the \pz\ community: intrinsic scatter, catastrophic outliers, and systematic bias.
-\Fig{fig:mega_scatter} illustrates these three effects individually at ten times the tolerance of the upcoming Large Synoptic Survey Telescope (LSST).
-\begin{figure*}
-	\begin{center}
-		\includegraphics[width=0.3\textwidth]{figures/chippr/hivarsigmas_scatter.png}
-		\includegraphics[width=0.3\textwidth]{figures/chippr/uouthi_scatter.png}
-		\includegraphics[width=0.3\textwidth]{figures/chippr/neghivarbias_scatter.png}
-		\caption{intrinsic scatter (left), uniform outliers (center), bias (right);
-			Not sure how best to broach the subject of nonuniform outliers and bias as model misspecification
-		}
-		\figlabel{fig:mega_scatter}
-	\end{center}
-\end{figure*}
-Tests including all three effects at the tolerance levels of LSST are presented in \Sect{sec:results}.
+Though there are plans for future expansion to more flexible parameterizations, the current version of \chippr\ uses a log-space piecewise constant parameterization
+\begin{equation}
+\eqlabel{eqn:logstepfunc}
+f(z; \ndphi) = \exp[\phi^{k}]\ \mathrm{if}\ z^{k} < z < z^{k+1}
+\end{equation}
+for \nz\ and every \pzpdf, satisfying
+\begin{equation}
+\eqlabel{eqn:logstepfuncnorm}
+\sum_{k=1}^{K} \exp[\phi^{k}] \delta z^{k} = 1
+\end{equation}
+with $K$ bins of width $\delta z^{1}, \dots, \delta z^{K}$ defined by endpoints $z^{0}, \dots, z^{K}$.
+\aim{Maybe include an equation for a general piecewise constant function here (which is currently in \Chap{qp})?}
+Thus each $p(z \gvn \data_{j}) = f(z; \ndphi_{j})$ has parameters $\ndphi_{j}$ that are defined in the same basis as those of \nz.
+To infer the full log-posterior distribution $\ln[\pr(\ndphi \gvn \{\data_{j}\})]$, one must provide a plaintext file with $K+1$ redshift bin endpoints $\{z_{k}\}$, the parameters $\ndphi^{*}$ of the implicit log-prior, and the parameters $\{\ndphi_{j}\}$ of the log-posteriors $\ln[p(z \gvn \data_{j}, \ndphi^{*})]$.
 
-The testing procedure is implemented in \texttt{Python} and is made public as Cosmological Hierarchical Inference with Probabilistic Photometric Redshifts (CHIPPR).  
-The code takes as input a \texttt{csv} file containing the basis for the binning of redshift space, a specification of the interim prior $\vec{\theta}^{*}$, and a catalog of $J$ interim photo-$z$ log-posteriors $\{\ln[p(z_{j}|\vec{d}_{j},\vec{\theta}^{*})]\}_{J}$ in the step-function basis.
+The \emcee \citep{Foreman-Mackey2013} implementation of ensemble sampling is used to sample the full log-posterior of \Eq{eq:final}. 
+\chippr\ accepts a configuration file of user-specified parameters, among them the number $W$ of walkers.
+At each iteration $i$ and for each walker, a proposal distribution $\hat{\ndphi}_{i}$ is drawn from the log-prior distribution and evaluated for acceptance to or rejection from the full log-posterior distribution.
 
-The \texttt{emcee} \citep{Foreman-Mackey2013} implementation of ensemble sampling is applied to sample the full log-posterior of (\ref{eq:final}).   
-For each of some $W$ walkers at each iteration $i$, a proposal distribution $\vec{\theta}^{i}$ generated from the hyperprior distribution and evaluated for acceptance to or rejection from the desired log-posterior distribution.  
 Two threshold conditions are defined, one designating all previous samples to be ignored as as products of a "burn-in" phase and another indicating when a sufficient number of "post-burn" samples have been accepted.  
-In this case, the first threshold (described in \Sect{sec:acorr}) is defined in terms of sub-runs of $I_{0}=10^{3}$ accepted samples, and the second is defined as an accumulation of $I_{tot}=10^{4}$ samples.
+In this case, the first threshold (described in \Sect{sec:acorr}) is defined in terms of sub-runs of $10^{3}$ accepted samples, and the second is defined as an accumulation of $10^{4}$ samples.
 
 The sampler is initialized with $M=100$ walkers each with a value chosen from a Gaussian distribution of identity covariance around a sample from the hyperprior distribution.  
 An example of such samples from the prior are shown in \Fig{fig:prior}.
@@ -564,6 +558,8 @@ Convergence is achieved when the statistic approaches unity.
 \subsection{Comparison with Alternative Approaches}
 \sectlabel{sec:sheldon}
 
+In this study, we compare the results of \Eq{eqn:fullpost} to those of the two most common approaches to estimating \nz\ from a catalog of \pzpdf s: the distribution $n(z_{\mathrm{max}})$ of the redshifts at maximum posterior probability (i.e. the modes of the \pzpdf s), and the stacked estimator of \Eq{eqn:stacked}.
+
 It will be desirable to compare the result of this method to the estimates of the hyperparameters obtained by two popular alternatives used in the literature, known as stacking and point estimation.   
 These have been compared 
 to one another by \citet{Hildebrandt2012}, \citet{Benjamin2013}, and \citet{Asorey2016}.
@@ -602,6 +598,8 @@ In general, derivatives will not be available for the full posterior distributio
 %\end{equation}
 %accessible with any optimization code.
 
+In \Sect{sec:diag} we outline the measures used to evaluate the performance of the method.
+
 %\clearpage
 \subsubsection{Comparison metrics}
 \sectlabel{sec:diag}
@@ -621,6 +619,22 @@ In simulated tests, $\vec{\theta}^{\ddagger}$ is the true value and $\vec{\theta
 
 \section{Validation}
 \sectlabel{sec:valid}
+
+We perform this comparison on mock data in the form of catalogs of emulated \pzpdf s generated via the forward model discussed above and presented in detail in \Sect{sec:data}.
+The mock data emulates the three sources of error of highest concern to the \pz\ community: intrinsic scatter, catastrophic outliers, and systematic bias.
+\Fig{fig:mega_scatter} illustrates these three effects individually at ten times the tolerance of the upcoming Large Synoptic Survey Telescope (LSST).
+\begin{figure*}
+	\begin{center}
+		\includegraphics[width=0.3\textwidth]{figures/chippr/hivarsigmas_scatter.png}
+		\includegraphics[width=0.3\textwidth]{figures/chippr/uouthi_scatter.png}
+		\includegraphics[width=0.3\textwidth]{figures/chippr/neghivarbias_scatter.png}
+		\caption{intrinsic scatter (left), uniform outliers (center), bias (right);
+			Not sure how best to broach the subject of nonuniform outliers and bias as model misspecification
+		}
+		\figlabel{fig:mega_scatter}
+	\end{center}
+\end{figure*}
+Tests including all three effects at the tolerance levels of LSST are presented in \Sect{sec:results}.
 
 The fiducial experiment of \Sect{sec:mock} is outlined first. 
 Seven other cases vary the shapes of the photo-$z$ likelihoods (\Sect{sec:imprecision} and \Sect{sec:inaccuracy}), the true redshift distribution function (\Sect{sec:fake-data}), and the interim prior (\Sect{sec:interim-data}).  
@@ -665,6 +679,8 @@ Two additional cases with SDSS-III BOSS DR10 data described in \Sect{sec:data} a
 		\figlabel{fig:flowchart}
 	\end{center}
 \end{figure*}
+
+In \Sect{sec:alldata} I describe the method by which interim photo-$z$ log-posteriors $\{\ln[p(z_{j}|\vec{d}_{j})]\}_{J}$ are synthesized as well as the real datasets considered for comparison.  
 
 \subsection{Data}
 \sectlabel{sec:alldata}
@@ -1185,7 +1201,7 @@ Future work will also include the extension of this fully probabilistic approach
 
 \textbf{What else should I be putting here?  Is this a good place to put the discussion of how different estimators of $N(z)$ affect different estimators of the weak lensing power spectrum?  That analysis has been completed, but I'm not sure where it fits into the paper.}
 
-\section{Chapter acknowledgements}
+\section*{Chapter acknowledgements}
 
 I thank Elisabeth Krause for assistance with the \texttt{CosmoLike} code, Mohammadjavad Vakili for statistical insights, Geoffrey Ryan for programming advice, and Boris Leistedt for other helpful comments in the development of \Chippr.
 I also thank David Alonso, Daniel Gruen, Boris Leistedt, Rachel Mandelbaum, Mark Manera, Eduardo Rozo, and Josh Speagle for additional feedback on the mathematical foundations of this work.
