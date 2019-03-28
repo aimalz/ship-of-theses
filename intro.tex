@@ -38,7 +38,19 @@ The most important of these issues, however, is that use of them in the literatu
 \clearpage
 
 \aim{[terms I should define up front: \pz s, probability density functions]}
-``$p(z)$'' is misleading, must be posterior conditioned on data $p(z \gvn d_{i})$, and $p(z_{i})$ doesn't make sense because the domain of $z$ is the same for any galaxy $i$
+
+what is stacking:
+\begin{align}
+\eqlabel{eqn:stacked}
+\hat{n}(z) &\equiv \frac{1}{J}\ \sum_{j=1}^{J}\ \pr(z_{j})
+\end{align}
+
+\begin{itemize}
+	\item \pzpdf\ a.k.a. ``$\pr(z)$'' is misleading
+	\item \pzpdf s are posteriors conditioned on data $\pr(z \gvn \data_{i})$, must be posterior  and $\pr(z_{i})$ doesn't make sense because the domain of $z$ is the same for any galaxy $i$
+	\item \pzpdf s are also conditioned on the information $I$ used to derive them, such as a template library or training set.
+	\item there is also a prior due to the method used to combine $I$ and $\data_{i}$ to yield an estimated $\pr(z \gvn \data_{i}, I)$, which is an implicit prior, making \pzpdf s implicit posteriors $\pr(z \gvn \data_{i}, I)$
+\end{itemize}
 
 \aim{[what interesting problems/opportunities are the context for my work?  (drawing conclusions about the universe from vast quantities of uncertainty-dominated, limitations of photometry lead to methodological challenges, what was tried so far and why isn't it good enough)]}
 
