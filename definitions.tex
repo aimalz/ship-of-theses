@@ -73,9 +73,12 @@
 
 % Code references:
 \newcommand{\repo}[1]{{\texttt{#1}}}
-\newcommand{\github}{\href{https://github.com}{GitHub}}
 \newcommand{\qp}{\repo{qp}}
 \newcommand{\chippr}{\repo{chippr}}
+
+% Tools:
+\newcommand{\github}{\href{https://github.com}{GitHub}}
+\newcommand{\python}{\textit{Python}}
 
 % LaTeX object referencing:
 \newcommand{\chapid}{no chapter}
@@ -129,9 +132,10 @@
 
 % Math:
 %\newcommand{\dd}{\ensuremath{\,\mathrm{d}}}
-\newcommand{\bvec}[1]{{\ensuremath{\boldsymbol{#1}}}}
-\newcommand{\paramvector}[1]{\bvec{#1}}
+\newcommand{\bvec}[1]{{\ensuremath{\boldsymbol{#1}}}}% could change to \vec
+%\newcommand{\paramvector}[1]{\bvec{#1}}
 %\newcommand{\unit}[1]{\mathrm{#1}}
+\newcommand{\data}{\ensuremath{\vec{d}}}% could change to bold
 
 % Probabilities:
 \newcommand{\perm}[2]{\ensuremath{_{#1}\mathrm{P}_{#2}}}
