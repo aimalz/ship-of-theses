@@ -4,12 +4,10 @@
 \newcommand{\Chippr}{\textit{CHIPPR}}
 \newcommand{\cosmolike}{\repo{CosmoLike}}
 \newcommand{\emcee}{\repo{emcee}}
+\newcommand{\sdss}{\project{SDSS}}
+\newcommand{\boss}{\project{BOSS}}
 
 % Math:
-\newcommand{\pzip}{\pz\ implicit posterior}
-\newcommand{\nz}{$n(z)$}
-\newcommand{\Nz}{$N(z)$}
-\newcommand{\stack}{$\hat{N}(z)$}
 \newcommand{\ndphi}{\bvec{\phi}}
 
 \chapter{How to obtain the redshift distribution from probabilistic redshift estimates\chaplabel{chippr}}
@@ -38,27 +36,23 @@ through the calculations of physical parameters \citep{VanBreukelen2009,Viironen
 Probability cuts on Bayesian quantities are not uncommon \citep{Leung2015, DiPompeo2015a}, but that procedure does not fully take advantage of all information contained in a probability distribution for parameter inference.  
 
 Despite the growing prevalence of \pzpdf\ production, no implementation of inference using \pzpdf s has yet been presented with a mathematically consistent methodology.  
-We present and validate a technique for the use of \pzpdf\ in inference of arbitrary statistics relevant to cosmology, large-scale structure, and galaxy evolution.  
+I present and validate a hierarchical Bayesian technique for the use of \pzpdf\ in inference of arbitrary statistics relevant to cosmology, large-scale structure, and galaxy evolution.  
 For simplicity, we consider only one-point statistics, though future work will extend this methodology to higher-order statistics.
 
-The redshift distribution function \Nz\ serves as an ideal statistic upon which to demonstrate this novel approach.  
+The redshift density function \nz, a normalized adaptation of \Eq{eqn:Nz}, serves as an ideal statistic upon which to demonstrate this novel approach.  
 \Nz\ is necessary for calculations of two-point correlation functions of weak gravitational lensing and counting statistics that are used to probe dark energy \citep{Masters2015}.  
 The observed \Nz\ also been used to validate survey selection functions used in generation of realistic, multi-purpose mock catalogs \citep{Norberg2002}.  
 Additionally, \Nz\ has been the subject of inference using \pzpdf s before \citep{Sheldon2012, Hildebrandt2012, Kelly2014, Benjamin2013, Bonnett2015a, Viironen2015, Asorey2016, Leistedt2016}, so comparisons to the literature may easily be made. 
 
-The established way to calculate \Nz\ is by ``stacking'' according to
-\begin{align}
-\label{eq:stackwithdata}
-\hat{N}(z) &= \sum_{i = 0}^{N_{tot}} p(z \mid d_{i}) .
-\end{align}
-The stacked estimator $\hat{N}(z)$ of the redshift distribution is effectively an average of the \pzpdf\ catalog and, as I will show in this Chapter, not in general mathematically valid.
+The prevailing way to estimate \nz\ for a sample of $J$ galaxies $j$ is to normalize \Eq{eqn:stackwithdata}.
+The stacked estimator $\hat{n}(z)$ of the redshift density function is effectively an average of the \pzpdf\ catalog and, as I will show in this \Chap, not in general mathematically valid.
 I aim to develop a clear methodology guiding the use of \pzpdf s in inference so they may be utilized effectively by the cosmology community.
 
 %\textbf{New paragraph here: Say what precision is needed for N(z) for future weak lensing surveys. Say what precision the mass function is needed (in, say cluster studies) for precision cosmology.}
 
 In \Sect{sec:pedantry}, I establish a mathematical formalism for \pzpdf s and present original proofs concerning the conditions under which the stacked estimator of the redshift distribution can be accurate.
 In \Sect{sec:meth}, I present the \Chippr\ model and \chippr\ implementation for characterizing the full posterior probability landscape of \Nz\ using \pzpdf s. 
-In \Sect{sec:valid}, I describe the experimental design for testing the fully probabilistic approach to mock and real datasets, the results of which are found in \Sect{sec:results}.
+In \Sect{sec:alldata}, I describe the experimental design for testing the fully probabilistic approach to mock and real datasets, the results of which are found in \Sect{sec:results}.
 
 %\begin{itemize}
 %	\item
@@ -177,7 +171,7 @@ p(N) &= \sum_{combination\ k}^{N_{tot}! / N! (N_{tot} - N)!} \left[ \prod_{i_{k}
 \subsection{Results}
 \sectlabel{sec:res}
 
-Here I explore what assumptions must hold for \Eq{eq:general} to be equivalent to \Eq{eq:stackwithdata}.
+Here I explore what assumptions must hold for \Eq{eq:general} to be equivalent to \Eq{eqn:stackwithdata}.
 
 \subsubsection{Perfectly informative data}
 \sectlabel{sec:informative}
@@ -233,7 +227,7 @@ this expression always reduces to the result of stacking
 
 \aim{Figure: sum of same $N_{z}$ building up to that times $N_{tot}$}
 
-\subsection{Discussion}
+\subsection{Summary}
 \sectlabel{sec:disco}
 
 i just showed when the right procedure is equivalent to stacking, but in that final case, it only approaches the true $\textbf{N}_{z}$ when $\tilde{n}(z) = \frac{\textbf{N}_{z}}{N_{tot}}$, i.e. when the truth is already known and baked into the PDFs.\\
@@ -242,7 +236,7 @@ if this were true, we would not need to take more data!
 The conditions of \Sect{sec:informative} and \Sect{sec:prior} sort of occurred in the past but will never occur for ongoing and upcoming surveys, hence why we must not stack!
 
 %\clearpage
-\section{Method}
+\section{The \Chippr\ Method}
 \sectlabel{sec:meth}
 
 \aim{Q: How can we improve the effectiveness of using \pzpdf s in inference?\\
@@ -250,18 +244,18 @@ The conditions of \Sect{sec:informative} and \Sect{sec:prior} sort of occurred i
 
 Consider a survey of $J$ galaxies $j$, each with photometric data $\data_{j}$; thus the entire survey over some solid angle $\Omega$ produces the ensemble of photometric magnitudes (or colors) and their associated observational errors $\{\data_{j}\}$.  
 Each galaxy $j$ has a redshift $z_{j}$ that we would like to learn; redshift is a parameter in this case.  
-The distribution of the ensemble of redshifts $\{z_{j}\}$ may be described by the hyperparameters defining the redshift distribution function \Nz\ that we would like to quantify.  
+The distribution of the ensemble of redshifts $\{z_{j}\}$ may be described by the hyperparameters defining the redshift distribution function \nz\ that we would like to quantify.  
 This situation may be considered to be a probabilistic generative model, illustrated by the directed acyclic graph of \Fig{fig:pgm}.  
 
-The redshift distribution function \Nz\ is the number of galaxies per unit redshift, effectively defining the evolution in the number of galaxies \citep{Menard2013}.  
-In the following sections, we will present and compare methods for estimating \Nz\ from photometric redshift probability distribution functions.  
-\Sect{sec:prob} contains the mathematical derivation of a probabilistic model for $N(z)$ dependent on photo-$z$ probability distribution functions, and \Sect{sec:sheldon} contrasts the probabilistic model with alternative methods.
+The redshift distribution function \nz\ is the number of galaxies per unit redshift, effectively defining the evolution in the number of galaxies \citep{Menard2013}.  
+In the following sections, I present and compare methods for estimating \nz\ from \pzpdf s.  
+\Sect{sec:prob} contains the mathematical derivation of a probabilistic model for $n(z)$ dependent on photo-$z$ probability distribution functions, and \Sect{sec:sheldon} contrasts the probabilistic model with alternative methods.
 
 \subsection{Forward Model}
 \sectlabel{sec:forward}
 
 We begin by reframing the redshift distribution \nz\ from a probabilistic perspective.
-Here we define a redshift distribution \nz\ as the normalized probability density
+Here we define a redshift density \nz\ as the normalized probability density
 \begin{equation}
 \label{eqn:nz}
 \int_{-\infty}^{\infty}\ n(z)\ dz\ \equiv\ \frac{1}{J}\ \int_{-\infty}^{\infty}\ \sum_{j=1}^{J}\ \delta(z_{j},\ z)\ dz = 1
@@ -304,12 +298,24 @@ The forward model corresponds to first redshifts according to \Eq{eqn:pz} and th
 of photometry conditioned on redshift.
 The likelihoods can be thought of as cuts through the joint probability space of redshift and photometry, evaluated at the true redshifts.
 
+\aim{Move some version of \Fig{fig:mega_scatter} here.
+	Address bias as model misspecification.}
+
 This description of the physical system corresponds to a forward model by which we actually believe photometry is generated:
 \begin{enumerate}
 	\item There exists a redshift distribution \nz\ with parameters $\phi$.
 	\item Galaxy redshifts $\{z_{j}\}$ are independent draws from $\pr(z \mid \phi)$.
 	\item Galaxy photometry $\data_{j}$ is drawn from the likelihoods $\pr(d | z_{j})$.
 \end{enumerate}
+\Fig{fig:flowchart} illustrates the implementation of this forward model as in this \paper.
+
+\begin{figure*}
+	\begin{center}
+		\includegraphics[width=0.75\textwidth]{figures/chippr/flowchart.png}
+		\caption{This flow chart outlines the forward model}
+		\figlabel{fig:flowchart}
+	\end{center}
+\end{figure*}
 
 \subsection{Probabilistic Model}
 \sectlabel{sec:prob}
@@ -513,18 +519,9 @@ At each iteration $i$ and for each walker, a proposal distribution $\hat{\ndphi}
 Two threshold conditions are defined, one designating all previous samples to be ignored as as products of a "burn-in" phase and another indicating when a sufficient number of "post-burn" samples have been accepted.  
 In this case, the first threshold (described in \Sect{sec:acorr}) is defined in terms of sub-runs of $10^{3}$ accepted samples, and the second is defined as an accumulation of $10^{4}$ samples.
 
-The sampler is initialized with $M=100$ walkers each with a value chosen from a Gaussian distribution of identity covariance around a sample from the hyperprior distribution.  
-An example of such samples from the prior are shown in \Fig{fig:prior}.
-
-\begin{figure}
-	\includegraphics[width=0.5\textwidth]{figures/chippr/null_priorsamps.pdf}
-	\caption{This figure shows samples (colored lines) of $p(z|\vec{\theta})$ where each $\vec{\theta}$ is drawn from the hyperprior distribution $p(\vec{\theta})$ defined in \Sect{sec:exp} with \Eq{eq:priorcov}.}
-	\label{fig:prior}
-\end{figure}
-
-The input/output format chosen for this work is \texttt{HDF5} because of its efficiency for large amounts of data.  
+Though previous versions used \texttt{HDF5} for the primary I/O format due to its efficiency for large quantities of data, it was abandoned in favor of \texttt{pickle} in the working release due to the instability of the \python\ implementation of the format on high-performance computing systems.  
 The resulting output is a set of $I$ ordered \texttt{hickle} files enumerated by $\rho$ containing the state information after each sub-run.  
-The state information includes $\frac{I_{0}}{s}$ actual samples $\vec{\theta}_{i}$ for a pre-specified chain thinning factor $s$ and their full posterior probabilities $p(\vec{\theta}_{i}|\{\vec{d}_{j}\})$ as well as the autocorrelation times and acceptance fractions calculated for each element of $\vec{\theta}$ over the entire sub-run.  
+The state information includes $\frac{I_{0}}{s}$ actual samples $\ndphi_{i}$ for a pre-specified chain thinning factor $s$ and their full posterior probabilities $p(\ndphi_{i} \gvn \{\data_{j}\})$ as well as the autocorrelation times and acceptance fractions calculated for each element of $\ndphi$ over the entire sub-run.  
 
 %\clearpage
 \subsubsection{Convergence Criteria}
@@ -558,18 +555,24 @@ Convergence is achieved when the statistic approaches unity.
 \subsection{Comparison with Alternative Approaches}
 \sectlabel{sec:sheldon}
 
-In this study, we compare the results of \Eq{eqn:fullpost} to those of the two most common approaches to estimating \nz\ from a catalog of \pzpdf s: the distribution $n(z_{\mathrm{max}})$ of the redshifts at maximum posterior probability (i.e. the modes of the \pzpdf s), and the stacked estimator of \Eq{eqn:stacked}.
-
+In this study, we compare the results of \Eq{eqn:fullpost} to those of the two most common approaches to estimating \nz\ from a catalog of \pzpdf s: the stacked estimator of \Eq{eqn:stacked} and the distribution $n(z_{\mathrm{max}})$ of the redshifts at maximum posterior probability
+\begin{equation}
+\eqlabel{eq:mmap}
+f_{\hat{\theta}}(z) = \sum_{j=1}^{J}\ p(z_{j} \gvn \data_{j},\ndphi^{*})
+\end{equation}
+ (i.e. the distribution of modes of the \pzpdf s), and .
 It will be desirable to compare the result of this method to the estimates of the hyperparameters obtained by two popular alternatives used in the literature, known as stacking and point estimation.   
 These have been compared 
 to one another by \citet{Hildebrandt2012}, \citet{Benjamin2013}, and \citet{Asorey2016}.
-
-Stacking directly calculates the full posterior for the entire dataset using the interim photo-$z$ posteriors for each galaxy according to 
+\begin{equation}
+\eqlabel{eq:stack}
+f_{\hat{\theta}}(z) = \sum_{j=1}^{J}\ p(z_{j} \gvn \data_{j},\ndphi^{*})
+\end{equation}
+Stacking directly calculates the full posterior for the entire dataset using the implicit \pzpdf s according to 
 \begin{equation}
 \eqlabel{eq:stack}
 f_{\hat{\theta}}(z) = \sum_{j=1}^{J}\ p(z_{j}|\vec{d}_{j},\vec{\theta}^{*})
-\end{equation}
-\citep{Lima2008}.  
+\end{equation}  
 Stacking is considered the preferred method for obtaining $N(z)$ from a dataset of interim photo-$z$ posteriors \citep{Sheldon2012, Kelly2014, Benjamin2013, Bonnett2015a, Viironen2015, Asorey2016}.  
 However, it must be noted here that \Eq{eq:stack} is not in general mathematically valid.  
 (See \citet{Hogg2012} for a complete discussion.)  
@@ -617,33 +620,35 @@ which measures a distance between parameter values $\vec{\theta}^{\dagger}$ and 
 We note that $KL_{\dagger,\ddagger}\neq KL_{\ddagger,\dagger}$, so both must be calculated, and the minimum of the two is reported in this study.  
 In simulated tests, $\vec{\theta}^{\ddagger}$ is the true value and $\vec{\theta}^{\dagger}$ is the value produced by one of the methods in question.  
 
-\section{Validation}
-\sectlabel{sec:valid}
+\section{\chippr\ Validation}
+\sectlabel{sec:alldata}
 
-We perform this comparison on mock data in the form of catalogs of emulated \pzpdf s generated via the forward model discussed above and presented in detail in \Sect{sec:data}.
+We compare the results of \Chippr\ to those of stacking and  on mock data in the form of catalogs of emulated \pzpdf s generated via the forward model discussed above and presented in detail in \Sect{sec:data}.
 The mock data emulates the three sources of error of highest concern to the \pz\ community: intrinsic scatter, catastrophic outliers, and systematic bias.
-\Fig{fig:mega_scatter} illustrates these three effects individually at ten times the tolerance of the upcoming Large Synoptic Survey Telescope (LSST).
+\Fig{fig:mega_scatter} illustrates these three effects individually at ten times the tolerance of the upcoming \lsst.
 \begin{figure*}
 	\begin{center}
 		\includegraphics[width=0.3\textwidth]{figures/chippr/hivarsigmas_scatter.png}
 		\includegraphics[width=0.3\textwidth]{figures/chippr/uouthi_scatter.png}
 		\includegraphics[width=0.3\textwidth]{figures/chippr/neghivarbias_scatter.png}
-		\caption{intrinsic scatter (left), uniform outliers (center), bias (right);
-			Not sure how best to broach the subject of nonuniform outliers and bias as model misspecification
+		\caption{The joint probability space of true and estimated redshift for the three concerning \pz\ systematics: intrinsic scatter (left), uniform outliers (center), bias (right).
+			Colored lines indicate posterior probabilities evaluated at the given estimated redshift.
 		}
 		\figlabel{fig:mega_scatter}
 	\end{center}
 \end{figure*}
-Tests including all three effects at the tolerance levels of LSST are presented in \Sect{sec:results}.
+Tests including all three effects at the tolerance levels of \lsst\ are presented in \Sect{sec:results}.
 
 The fiducial experiment of \Sect{sec:mock} is outlined first. 
-Seven other cases vary the shapes of the photo-$z$ likelihoods (\Sect{sec:imprecision} and \Sect{sec:inaccuracy}), the true redshift distribution function (\Sect{sec:fake-data}), and the interim prior (\Sect{sec:interim-data}).  
-Two additional cases with SDSS-III BOSS DR10 data described in \Sect{sec:data} are also considered.
+Seven other cases in \Sect{sec:imprecision} and \Sect{sec:inaccuracy} vary the \pzpdf s via the space of redshift and projected photometry.
+\Sect{sec:fake-data} considers unexpected true redshift density functions, and \Sect{sec:interim-data} considers nontrivial implicit priors.  
+Two additional cases with \sdss-III BOSS DR10 data are also considered in \Sect{sec:data}.
+The test cases included here are summarized in \Tab{tab:key}.
 
 \begin{table}
 	\begin{tabular}{llll}
-		\textul{Title} & \textul{True $N(z)$} & \textul{Interim Prior} & 
-		\textul{Photo-$z$ PDFs}\\
+		\textul{Title} & \textul{True $n(z)$} & \textul{Implicit Prior} & 
+		\textul{Probability space}\\
 		Fiducial & Physically motivated, & Uniform & Single Gaussians\\
 		& featured $N(z)$ &&\\
 		Precise & Physically motivated, & Uniform & Single, Narrow Gaussians\\
@@ -670,106 +675,87 @@ Two additional cases with SDSS-III BOSS DR10 data described in \Sect{sec:data} a
 	\tablabel{tab:key}
 \end{table}
 
-\textul{Plots: flow chart of forward model}
+In \Sect{sec:alldata} I describe the method by which mock \pzpdf s $\{\ln[\pr(z \gvn \data_{j})]\}$ are synthesized as well as the real datasets considered for comparison.  
+The sampler is initialized with $W=100$ walkers each with a value chosen from a Gaussian distribution of identity covariance around a sample from the hyperprior distribution.  
 
-\begin{figure*}
-	\begin{center}
-		\includegraphics[width=0.75\textwidth]{figures/chippr/flowchart.png}
-		\caption{In appendix?}
-		\figlabel{fig:flowchart}
-	\end{center}
-\end{figure*}
+The hyperprior distribution chosen here is a multivariate normal distribution with mean $\vec{\mu}$ equal to the implicit prior $\ndphi^{*}$ and covariance
+\begin{equation}
+\eqlabel{eqn:priorcov}
+\Sigma_{k,k'} = q\ \exp[-\frac{e}{2}\ (\bar{z}_{k}-\bar{z}_{k'})^{2}]\ +\ t\delta(k,k')
+\end{equation}
+inspired by one used in Gaussian processes, where $k$ and $k'$ are indices ranging from $1$ to $K$ and $q=1.0$, $e=100.0$, and $t=q\cdot10^{-5}$ are constants chosen to permit draws from this prior distribution to produce shapes similar to that of a true $\tilde{\ndphi}$.  
+We adapt the full log-posterior of \Eq{eq:final} to the binning of redshift space chosen in \Sect{sec:mock}.
+An example of such samples from the prior are shown in \Fig{fig:prior}.
 
-In \Sect{sec:alldata} I describe the method by which interim photo-$z$ log-posteriors $\{\ln[p(z_{j}|\vec{d}_{j})]\}_{J}$ are synthesized as well as the real datasets considered for comparison.  
+\begin{figure}
+	\includegraphics[width=0.5\textwidth]{figures/chippr/null_priorsamps.pdf}
+	\caption{Samples (colored lines) of $p(z \gvn \ndphi)$ where each $\ndphi$ is drawn from the hyperprior distribution $p(\ndphi)$ given in \Eq{eqn:priorcov}.}
+	\label{fig:prior}
+\end{figure}
 
 \subsection{Data}
 \sectlabel{sec:alldata}
 
-The parametrization of $N(z)$ chosen here is a step function formulation according to
-\begin{eqnarray}
-\eqlabel{eq:steps}
-f_{\vec{\theta}}(z)&=&\sum_{k=1}^{K}\exp[\theta_{k}]s(z;k)\\
-s(z;k)&=&\left\{\begin{array}{ccc}0&\text{for}&z<z_{k-1}\\(z_{k}-z_{k-1})^{-1} \equiv\Delta_{k}&\text{for}&z_{k-1}<z<z_{k}\\0&\text{for}&z_{k}<z\end{array}\right
-\}.
-\end{eqnarray}
-All tests in this paper will be conducted with $z_{0}=0.0$, $z_{K}=1.1$, and $K=35$, the endpoints and dimensionality of the published BOSS DR8 photo-$z$ interim posteriors \citet{Sheldon2012}.  
-We also define $\bar{z}_{k}\equiv(z_{k}+z_{k-1})/2$.
-
-The hyperprior distribution chosen here is a multivariate normal distribution with mean $\vec{\mu}$ equal to the interim prior $\vec{\theta}^{*}$ and covariance
-\begin{equation}
-\eqlabel{eq:priorcov}
-\Sigma_{k,k'} = q\ \exp[-\frac{e}{2}\ (\bar{z}_{k}-\bar{z}_{k'})^{2}]\ +\ t\delta(k,k')
-\end{equation}
-inspired by one used in Gaussian processes, where $k$ and $k'$ are indices ranging from $1$ to $K$ and $q=1.0$, $e=100.0$, and $t=q\cdot10^{-5}$ are constants chosen to permit draws from this prior distribution to produce shapes similar to that of a true $\tilde{\theta}$.  
-We adapt the full log-posterior of \Eq{eq:final} to the binning of redshift space chosen in \Sect{sec:mock}.
-
 In the following sections we motivate several informative tests, summarized in \Tab{tab:key}.  
 The code was tested on simulated datasets each of size $J'=10,000$.  
 
-%\clearpage
-\subsubsection{Fiducial Data}
-\sectlabel{sec:mock}
-
-The following outlines the ``fiducial'' test case.  
-We begin by choosing a physically-motivated $p^{*}(z)$ defining the general shape of $N(z)$ over the specified redshift range $[z_{min},z_{max}]$.  
-Here we shall set it to a weighted sum of truncated Gaussians chosen to impose recognizably recoverable features on the true $N(z)$, shown in the top panel of \Fig{fig:physpz}.  
-In the test case of \Sect{sec:fake} it shall be set to a narrow Gaussian shown in the bottom panel of \Fig{fig:physpz}.  
-The true survey size $J$ is a Poisson random variable distributed about a target survey size of $J'$.
-
-\begin{figure}
-	\includegraphics[width=0.5\textwidth]{figures/chippr/sig2_physPz.pdf}\\
-	\includegraphics[width=0.5\textwidth]{figures/chippr/delt_physPz.pdf}
-	\caption{The physically-motivated true redshift distribution used in the mock data tests is chosen to have recognizable features of different scales so the quality of recovery can be easily determined.  
-		The top panel shows a physically motivated true $N(z)$ for the fiducial test, and the bottom panel shows a toy model of a highly featured true $N(z)$.}
-	\figlabel{fig:physpz}
-\end{figure}
-
-The catalog of $J$ photo-$z$ likelihoods $p(\vec{d}_{j}|z_{j})$ is chosen to be a set of Gaussian distributions, truncated to the redshift range over which $N(z)$ is defined, because it is the simplest extension of the standard redshift point estimates with reported error bars.  
-To obtain the standard deviations $\sigma_{j}\sim\mathcal{N}(g\bar{\Delta},(g\bar{\Delta})^{2})$ associated with each surveyed galaxy $j$, we first sample a Gaussian 
-distribution with mean and standard deviation equal to $g\bar{\Delta}$ for some factor $g$ (by default set to 2), truncated to enforce positive standard deviations.  
-Each Gaussian is centered at an "observed" redshift $z'_{j}\sim\mathcal{N}(z^{*}_{j},\sigma_{j})$ separated from the true redshift $z^{*}_{j}$ by a Gaussian random variable $\epsilon_{j}\sim\mathcal{N}(0,\sigma^{2}_{j})$ selected from a distribution of mean of 0 and true standard deviation $\sigma_{j}$.   
-This prescription may be understood as an exposition of the generative model of 
-\begin{equation}
-\eqlabel{eq:genmod}
-z'_{j} = z^{*}_{j}+\epsilon_{j}
-\end{equation}
-for the physically-motivated process originating the data, which states that the MLE $z'_{j}$ of the redshift is equal to the true redshift $z^{*}_{j}$ plus a Gaussian random variable $\epsilon_{j}$.  
-\Fig{fig:nullpzsgen} illustrates this procedure by showing the probability distribution $p(z'_{j}|z^{*}_{j})$ for a random galaxy $j$.
-
-\begin{figure}
-	\includegraphics[width=0.5\textwidth]{figures/chippr/sig2_zobsvztru.pdf}
-	\caption{Top panel: This plot depicts $p(z'_{j}|z^{*}_{j})$ for a randomly chosen galaxy $j$ with areas of high probability in darker grayscale shades.  
-		The colored dots represent coordinates at which the function is evaluated to produce the horizontal slices shown in the bottom panel.  
-		Bottom panel: In colors are plotted several examples of individual photo-$z$ posteriors in the fiducial case with their MLE redshifts (dashed lines) and true redshifts (solid lines); these represent horizontal slices through the top panel.}
-	\figlabel{fig:nullpzsgen}
-\end{figure}
-
-We must also choose the parametrization of the redshift distribution function, in this case that of \Eq{eq:steps}.   
-We emphasize that the choice of parametrization here is arbitrary, but it is a choice that must at some point be made.  
-By default we choose a flat distribution as the interim prior, but others will be tested.  
-(Such a comparison has been executed before by \citet{Viironen2015}.)
-
-To obtain the $J$ desired interim photo-$z$ posteriors $p(z_{j}|\vec{d}_{j})$ from the photo-$z$ likelihoods $p(\vec{d}_{j}|z_{j})$, we simply apply Bayes' rule as in 
-\begin{equation}
-\eqlabel{eq:likpost}
-p(z_{j}|\vec{d}_{j}) \propto p(\vec{d}_{j}|z_{j})\ p(z_{j}|\vec{\theta}^{*}),
-\end{equation}
-A random sampling of such interim redshift posteriors is shown in \Fig{fig:nullpzs}.  
-
-\begin{figure}
-	\includegraphics[width=0.5\textwidth]{figures/chippr/sig2_samplepzs.pdf}
-	\caption{In colors are plotted several examples of individual photo-$z$ posteriors in the fiducial case with their MLE redshifts (dashed lines) and true redshifts (solid lines).}
-	\figlabel{fig:nullpzs}
-\end{figure}
+%%\clearpage
+%\subsubsection{Fiducial Data}
+%\sectlabel{sec:mock}
+%
+%The following outlines the ``fiducial'' test case.  
+%We begin by choosing a physically-motivated $p^{*}(z)$ defining the general shape of $N(z)$ over the specified redshift range $[z_{min},z_{max}]$.  
+%Here we shall set it to a weighted sum of truncated Gaussians chosen to impose recognizably recoverable features on the true $N(z)$, shown in the top panel of \Fig{fig:physpz}.  
+%In the test case of \Sect{sec:fake} it shall be set to a narrow Gaussian shown in the bottom panel of \Fig{fig:physpz}.  
+%The true survey size $J$ is a Poisson random variable distributed about a target survey size of $J'$.
+%
+%\begin{figure}
+%	\includegraphics[width=0.5\textwidth]{figures/chippr/sig2_physPz.pdf}\\
+%	\includegraphics[width=0.5\textwidth]{figures/chippr/delt_physPz.pdf}
+%	\caption{The physically-motivated true redshift distribution used in the mock data tests is chosen to have recognizable features of different scales so the quality of recovery can be easily determined.  
+%		The top panel shows a physically motivated true $N(z)$ for the fiducial test, and the bottom panel shows a toy model of a highly featured true $N(z)$.}
+%	\figlabel{fig:physpz}
+%\end{figure}
+%
+%The catalog of $J$ photo-$z$ likelihoods $p(\vec{d}_{j}|z_{j})$ is chosen to be a set of Gaussian distributions, truncated to the redshift range over which $N(z)$ is defined, because it is the simplest extension of the standard redshift point estimates with reported error bars.  
+%To obtain the standard deviations $\sigma_{j}\sim\mathcal{N}(g\bar{\Delta},(g\bar{\Delta})^{2})$ associated with each surveyed galaxy $j$, we first sample a Gaussian 
+%distribution with mean and standard deviation equal to $g\bar{\Delta}$ for some factor $g$ (by default set to 2), truncated to enforce positive standard deviations.  
+%Each Gaussian is centered at an "observed" redshift $z'_{j}\sim\mathcal{N}(z^{*}_{j},\sigma_{j})$ separated from the true redshift $z^{*}_{j}$ by a Gaussian random variable $\epsilon_{j}\sim\mathcal{N}(0,\sigma^{2}_{j})$ selected from a distribution of mean of 0 and true standard deviation $\sigma_{j}$.   
+%This prescription may be understood as an exposition of the generative model of 
+%\begin{equation}
+%\eqlabel{eq:genmod}
+%z'_{j} = z^{*}_{j}+\epsilon_{j}
+%\end{equation}
+%for the physically-motivated process originating the data, which states that the MLE $z'_{j}$ of the redshift is equal to the true redshift $z^{*}_{j}$ plus a Gaussian random variable $\epsilon_{j}$.  
+%\Fig{fig:nullpzsgen} illustrates this procedure by showing the probability distribution $p(z'_{j}|z^{*}_{j})$ for a random galaxy $j$.
+%
+%\begin{figure}
+%	\includegraphics[width=0.5\textwidth]{figures/chippr/sig2_zobsvztru.pdf}
+%	\caption{Top panel: This plot depicts $p(z'_{j}|z^{*}_{j})$ for a randomly chosen galaxy $j$ with areas of high probability in darker grayscale shades.  
+%		The colored dots represent coordinates at which the function is evaluated to produce the horizontal slices shown in the bottom panel.  
+%		Bottom panel: In colors are plotted several examples of individual photo-$z$ posteriors in the fiducial case with their MLE redshifts (dashed lines) and true redshifts (solid lines); these represent horizontal slices through the top panel.}
+%	\figlabel{fig:nullpzsgen}
+%\end{figure}
+%
+%By default we choose a flat distribution as the interim prior, but others will be tested.  
+%(Such a comparison has been executed before by \citet{Viironen2015}.)
+%
+%To obtain the $J$ desired interim photo-$z$ posteriors $p(z_{j}|\vec{d}_{j})$ from the photo-$z$ likelihoods $p(\vec{d}_{j}|z_{j})$, we simply apply Bayes' rule as in 
+%\begin{equation}
+%\eqlabel{eq:likpost}
+%p(z_{j}|\vec{d}_{j}) \propto p(\vec{d}_{j}|z_{j})\ p(z_{j}|\vec{\theta}^{*}),
+%\end{equation}
+%A random sampling of such interim redshift posteriors is shown in \Fig{fig:nullpzs}.  
+%
+%\begin{figure}
+%	\includegraphics[width=0.5\textwidth]{figures/chippr/sig2_samplepzs.pdf}
+%	\caption{In colors are plotted several examples of individual photo-$z$ posteriors in the fiducial case with their MLE redshifts (dashed lines) and true redshifts (solid lines).}
+%	\figlabel{fig:nullpzs}
+%\end{figure}
 
 \subsubsection{Intrinsic Scatter}
 \sectlabel{sec:imprecision}
 
-Several factors contribute to photometric redshifts' intrinsic scatter.  
-Distant galaxies are dimmer compared to galaxies of identical luminosity that are closer, driving up photometric errors in flux-limited surveys.  
-The nature of the galaxy sample at higher redshifts also changes, meaning the generation of the photometric redshift posterior based on an a locally-calibrated SED template library or spectroscopically-confirmed training set is more likely to be inappropriate, leading to broader features.  
-In general, the galaxies that could not have been observed spectroscopically will have different and noisier photo-$z$ likelihoods than those that could fall into a spectroscopic training set (or spectroscopically derived template library).  
-This effect may be stronger for high-redshift galaxies.  
 This set of tests aims to demonstrate the performance of the sampler in cases with less and more random noise (via the factor $g$) and with noise that increases with redshift.
 
 The first two test cases deviate from the fiducial case by varying the factor $g$ to be lower ($g=1$) and higher ($g=4$).  
@@ -859,8 +845,11 @@ To simulate this case, we choose an interim prior with more weight at high and l
 \subsubsection{BOSS Data}
 \sectlabel{sec:data}
 
-We also test this method on subsets of the published interim photo-$z$ posteriors of SDSS III DR 10. 
+We also test this method on subsets of the published \pzpdf s of \sdss\ III DR 10. 
 A sampling of the provided interim photo-$z$ posteriors of dimension $K=35$ for $z_{min}=0.3$ and $z_{max}=1.4$ is shown in the top panel of \Fig{fig:datapzs}.  
+
+All tests in this paper will be conducted with $z_{0}=0.0$, $z_{K}=1.1$, and $K=35$, the endpoints and dimensionality of the published BOSS DR8 photo-$z$ interim posteriors \citet{Sheldon2012}.  
+We also define $\bar{z}_{k}\equiv(z_{k}+z_{k-1})/2$.
 The brightest half of this pseudo-random sampling are selected for another test, with photo-$z$ interim posterior samples shown in the bottom panel of \Fig{fig:datapzs}.  
 The interim prior used for this set of interim photo-$z$ posteriors is the reweighted estimator of $N(z)$ of \citet{Sheldon2012}.  
 In these cases the true $N(z)$ is not known, but the fully probabilistic method presented here may still be compared to what is obtained by alternative approaches.
@@ -874,30 +863,30 @@ In these cases the true $N(z)$ is not known, but the fully probabilistic method 
 	\figlabel{fig:datapzs}
 \end{figure}
 
-Here we present the results of the informative tests of \Sect{sec:exp}, summarized in \Tab{tab:key}.  
-
-\subsection{Fiducial Case}
-\sectlabel{sec:null}
-
-\Fig{fig:null-samp} shows a selection of random samples from the posterior distribution of \Eq{eq:final} for the fiducial setup of \Sect{sec:mock}.  
-\Fig{fig:null-comp} compares the mean of the sample values to alternative estimators as well as the truth.  
-In the fiducial case, hierarchical inference preserves features in the redshift distribution function, whereas stacking tends to smear it out.  
-
-\begin{figure}
-	\includegraphics[width=0.5\textwidth]{figures/chippr/null_samps.pdf}
-	\caption{This test was conducted with a flat interim prior (gray line) and produced a mean of samples (thick, black line) that accurately reproduces the truth.  
-		It can be seen that the samples (colored lines) are an excellent estimator of the true $N(z)$ (thin, black line) with the true values falling within the error bars ($1\sigma$ in dark gray, $2\sigma$ in light gray).}
-	\label{fig:null-samp}
-\end{figure}
-
-\begin{figure}
-	\includegraphics[width=0.5\textwidth]{figures/chippr/null_comps.pdf}
-	\caption{The mean of the samples (thick, solid line) and marginalized MLE (thick, dotted line) are the best estimators of the true distribution (thin, solid line), and the error bars ($1\sigma$ in dark gray, $2\sigma$ in light gray) appear to be accurate.  
-		Stacking (thick, dashed line) overestimates $N(z)$ at the tails and underestimates $N(z)$ at the peaks.  
-		The two point estimators considered here, marginalized MAP (thin, dashed line) and marginalized expected value (thin, dotted line) fall between these two 
-		extremes.}
-	\figlabel{fig:null-comp}
-\end{figure}
+%Here we present the results of the informative tests of \Sect{sec:exp}, summarized in \Tab{tab:key}.  
+%
+%\subsection{Fiducial Case}
+%\sectlabel{sec:null}
+%
+%\Fig{fig:null-samp} shows a selection of random samples from the posterior distribution of \Eq{eq:final} for the fiducial setup of \Sect{sec:mock}.  
+%\Fig{fig:null-comp} compares the mean of the sample values to alternative estimators as well as the truth.  
+%In the fiducial case, hierarchical inference preserves features in the redshift distribution function, whereas stacking tends to smear it out.  
+%
+%\begin{figure}
+%	\includegraphics[width=0.5\textwidth]{figures/chippr/null_samps.pdf}
+%	\caption{This test was conducted with a flat interim prior (gray line) and produced a mean of samples (thick, black line) that accurately reproduces the truth.  
+%		It can be seen that the samples (colored lines) are an excellent estimator of the true $N(z)$ (thin, black line) with the true values falling within the error bars ($1\sigma$ in dark gray, $2\sigma$ in light gray).}
+%	\label{fig:null-samp}
+%\end{figure}
+%
+%\begin{figure}
+%	\includegraphics[width=0.5\textwidth]{figures/chippr/null_comps.pdf}
+%	\caption{The mean of the samples (thick, solid line) and marginalized MLE (thick, dotted line) are the best estimators of the true distribution (thin, solid line), and the error bars ($1\sigma$ in dark gray, $2\sigma$ in light gray) appear to be accurate.  
+%		Stacking (thick, dashed line) overestimates $N(z)$ at the tails and underestimates $N(z)$ at the peaks.  
+%		The two point estimators considered here, marginalized MAP (thin, dashed line) and marginalized expected value (thin, dotted line) fall between these two 
+%		extremes.}
+%	\figlabel{fig:null-comp}
+%\end{figure}
 
 %\clearpage
 \subsection{Intrinsic Scatter}
@@ -1132,21 +1121,14 @@ One can see that the excessive breadth of the stacked estimator and the histogra
 	\end{center}
 \end{figure*}
 
-I then used the different estimators of \nz\ in a cosmological forecasting procedure with \cosmolike.\aim{Cite Krause here}
+I then used the different estimators of \nz\ in a cosmological forecasting procedure with \cosmolike.
+\aim{Cite Krause here}
 
 
 \begin{figure*}
 	\begin{center}
 		\includegraphics[width=0.99\textwidth]{figures/chippr/final_plot.png}
 		\caption{The result of propagating the estimators of \nz\ of \Fig{fig:per-bin-ests} to a subset of cosmological parameters.}
-		\figlabel{fig:cornerplot}
-	\end{center}
-\end{figure*}
-
-\begin{figure*}
-	\begin{center}
-		\includegraphics[width=0.99\textwidth]{figures/chippr/final_plot.png}
-		\caption{propagation to cosmology}
 		\figlabel{fig:cornerplot}
 	\end{center}
 \end{figure*}
