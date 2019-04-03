@@ -806,6 +806,9 @@ A broader posterior on \nz\ is an expected consequence of any increase in uncert
 As was covered in the Introduction \aim{add an internal reference}, catastrophic outliers tend to be distributed non-uniformly across the space of observed and true redshift.
 However, the \lsst\ requirements do not specify details for a distribution of outliers to which they were tuned, and it is still instructive to examine the impact of uniform outliers on the inference of \nz.
 More realistic outlier populations will be covered in \Sect{sec:results}.
+
+A uniformly distributed population of outliers was simulated by giving every sample in true redshift a $10\%$ chance of having an observed redshift drawn from a uniform distribution rather than the Gaussian about the true redshift.
+Though this results in slightly less than the $10\%$ catastrophic outlier rate, it can be done independently of the definition of the standard deviation so was implemented for demonstrative purposes.
 \Fig{fig:uniform-outliers} shows examples of \pzpdf s from a uniformly distributed outlier population at the level of the \lsst\ requirements as well as the results of \Chippr\ and other \nz\ estimation methods.
 The alternative estimators are overly broad, whereas \Chippr\ yields an unbiased estimate of \nz.
 
@@ -823,12 +826,14 @@ The alternative estimators are overly broad, whereas \Chippr\ yields an unbiased
 When one thinks of the \pzpdf s of catastrophic outliers, however, what comes to mind is multimodal \pzpdf s, wherein reducing \pzpdf s to point estimates to make a standard scatterplot of the true and observed redshifts leads to substantial probability density off the diagonal.
 These coordinated catastrophic outliers may be emulated in the joint probability space of true and estimated redshifts by using a mixture of the unbiased diagonal defined by the intrinsic scatter and an additional Gaussian in one dimension, with constant observed redshift for a template-fitting code and constant true redshift for a machine learning code.
 In the case of a catastrophic outlier population like that anticipated of template-fitting codes, $10\%$ of all galaxies have their observed redshift at a particular value unrelated to their true redshift, illustrated in the left panel of \Fig{fig:nonuniform-outlier-probs}.
+This case is subject to the same caveat as the uniformly distributed outliers when it comes to the \lsst\ requirement.
+
 It is less straightforward to emulate catastrophic outliers like those anticipated of a machine learning code.
 The test here gives $10\%$ of galaxies at the redshift affected by outliers an observed redshift that is uniformly distributed relative to the true redshift, illustrated in the right panel of \Fig{fig:nonuniform-outlier-probs}.
 This means that far fewer than $10\%$ of all galaxies in the sample are catastrophic outliers.
-\aim{Probably won't have time to address this inconsistency}
+\aim{Probably won't have time to change code to address this inconsistency}
 This second variety of outliers is the only kind that can lead to multimodal \pzpdf s under the forward model.
-\aim{Interpret this in terms of whether BPZ, etc. are yielding likelihoods and how it relates to the standard true vs. estimated redshift plot.}
+\aim{Interpret this in terms of whether BPZ, etc. are yielding likelihoods and how it relates to the standard true vs. estimated redshift plot presented in the introduction.}
 
 \begin{figure}
 	\includegraphics[width=0.5\textwidth]{figures/chippr/thesis_eout_mega_scatter.png}
@@ -839,74 +844,21 @@ This second variety of outliers is the only kind that can lead to multimodal \pz
 	\figlabel{fig:uniform-outliers-data}
 \end{figure}
 
-
-\aim{Run the sampler on this for consistency.}
+The results of \Chippr\ and the alternative estimators of \nz\ are presented in \Fig{fig:nonuniform-outliers-results}.
+The most striking feature is that the histogram of modes is highly sensitive to the outlier populations, producing a severe overestimate in the case of an outlier population like those seen in template-fitting codes and a severe underestimate in the case of an outlier population like those seen in machine learning codes.
+The effect on the stacked estimator of \nz\ is more subtle though still concerning.
+In the case of outliers like those resulting from template-fitting, the estimator is overly broad, and in the case of outliers like those resulting from machine learning, the estimator features an overestimate at the redshift affected by the outlier population.
+The \Chippr\ \mmle, however, appears unbiased and withstands these effects.
 
 \begin{figure}
 	\includegraphics[width=0.5\textwidth]{figures/chippr/thesis_eout_log_estimators.png}
 	\includegraphics[width=0.5\textwidth]{figures/chippr/thesis_rout_log_estimators.png}
 	\caption{
-		The results of \Chippr\ (samples in light blue, optimization in dark blue) and the alternative approaches (the stacked estimator in red, the histogram of modes in yellow) on \pzpdf s with catastrophic outliers like those seen in template-fitting \pzpdf\ codes (left) and machine learning \pzpdf\ codes (right) to the \lsst\ requirements, with the true redshift density (black curve) and implicit prior (gray curve).
+		The results of \Chippr\ (optimization in dark blue) and the alternative approaches (the stacked estimator in red, the histogram of modes in yellow) on \pzpdf s with catastrophic outliers like those seen in template-fitting \pzpdf\ codes (left) and machine learning \pzpdf\ codes (right) to the \lsst\ requirements, with the true redshift density (black curve) and implicit prior (gray curve).
+		\aim{Run the sampler on this for consistency.}
 	}
-	\figlabel{fig:uniform-outliers-results}
+	\figlabel{fig:nonuniform-outliers-results}
 \end{figure}
-
-%In this test, we aim to simulate more realistic interim photo-$z$ posteriors by modifying the procedure of \Sect{sec:mock} to introduce inaccuracy that causes catastrophic photo-$z$ errors.  
-%Catastrophic photo-$z$ errors arise from a degeneracy in the space of galaxy SEDs and redshifts, wherein a galaxy of one SED type at one redshift has photometry indistinguishable from a galaxy of another SED type at another redshift.  
-%In this case, there may be multiple peaks in the interim photo-$z$ posteriors.  
-%
-%Catastrophic errors are simulated by considering multimodal photo-$z$ likelihoods.  
-%The first way to achieve this goal is to take the likelihoods to be sums of Gaussians of the form of those tested in \Sect{sec:null}.  
-%$R_{max}$ degenerate variances $\sigma_{R}^{2} $ and redshifts $z_{R}$ are chosen randomly for the entire survey.  
-%Each galaxy is assigned a number $R_{j}$ of Gaussian elements to be summed, chosen randomly from $R=1,\dots,R_{max}$ with weights proportional to $\sigma_{R}^{2}$.  
-%One $\sigma_{jr}$ is drawn for each $r=1,\dots,R_{j}$, and one $z'_{jr}$ is selected from the corresponding $\mathcal{N}(z_{R},\sigma^{2}_{jr})$.  
-%The components are summed and normalized to yield the likelihood, which is then convolved with the interim prior to produce a true interim posterior.   
-%An illustration of this method is shown in \Fig{fig:multpzsgen}. 
-%
-%\begin{figure}
-%	\includegraphics[width=0.5\textwidth]{figures/chippr/mult_zobsvztru.pdf}
-%	\caption{As in \Fig{fig:nullpzsgen} but for multimodal likelihoods.  
-%		Top panel: This plot depicts $p(z'_{j}|z^{*}_{j})$ for a randomly chosen galaxy $j$ with areas of high probability in darker grayscale shades.  
-%		The colored dots represent coordinates at which the function is evaluated to produce the likelihoods shown in the bottom panel.  
-%		Bottom panel: In colors are plotted several examples of individual photo-$z$ posteriors in the fiducial case with their peak redshifts (dashed lines) and true redshifts (solid lines).}
-%	\figlabel{fig:multpzsgen}
-%\end{figure}
-%
-%A third way to produce multimodal or asymmetric posteriors is to sample the simple Gaussians of the fiducial case at the level of the posteriors.  
-%Here $K$ samples are taken.  
-%Some examples of both types of multimodal interim photo-$z$ posteriors are shown in \Fig{fig:allpzs}.  
-%
-%\begin{figure}
-%	\includegraphics[width=0.5\textwidth]{figures/chippr/mult_samplepzs.pdf}\\
-%	\includegraphics[width=0.5\textwidth]{figures/chippr/samp_samplepzs.pdf}
-%	\caption{Same as \Fig{fig:nullpzs} but for multiple likelihood components (top panel) and sampled posteriors (bottom panel).}
-%	\figlabel{fig:allpzs}
-%\end{figure}
-
-%The effect of catastrophic outliers on hyperparameter estimation, simulated according to the procedure of \Sect{sec:inaccuracy} is described here.  
-%
-%For the case of multimodal likelihoods, \Fig{fig:multi-comp} shows a comparison of the mean of the samples to alternative methods.  
-%It can be seen that the lessened quality of the data does not impact the accuracy of the mean of the posterior samples as an estimator of the truth.  
-%However, both the error bars on the mean of posterior samples and the alternative point estimators are worse in the sense of being broader.
-%
-%\begin{figure}
-%	\includegraphics[width=0.5\textwidth]{figures/chippr/mult_comps.pdf}
-%	\caption{Both the mean of posterior samples (thick, solid line) and marginalized maximum likelihood estimator (thick, dotted line) do a good job of recovering the true redshift distribution function (thin, solid line).  
-%		The stacked estimator (thick, dashed line), marginalized maximum a posteriori estimator (thin, dashed line), and marginalized expected value estimator (thick, dotted line) are smoother and fail to recover the features of the true redshift distribution.  
-%		The error bars ($1\sigma$ in dark gray, $2\sigma$ in light gray) on the mean of posterior samples include the true value of the hyperparameters.}
-%	\figlabel{fig:multi-comp}
-%\end{figure}
-%
-%For the case of sampled posteriors, \Fig{fig:samp-comp} shows a comparison of the mean of the samples to alternative methods.  
-%It can be seen that the lessened quality of the data does impart some systematic effects onto the mean of samples that is not seen in the marginalized maximum likelihood estimator, but the error bars are broader as well to reflect the uncertainty of the mean of posterior samples.  
-%The alternative point estimators still fail to recover features of the true redshift distribution.
-%
-%\begin{figure}
-%	\includegraphics[width=0.5\textwidth]{figures/chippr/samp_comps.pdf}
-%	\caption{In the case of sampled interim photo-$z$ posteriors, the mean of posterior samples (thick, solid line) and marginalized maximum likelihood estimator (thick, dotted line) do a good job of recovering the true redshift distribution function (thin, solid line), though the error bars ($1\sigma$ in dark gray, $2\sigma$ in light gray) of the posterior samples appear to be underestimated.  
-%		The stacked estimator (thick, dashed line), marginalized maximum a posteriori estimator (thin, dashed line), and marginalized expected value estimator (thick, dotted line) are smoother and fail to recover the features of the true redshift distribution.}
-%	\figlabel{fig:samp-comp}
-%\end{figure}
 
 \subsection{Bias}
 \sectlabel{sec:bias}
