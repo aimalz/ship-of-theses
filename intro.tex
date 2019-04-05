@@ -75,6 +75,8 @@ what is stacking:
 
 \aim{what science can be done with that opportunity? (cosmology, and then some! the interesting problems are in testing LCDM, GR, inflation, also galaxy evolution)}
 
+\aim{Hogg says ``I think it would be good to talk a little quantitatively about where people need to know N(z) and other one-point statistics, and how much they will get various things wrong if they don't know these correctly. And situate that discussion within the current context of cosmological parameter estimation and precision cosmology.''}
+
 \aim{what I'm going to say in each chapter, one paragraph each, pose the problem I solve and say what chapter contains my solution}
 
 \Chap{chippr} presents a mathematically rigorous methodology for inferring the redshift distribution function from a catalog of redshift posteriors.
@@ -90,12 +92,18 @@ Each \chapname\ was co-authored with collaborators but the writing in each \chap
 Here, I describe my specific contributions to each \chapname:
 \begin{enumerate}
 
-{\item For \chap{chippr}, I led the development, implementation, and validation of CHIPPR under the supervision of David Hogg (NYU) and developed the mathematical formalism with encouragement from Phil Marshall (SLAC).}
+{\item For \chap{chippr}, I led the development, implementation, and validation of CHIPPR initially under the supervision of David Hogg (NYU) and later continued to work on all three aspects of the project under the supervision of Phil Marshall (SLAC).
+	I developed the mathematical formalism in consultation with Phil Marshall (SLAC).}
 
 {\item For \chap{pzdc1}, I led the choice, evaluation, and interpretation of the comparison metrics, and I devised and implemented the \texttt{trainZ} technique of \pzpdf\ estimation.
-I wrote the paper collaboratively with Sam Schmidt and the \Pz\ Working Group of the \desc.
-The mock data was produced by [just a few people] and the \pzpdf s were calculated by [almost all the other people].}
+	I wrote the paper in collaboration with Sam Schmidt (UC Davis), John Soo (U. of Science Malaysia), and the \Pz\ Working Group of the \desc.  
+	The mock data was produced and validated by Alex Abate (Dia\&Co), Sam Schmidt (UC Davis), Eve Kovacs (Argonne), Joe DeRose (Stanford), Risa Wechsler (Stanford), Tina Peters (Toronto).
+	The experimental design was chosen by Ofer Lahav (UCL), Jeff Newman (Pitt), Sam Schmidt (UC Davis), and Tony Tyson (UC Davis).
+	I chose the metrics to test with input from Jeff Newman (Pitt) and Ann Lee (CMU).
+	I worked together with Rongpu Zhou (Pitt), Bryce Kalmbach (UW), Kartik Iyer (Rutgers), Sam Schmidt (UC Davis), and Chris Morrison (UW) to implement the comparison metrics and run them on the results of different \pzpdf\ codes.
+	The \pzpdf\ codes themselves were written and/or run by Ibrahim Almosallam (King Abdulaziz City for Science and Technology), Massimo Brescia (INAF-Capodimonte), Stefano Cavuoti (University Federico II), Johann Cohen-Tanugi (Universit\'e de Montpellier),  Andy Connolly (UW), Peter Freeman (CMU), Melissa Graham (UW), Rafael Izbicki (Federal University of Sao Carlos), Matt Jarvis (Oxford; University of the Western Cape), Ann Lee (CMU), Giuseppe Longo (University Federico II), Erfan Nourbakhsh (UC Davis), Eric Nuss (Universit\'e de Montpellier), Taylor Pospisil (CMU), Cecile Roucelle (U Clermont-Ferrand), and Hugo Tranin (Universit\'e de Montpellier).
+}
 
-{\item For \chap{qp}, I conducted the investigation and wrote the \texttt{qp} code under the supervision of Phil Marshall (SLAC), with contributions to the mock data production by Sam Schmidt (UC Davis), Melissa Graham (UW), Joe DeRose (Stanford), and Risa Wechsler (Stanford).}
+{\item For \chap{qp}, I devised the idea for the project, conducted the investigation, and wrote the \texttt{qp} code under the supervision of Phil Marshall (SLAC), with contributions to the mock data production by Sam Schmidt (UC Davis), Melissa Graham (UW), Joe DeRose (Stanford), and Risa Wechsler (Stanford).}
 
 \end{enumerate}
