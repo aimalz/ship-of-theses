@@ -42,7 +42,11 @@ The redshift density function \nz, a normalized adaptation of \Eq{eqn:Nz}, serve
 The observed \Nz\ also been used to validate survey selection functions used in generation of realistic, multi-purpose mock catalogs \citep{Norberg2002}.  
 Additionally, \Nz\ has been the subject of inference using \pzpdf s before \citep{Sheldon2012, Hildebrandt2012, Kelly2014, Benjamin2013, Bonnett2015a, Viironen2015, Asorey2016, Leistedt2016}, so comparisons to the literature may easily be made. 
 
-The prevailing way to estimate \nz\ for a sample of $J$ galaxies $j$ is to normalize \Eq{eqn:stackwithdata}.
+The prevailing way to estimate \nz\ for a sample of $J$ galaxies $j$ is to ``stack'' \pzpdf s according to
+\begin{align}
+\eqlabel{eqn:stackwithdata}
+\hat{n}(z) &= \frac{1}{J} \sum_{i = 0}^{J} p(z \gvn \data_{j}) .
+\end{align}
 The stacked estimator $\hat{n}(z)$ of the redshift density function is effectively an average of the \pzpdf\ catalog and, as I will show in this \Chap, not in general mathematically valid.
 I aim to develop a clear methodology guiding the use of \pzpdf s in inference so they may be utilized effectively by the cosmology community.
 
@@ -89,9 +93,9 @@ We first establish some basic definitions by considering the chance that a singl
 \end{definition}
 
 These definitions pertain to the redshift of a single galaxy, but this document concerns the distribution $N(z)$ of redshifts of an ensemble of $N_{tot}$ galaxies, quantified by a summary statistic $\ndphi$, which under some function $N(z) = f(\ndphi; z)$ provides the number of galaxies $N_{z}$ at a redshift $z$.
-The redshift distribution itself can be used to define a probability density $n(z) \equiv p(z \gvn \ndphi) = N(z) / N_{tot}$ of finding a galaxy at a given redshift under the parameter $\ndphi$.
+The redshift distribution itself can be used to define a probability density $n(z) \equiv \pr{z \gvn \ndphi} = N(z) / N_{tot}$ of finding a galaxy at a given redshift under the parameter $\ndphi$.
 The state space of $N(z)$ is the set of non-negative integers $0, \dots, N_{tot}$, so $N_{tot}+1$ possibilities.
-The state space of $p(z \gvn \ndphi)$, however need only satisfy Definitions \ref{def:pdens} and \ref{def:normalization}.
+The state space of $\pr{z \gvn \ndphi}$, however need only satisfy Definitions \ref{def:pdens} and \ref{def:normalization}.
 
 \aim{this section needs work after here}
 
@@ -132,6 +136,12 @@ The following proofs establish the relationship between a catalog of individual 
 	\aim{define orderings above and turn this into a proposition?}
 	The number of possible orderings of all $\comb{N_{tot}}{N}$ subsets of $N$ galaxies out of a set of $N_{tot} \geq N$ is $\perm{N_{tot}}{N} \equiv \frac{N_{tot}!}{(N_{tot}-N)!} = N!\comb{N_{tot}}{N}$.
 \end{definition}
+
+\begin{itemize}
+	\item \pzpdf s are posteriors conditioned on data $\pr{z \gvn \data_{i}}$, must be posterior  and $\pr{z_{i}}$ doesn't make sense because the domain of $z$ is the same for any galaxy $i$
+	\item \pzpdf s are also conditioned on the information $I$ used to derive them, such as a template library or training set.
+	\item there is also a prior due to the method used to combine $I$ and $\data_{i}$ to yield an estimated $\pr{z \gvn \data_{i}, I}$, which is an implicit prior, making \pzpdf s implicit posteriors $\pr{z \gvn \data_{i}, I}$
+\end{itemize}
 
 \subsubsection{A universe of identical galaxies}
 
@@ -270,19 +280,19 @@ in terms of some parameter vector $\ndphi$.
 Upon doing so, we may rewrite \Eq{eqn:nz} as 
 \begin{equation}
 \label{eqn:pz}
-z_{j}\ \sim\ \pr(z \gvn \ndphi)\ \equiv\ f(z; \ndphi),
+z_{j}\ \sim\ \pr{z \gvn \ndphi}\ \equiv\ f(z; \ndphi),
 \end{equation}
 a probability density over redshift conditioned on the parameters $\ndphi$ specifying \nz.
 Note that $z_{j}$ does not depend on the redshift $z_{j'}$ of some other galaxy $j' \neq j$, a statement of the causal independence of galaxy redshifts from one another.
 
-In addition to believing \nz\ is a PDF from which redshifts are drawn, we also believe that there is some higher dimensional probability space $\pr(z, \data)$ of redshift and photometric data vectors $\data$, which may be any combination of fluxes, magnitudes, colors, and their observational errors.
+In addition to believing \nz\ is a PDF from which redshifts are drawn, we also believe that there is some higher dimensional probability space $\pr{z, \data}$ of redshift and photometric data vectors $\data$, which may be any combination of fluxes, magnitudes, colors, and their observational errors.
 In that sense \nz\ is equivalent to an integral
 \begin{equation}
 \label{eqn:integral}
-n(z)\ =\ \integral(pr(z, \data), \data)
+n(z)\ =\ \integral(\pr{z, \data}, \data)
 \end{equation}
 over the dimension of data in that joint probability space.
-Note that galaxies may have different observational data despite sharing the same redshift, and that galaxies at different redshifts may have identical photometry; the space $\pr(z, \data)$ need not be one-to-one.
+Note that galaxies may have different observational data despite sharing the same redshift, and that galaxies at different redshifts may have identical photometry; the space $\pr{z, \data}$ need not be one-to-one.
 We assume a stronger version of statistical independence here, that draws $(z_{j}, \data_{j})$ are independent of draws $(z_{j'}, \data_{j'})$ in this space; the data and redshift of each galaxy are independent of those of other galaxies.
 
 However, this problem has additional causal structure that we can acknowledge.
@@ -291,19 +301,28 @@ This is the fundamental assumption upon which \pz\ estimation is based.
 The forward model corresponds to first redshifts according to \Eq{eqn:pz} and then drawing data from the likelihood
 \begin{equation}
 \label{eqn:pzpdf}
-\data_{j}\ \sim\ \pr(\data \gvn z_{j})
+\data_{j}\ \sim\ \pr{\data \gvn z_{j}}
 \end{equation}
-of photometry conditioned on redshift.
+of photometry conditioned on redshift, illustrated in \Fig{fig:pedagogical_scatter}.
 The likelihoods can be thought of as cuts through the joint probability space of redshift and photometry, evaluated at the true redshifts.
 
-\aim{Move some version of \Fig{fig:mega_scatter} here.
-	Address bias as model misspecification.}
+\begin{figure*}
+	\begin{center}
+		\includegraphics[width=\textwidth]{figures/chippr/jain05.png}
+		\caption{
+			\aim{Cite Jain+05, WebPlotDigitizer}
+		}
+		\figlabel{fig:pedagogical_scatter}
+	\end{center}
+\end{figure*}
+
+\aim{Address bias as model misspecification.}
 
 This description of the physical system corresponds to a forward model by which we actually believe photometry is generated:
 \begin{enumerate}
-	\item There exists a redshift distribution \nz\ with parameters $\phi$.
-	\item Galaxy redshifts $\{z_{j}\}$ are independent draws from $\pr(z \mid \phi)$.
-	\item Galaxy photometry $\data_{j}$ is drawn from the likelihoods $\pr(d | z_{j})$.
+	\item There exists a redshift distribution \nz\ with parameters $\ndphi$.
+	\item Galaxy redshifts $\{z_{j}\}$ are independent draws from $\pr{z \gvn \ndphi}$.
+	\item Galaxy photometry $\data_{j}$ is drawn from the likelihoods $\pr{\data \gvn z_{j}}$.
 \end{enumerate}
 \Fig{fig:flowchart} illustrates the implementation of this forward model as in this \paper.
 
@@ -334,9 +353,9 @@ A DAG conveys the causal relationships between physical parameters and, like a F
 \end{figure}
 
 The problem facing cosmologists is to determine the true values of $\ndphi$ from observing the photometry $\{\data_{j}\}$ of a large sample of $J$ galaxies $j$.
-To self-consistently propagate the uncertainty in the redshifts, however, it is more appropriate to estimate the posterior $\pr(\ndphi \gvn \{\data_{j}\})$ over all possible values of $\ndphi$ conditioned on all the observed data $\{\data_{j}\}$ available in a generic catalog.
+To self-consistently propagate the uncertainty in the redshifts, however, it is more appropriate to estimate the posterior $\pr{\ndphi \gvn \{\data_{j}\}}$ over all possible values of $\ndphi$ conditioned on all the observed data $\{\data_{j}\}$ available in a generic catalog.
 
-In order to use the DAG of \Fig{fig:pgm} to derive an expression for $\pr(\ndphi \gvn \{\data_{j}\})$ in terms of \pzpdf s, we must introduce two more concepts, confusingly named the implicit prior and the prior probability density.
+In order to use the DAG of \Fig{fig:pgm} to derive an expression for $\pr{\ndphi \gvn \{\data_{j}\}}$ in terms of \pzpdf s, we must introduce two more concepts, confusingly named the implicit prior and the prior probability density.
 
 When we constrain the redshift of a galaxy using its observed photometric data $\data_{j}$, we are effectively estimating a posterior $\Pr(z \mid d_{j})$.
 However, to do this, we must have a model for the general relationship between redshifts and photometry, whether empirical, as is the case for machine learning \pzpdf\ methods, or analytic, as is the case for template-based \pzpdf\ methods.
@@ -486,7 +505,7 @@ Third, the hyperprior may be quite arbitrary and poorly motivated if the underly
 
 I implemented the \Chippr\ model in code in order to perform tests of its validity and to compare its performance to that of traditional alternatives.
 In \Sect{sec:mcmc}, I describe the publicly available \chippr\ library.
-In \Sect{sec:acorr}, I outline how \chippr\ can be used to sample the full log-posterior distribution $\ln[\pr(\ndphi \gvn \{\data_{j}\})]$.
+In \Sect{sec:acorr}, I outline how \chippr\ can be used to sample the full log-posterior distribution $\ln[\pr{\ndphi \gvn \{\data_{j}\}}]$.
 
 %\clearpage
 \subsubsection{Code}
@@ -507,8 +526,8 @@ for \nz\ and every \pzpdf, satisfying
 \end{equation}
 with $K$ bins of width $\delta z^{1}, \dots, \delta z^{K}$ defined by endpoints $z^{0}, \dots, z^{K}$.
 \aim{Maybe include an equation for a general piecewise constant function here (which is currently in \Chap{qp})?}
-Thus each $p(z \gvn \data_{j}) = f(z; \ndphi_{j})$ has parameters $\ndphi_{j}$ that are defined in the same basis as those of \nz.
-To infer the full log-posterior distribution $\ln[\pr(\ndphi \gvn \{\data_{j}\})]$, one must provide a plaintext file with $K+1$ redshift bin endpoints $\{z_{k}\}$, the parameters $\ndphi^{*}$ of the implicit log-prior, and the parameters $\{\ndphi_{j}\}$ of the log-posteriors $\ln[p(z \gvn \data_{j}, \ndphi^{*})]$.
+Thus each $\pr{z \gvn \data_{j}} = f(z; \ndphi_{j})$ has parameters $\ndphi_{j}$ that are defined in the same basis as those of \nz.
+To infer the full log-posterior distribution $\ln[\pr{\ndphi \gvn \{\data_{j}\}}]$, one must provide a plaintext file with $K+1$ redshift bin endpoints $\{z_{k}\}$, the parameters $\ndphi^{*}$ of the implicit log-prior, and the parameters $\{\ndphi_{j}\}$ of the log-posteriors $\ln[\pr{z \gvn \data_{j}, \ndphi^{*})}$.
 
 The \emcee \citep{Foreman-Mackey2013} implementation of ensemble sampling is used to sample the full log-posterior of \Eq{eq:final}. 
 \chippr\ accepts a configuration file of user-specified parameters, among them the number $W$ of walkers.
@@ -621,10 +640,10 @@ In simulated tests, $\vec{\theta}^{\ddagger}$ is the true value and $\vec{\theta
 \section{\chippr\ Validation}
 \sectlabel{sec:alldata}
 
-We compare the results of \Chippr\ to those of stacking and  on mock data in the form of catalogs of emulated \pzpdf s generated via the forward model discussed above and presented in detail in \Sect{sec:data}.
+We compare the results of \Chippr\ to those of stacking and the histogram of \pzpdf\ maxima (modes) on mock data in the form of catalogs of emulated \pzpdf s generated via the forward model discussed above and presented in detail in \Sect{sec:data}.
 The mock data emulates the three sources of error of highest concern to the \pz\ community: intrinsic scatter, catastrophic outliers, and systematic bias.
 \Fig{fig:mega_scatter} illustrates these three effects individually at ten times the tolerance of the upcoming \lsst.
-\begin{figure*}
+\begin{figure}
 	\begin{center}
 		\includegraphics[width=0.3\textwidth]{figures/chippr/hivarsigmas_scatter.png}
 		\includegraphics[width=0.3\textwidth]{figures/chippr/uouthi_scatter.png}
@@ -634,46 +653,46 @@ The mock data emulates the three sources of error of highest concern to the \pz\
 		}
 		\figlabel{fig:mega_scatter}
 	\end{center}
-\end{figure*}
+\end{figure}
 Tests including all three effects at the tolerance levels of \lsst\ are presented in \Sect{sec:results}.
 
 The fiducial experiment of \Sect{sec:mock} is outlined first. 
 Seven other cases in \Sect{sec:imprecision} and \Sect{sec:inaccuracy} vary the \pzpdf s via the space of redshift and projected photometry.
 \Sect{sec:fake-data} considers unexpected true redshift density functions, and \Sect{sec:interim-data} considers nontrivial implicit priors.  
 Two additional cases with \sdss-III BOSS DR10 data are also considered in \Sect{sec:data}.
-The test cases included here are summarized in \Tab{tab:key}.
+%The test cases included here are summarized in \Tab{tab:key}.
+%
+%\begin{table}
+%	\begin{tabular}{llll}
+%		\textul{Title} & \textul{True $n(z)$} & \textul{Implicit Prior} & 
+%		\textul{Probability space}\\
+%		Fiducial & Physically motivated, & Uniform & Single Gaussians\\
+%		& featured $N(z)$ &&\\
+%		Precise & Physically motivated, & Uniform & Single, Narrow Gaussians\\
+%		& featured $N(z)$ &&\\
+%		Imprecise & Physically motivated, & Uniform & Single, Broad Gaussians\\
+%		& featured $N(z)$ &&\\
+%		Trending & Physically motivated, & Uniform & Single Gaussians\\
+%		& featured $N(z)$ && with $\sigma_{j}\sim z^{*}_{j}$\\
+%		Multimodal & Physically motivated, & Uniform & Multiple Gaussians\\
+%		& featured $N(z)$ &&\\
+%		Sampled & Physically motivated, & Uniform & Sampled, Single Gaussian\\
+%		& featured $N(z)$ &&\\
+%		Featured & Single, Narrow Gaussian & Uniform & Single, Broad Gaussians\\
+%		Unimodal $\vec{\theta}_{0}$ & Physically motivated, & Low-$z$ Favoring & 
+%		Single, Broad Gaussians\\
+%		& featured $N(z)$ &&\\
+%		Bimodal $\vec{\theta}_{0}$& Physically motivated, & Mid-$z$ Disfavoring & 
+%		Single, Broad Gaussians\\
+%		& featured $N(z)$ &&\\
+%		Surveyed & Unknown & \citet{Sheldon2012} & pseudo-random sample of BOSS DR10\\
+%		Biased & Unknown & \citet{Sheldon2012} & brightest 50\% of BOSS test
+%	\end{tabular}
+%	\caption{Summary of the mock data validation tests using the shorthand names by which the tests are referenced.}
+%	\tablabel{tab:key}
+%\end{table}
 
-\begin{table}
-	\begin{tabular}{llll}
-		\textul{Title} & \textul{True $n(z)$} & \textul{Implicit Prior} & 
-		\textul{Probability space}\\
-		Fiducial & Physically motivated, & Uniform & Single Gaussians\\
-		& featured $N(z)$ &&\\
-		Precise & Physically motivated, & Uniform & Single, Narrow Gaussians\\
-		& featured $N(z)$ &&\\
-		Imprecise & Physically motivated, & Uniform & Single, Broad Gaussians\\
-		& featured $N(z)$ &&\\
-		Trending & Physically motivated, & Uniform & Single Gaussians\\
-		& featured $N(z)$ && with $\sigma_{j}\sim z^{*}_{j}$\\
-		Multimodal & Physically motivated, & Uniform & Multiple Gaussians\\
-		& featured $N(z)$ &&\\
-		Sampled & Physically motivated, & Uniform & Sampled, Single Gaussian\\
-		& featured $N(z)$ &&\\
-		Featured & Single, Narrow Gaussian & Uniform & Single, Broad Gaussians\\
-		Unimodal $\vec{\theta}_{0}$ & Physically motivated, & Low-$z$ Favoring & 
-		Single, Broad Gaussians\\
-		& featured $N(z)$ &&\\
-		Bimodal $\vec{\theta}_{0}$& Physically motivated, & Mid-$z$ Disfavoring & 
-		Single, Broad Gaussians\\
-		& featured $N(z)$ &&\\
-		Surveyed & Unknown & \citet{Sheldon2012} & pseudo-random sample of BOSS DR10\\
-		Biased & Unknown & \citet{Sheldon2012} & brightest 50\% of BOSS test
-	\end{tabular}
-	\caption{Summary of the mock data validation tests using the shorthand names by which the tests are referenced.}
-	\tablabel{tab:key}
-\end{table}
-
-In \Sect{sec:alldata} I describe the method by which mock \pzpdf s $\{\ln[\pr(z \gvn \data_{j})]\}$ are synthesized as well as the real datasets considered for comparison.  
+In \Sect{sec:alldata} I describe the method by which mock \pzpdf s $\{\ln[\pr{z \gvn \data_{j}}]\}$ are synthesized as well as the real datasets considered for comparison.  
 The sampler is initialized with $W=100$ walkers each with a value chosen from a Gaussian distribution of identity covariance around a sample from the hyperprior distribution.  
 
 The hyperprior distribution chosen here is a multivariate normal distribution with mean $\vec{\mu}$ equal to the implicit prior $\ndphi^{*}$ and covariance
@@ -697,6 +716,8 @@ An example of such samples from the prior are shown in \Fig{fig:prior}.
 \aim{Commented out but may add back in later.}
 
 \aim{Describe joint space of true and ``observed'' redshift as a special nonlinear projection of the data}
+
+\Fig{fig:pedagogical_scatter}
 
 %The following outlines the ``fiducial'' test case.  
 %We begin by choosing a physically-motivated $p^{*}(z)$ defining the general shape of $N(z)$ over the specified redshift range $[z_{min},z_{max}]$.  
