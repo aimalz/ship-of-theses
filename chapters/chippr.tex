@@ -45,9 +45,15 @@ Additionally, \Nz\ has been the subject of inference using \pzpdf s before \cite
 The prevailing way to estimate \nz\ for a sample of $J$ galaxies $j$ is to ``stack'' \pzpdf s according to
 \begin{align}
 \eqlabel{eqn:stackwithdata}
-\hat{n}(z) &= \frac{1}{J} \sum_{i = 0}^{J} p(z \gvn \data_{j}) .
+\hat{n}(z) &= \frac{1}{J} \sum_{i = 0}^{J} \pr{z \gvn \data_{j}} .
 \end{align}
 The stacked estimator $\hat{n}(z)$ of the redshift density function is effectively an average of the \pzpdf\ catalog and, as I will show in this \Chap, not in general mathematically valid.
+
+Stacking is considered the preferred method for obtaining $N(z)$ from a dataset of interim photo-$z$ posteriors \citep{Sheldon2012, Kelly2014, Benjamin2013, Bonnett2015a, Viironen2015, Asorey2016}.  
+However, it must be noted here that \Eq{eq:stack} is not in general mathematically valid.  
+(See \citet{Hogg2012} for a complete discussion.)  
+The estimator produced by stacking shall henceforth be referred to as the ``stacked'' estimator.
+
 I aim to develop a clear methodology guiding the use of \pzpdf s in inference so they may be utilized effectively by the cosmology community.
 
 %\textbf{New paragraph here: Say what precision is needed for N(z) for future weak lensing surveys. Say what precision the mass function is needed (in, say cluster studies) for precision cosmology.}
@@ -108,7 +114,6 @@ The state space of $\pr{z \gvn \ndphi}$, however need only satisfy Definitions \
 The probability that either of two independent events occur is $p(z_{i} \cup z_{j}) = p(z_{i}) p(\sim z_{j}) + p(\sim z_{i}) p(z_{j}) + p(z_{i}) p(z_{j}) = p(z_{i})(1 - p(z_{j})) + (1 - p(z_{j}))p(z_{j}) + p(z_{i}) p(z_{j})$, also $p(z_{i} \cup z_{j}) = 1 - p(\sim z_{i} \cap \sim z_{j}) = 1 - p(\sim z_{i}) p(\sim z_{j}) = 1 - (1 - p(z_{i})) (1 -p(z_{j}))$
 expected value $\langle N_{z} \rangle = \frac{1}{N_{tot}+1} \sum_{N_{z} = 0}^{N_{tot}} N_{z} p(N_{z})$
 %; note that $\hat{n}(z) = \langle p(z) \rangle$ assuming $p(p(z)) = \mathcal{U}(0, 1)$
-
 
 what is wrong with $p(z_{i} \cap z_{j}) \neq (p(z_{i}) + p(z_{j})) / 2$? mixing normalization and independence concepts in wrong way
 
@@ -325,7 +330,7 @@ This description of the physical system corresponds to a forward model by which 
 \begin{enumerate}
 	\item There exists a redshift distribution \nz\ with parameters $\ndphi$.
 	\item Galaxy redshifts $\{z_{j}\}$ are independent draws from $\pr{z \gvn \ndphi}$.
-	\item Galaxy photometry $\data_{j}$ is drawn from the likelihoods $\pr{\data \gvn z_{j}}$.
+	\item Galaxy photometry $\data_{j}$ is drawn from the likelihoods $\pr{\data_{j} \gvn z}$.
 \end{enumerate}
 
 \subsection{Probabilistic Model}
@@ -517,7 +522,7 @@ In \Sect{sec:acorr}, I outline how \chippr\ can be used to sample the full log-p
 \subsubsection{Code}
 \sectlabel{sec:mcmc}
 
-\chippr\ is a \python\ library that includes an implementation of the \Chippr\ model as well as an extensive suite of tools for comparing \Chippr\ to other approaches.
+\chippr\ is a \python\ 2 library that includes an implementation of the \Chippr\ model as well as an extensive suite of tools for comparing \Chippr\ to other approaches.
 \aim{Cite GitHub here.}
 
 Though there are plans for future expansion to more flexible parameterizations, the current version of \chippr\ uses a log-space piecewise constant parameterization
@@ -544,7 +549,7 @@ In this case, the first threshold (described in \Sect{sec:acorr}) is defined in 
 
 Though previous versions used \texttt{HDF5} for the primary I/O format due to its efficiency for large quantities of data, it was abandoned in favor of \texttt{pickle} in the working release due to the instability of the \python\ implementation of the format on high-performance computing systems.  
 The resulting output is a set of $I$ ordered \texttt{hickle} files enumerated by $\rho$ containing the state information after each sub-run.  
-The state information includes $\frac{I_{0}}{s}$ actual samples $\ndphi_{i}$ for a pre-specified chain thinning factor $s$ and their full posterior probabilities $p(\ndphi_{i} \gvn \{\data_{j}\})$ as well as the autocorrelation times and acceptance fractions calculated for each element of $\ndphi$ over the entire sub-run.  
+The state information includes $\frac{I_{0}}{s}$ actual samples $\ndphi_{i}$ for a pre-specified chain thinning factor $s$ and their full posterior probabilities $\pr{\ndphi_{i} \gvn \{\data_{j}\}}$ as well as the autocorrelation times and acceptance fractions calculated for each element of $\ndphi$ over the entire sub-run.  
 
 %\clearpage
 \subsubsection{Convergence Criteria}
@@ -570,7 +575,7 @@ Low autocorrelation times are a necessary but not always sufficient convergence 
 The Gelman-Rubin statistic
 \begin{equation}
 \eqlabel{eq:gr}
-R_{k} = \sqrt{\frac{(1-\frac{2}{I_{0}})w_{k}+\frac{2}{I_{0}}b_{k}}{w_{k}}},
+R_{k} = \sqrt{\frac{(1 - \frac{2}{I_{0}}) w_{k} + \frac{2}{I_{0}} b_{k}}{w_{k}}},
 \end{equation}
 a weighted sum of the mean $w_{k}$ of the variances within individual walkers' chains and the variance $b_{k}$ between chains of different walkers $m$, is calculated over each sub-run $i$ to determine the duration of the burn-in period.  
 Convergence is achieved when the statistic approaches unity.  
@@ -578,28 +583,19 @@ Convergence is achieved when the statistic approaches unity.
 \subsection{Comparison with Alternative Approaches}
 \sectlabel{sec:sheldon}
 
-In this study, we compare the results of \Eq{eqn:fullpost} to those of the two most common approaches to estimating \nz\ from a catalog of \pzpdf s: the stacked estimator of \Eq{eqn:stacked} and the distribution $n(z_{\mathrm{max}})$ of the redshifts at maximum posterior probability
+In this study, we compare the results of \Eq{eqn:fullpost} to those of the two most common approaches to estimating \nz\ from a catalog of \pzpdf s: the distribution $n(z_{\mathrm{max}})$ of the redshifts at maximum posterior probability
 \begin{equation}
 \eqlabel{eq:mmap}
-f_{\hat{\theta}}(z) = \sum_{j=1}^{J}\ p(z_{j} \gvn \data_{j},\ndphi^{*})
+f(z; \hat{\ndphi}) = \sum_{j=1}^{J}\ \pr{z \gvn \data_{j}, \ndphi^{*}}
 \end{equation}
- (i.e. the distribution of modes of the \pzpdf s), and .
+(i.e. the distribution of modes of the \pzpdf s) and the stacked estimator of \Eq{eqn:stacked}, which can be rewritten as 
+\begin{equation}
+\eqlabel{eq:stack}
+f(z; \hat{\ndphi}) = \sum_{j=1}^{J}\ \pr{z \gvn \data_{j}, \ndphi^{*}}
+\end{equation}
+in terms of the implicit \pz\ posteriors we have.
 It will be desirable to compare the result of this method to the estimates of the hyperparameters obtained by two popular alternatives used in the literature, known as stacking and point estimation.   
-These have been compared 
-to one another by \citet{Hildebrandt2012}, \citet{Benjamin2013}, and \citet{Asorey2016}.
-\begin{equation}
-\eqlabel{eq:stack}
-f_{\hat{\theta}}(z) = \sum_{j=1}^{J}\ p(z_{j} \gvn \data_{j},\ndphi^{*})
-\end{equation}
-Stacking directly calculates the full posterior for the entire dataset using the implicit \pzpdf s according to 
-\begin{equation}
-\eqlabel{eq:stack}
-f_{\hat{\theta}}(z) = \sum_{j=1}^{J}\ p(z_{j}|\vec{d}_{j},\vec{\theta}^{*})
-\end{equation}  
-Stacking is considered the preferred method for obtaining $N(z)$ from a dataset of interim photo-$z$ posteriors \citep{Sheldon2012, Kelly2014, Benjamin2013, Bonnett2015a, Viironen2015, Asorey2016}.  
-However, it must be noted here that \Eq{eq:stack} is not in general mathematically valid.  
-(See \citet{Hogg2012} for a complete discussion.)  
-The estimator produced by stacking shall henceforth be referred to as the ``stacked'' estimator.
+These have been compared to one another by \citet{Hildebrandt2012}, \citet{Benjamin2013}, and \citet{Asorey2016}.
 
 Point estimation converts the interim photo-$z$ posteriors $p(z_{j}|\vec{d}_{j},\vec{\theta}^{*})$ into delta functions with all probability at a single estimated redshift.  
 Some variants of point estimation choose this single redshift to be that of maximum a posteriori probability $argmax[p(z_{j}|\vec{d}_{j},\vec{\theta}^{*})]$ or the expected value of redshift $E[z]=\int z_{j}\ p(z_{j}|\vec{d}_{j},\vec{\theta}^{*})\ dz_{j}$.  
