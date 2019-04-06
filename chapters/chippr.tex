@@ -265,21 +265,23 @@ In the following sections, I present and compare methods for estimating \nz\ fro
 We begin by reframing the redshift distribution \nz\ from a probabilistic perspective.
 Here we define a redshift density \nz\ as the normalized probability density
 \begin{equation}
-\label{eqn:nz}
+\eqlabel{eqn:nz}
 \int_{-\infty}^{\infty}\ n(z)\ dz\ \equiv\ \frac{1}{J}\ \int_{-\infty}^{\infty}\ \sum_{j=1}^{J}\ \delta(z_{j},\ z)\ dz = 1
 \end{equation}
 of finding a galaxy $j$ in a catalog of $J$ galaxies having a redshift $z$.
-We believe that galaxy redshifts are indeed drawn from \nz, making it a probability density over redshift; this fact can also be confirmed from dimensional analysis of Equation~\ref{eqn:nz}.
+We believe that galaxy redshifts are indeed drawn from \nz, making it a probability density over redshift; this fact can also be confirmed by dimensional analysis of Equation~\ref{eqn:nz}.
+\aim{Cite Hogg's probability calculus for inference document.}
 
-We may without loss of generality impose a parametrization
+We may without loss of generality impose a parameterization
 \begin{equation}
-\label{eqn:fz}
+\eqlabel{eqn:fz}
 f(z; \ndphi)\ \equiv\ n(z)
 \end{equation}
 in terms of some parameter vector $\ndphi$.
+At this point, the parameter vector is quite general and may represent coefficients in a high-order polynomial as a function of redshift, a set of means and variances defining Gaussians that sum to the desired distribution, a set of histogram heights that describe a binned version of the redshift distribution function, etc.
 Upon doing so, we may rewrite \Eq{eqn:nz} as 
 \begin{equation}
-\label{eqn:pz}
+\eqlabel{eqn:pz}
 z_{j}\ \sim\ \pr{z \gvn \ndphi}\ \equiv\ f(z; \ndphi),
 \end{equation}
 a probability density over redshift conditioned on the parameters $\ndphi$ specifying \nz.
@@ -289,7 +291,7 @@ In addition to believing \nz\ is a PDF from which redshifts are drawn, we also b
 In that sense \nz\ is equivalent to an integral
 \begin{equation}
 \label{eqn:integral}
-n(z)\ =\ \integral(\pr{z, \data}, \data)
+n(z)\ =\ \integral{\pr{z, \data}}{\data}
 \end{equation}
 over the dimension of data in that joint probability space.
 Note that galaxies may have different observational data despite sharing the same redshift, and that galaxies at different redshifts may have identical photometry; the space $\pr{z, \data}$ need not be one-to-one.
@@ -298,25 +300,26 @@ We assume a stronger version of statistical independence here, that draws $(z_{j
 However, this problem has additional causal structure that we can acknowledge.
 The photometry results from the redshifts, not the other way around.
 This is the fundamental assumption upon which \pz\ estimation is based.
-The forward model corresponds to first redshifts according to \Eq{eqn:pz} and then drawing data from the likelihood
+The forward model corresponds to first drawing redshifts according to \Eq{eqn:pz} and then drawing data from the likelihood
 \begin{equation}
 \label{eqn:pzpdf}
 \data_{j}\ \sim\ \pr{\data \gvn z_{j}}
 \end{equation}
 of photometry conditioned on redshift, illustrated in \Fig{fig:pedagogical_scatter}.
+\aim{Describe joint space of true and ``observed'' redshift as a special nonlinear projection of the data}
 The likelihoods can be thought of as cuts through the joint probability space of redshift and photometry, evaluated at the true redshifts.
 
 \begin{figure*}
 	\begin{center}
 		\includegraphics[width=\textwidth]{figures/chippr/jain05.png}
 		\caption{
-			\aim{Cite Jain+05, WebPlotDigitizer}
+			\aim{Cite Jain+05, WebPlotDigitizer.}
+			A generic probability space of redshift (x-axis) and data (y-axis), projected into a single dimension, with vertical cuts and marginals (cyan) indicating the construction of likelihoods and horizontal cuts and marginals (magenta) indicating the construction of posteriors.
+			\aim{Maybe choose better colors here?}
 		}
 		\figlabel{fig:pedagogical_scatter}
 	\end{center}
 \end{figure*}
-
-\aim{Address bias as model misspecification.}
 
 This description of the physical system corresponds to a forward model by which we actually believe photometry is generated:
 \begin{enumerate}
@@ -324,174 +327,177 @@ This description of the physical system corresponds to a forward model by which 
 	\item Galaxy redshifts $\{z_{j}\}$ are independent draws from $\pr{z \gvn \ndphi}$.
 	\item Galaxy photometry $\data_{j}$ is drawn from the likelihoods $\pr{\data \gvn z_{j}}$.
 \end{enumerate}
-\Fig{fig:flowchart} illustrates the implementation of this forward model as in this \paper.
-
-\begin{figure*}
-	\begin{center}
-		\includegraphics[width=0.75\textwidth]{figures/chippr/flowchart.png}
-		\caption{This flow chart outlines the forward model}
-		\figlabel{fig:flowchart}
-	\end{center}
-\end{figure*}
 
 \subsection{Probabilistic Model}
 \sectlabel{sec:prob}
 
 A forward model such as that of \Sect{sec:forward} corresponds to a probabilistic graphical model (PGM), represented by a directed acyclic graph (DAG) as in \Fig{fig:pgm}.
 A DAG conveys the causal relationships between physical parameters and, like a Feynman diagram in the context of particle physics, is a shorthand for mathematical relationships between variables.
+The photometric data $\data_{j}$ of a galaxy is drawn from some function of its redshift $z_{j}$, independent of other galaxies' data and redshift.
+Both data and redshift are random variables, but data is the one that we observe and redshift is not directly observable.
+In this problem, we don't care about further constraining the redshifts of individual galaxies, only the redshift distribution, so we consider redshift to be a \textit{latent variable}.
+Because the parameters $\ndphi$ that we seek are causally separated from the data by the latent variable of redshift, we call them \textit{hyperparameters}.
+\aim{I'm not explaining the distinction between hyperparameters and parameters adequately.}
 
 \begin{figure}
 	\begin{center}
 		\includegraphics[width=0.25\textwidth]{figures/chippr/pgm.png}
-		\caption{This directed acyclic graph illustrates the CHIPPR model, where circles indicate random variables.
-			The redshift distribution function parameterized by $\ndphi$ exists independent of the survey of $J$ galaxies, indicated as a box.  
-			The redshifts $\{z_{j}\}$ of all galaxies in the survey are parameters independently drawn from the redshift distribution as a function of $\ndphi$. 
-			The photometric data $\data_{j}$ for each galaxy is drawn from a function of its redshift $z_{j}$.  
-			Because $\{\data_{j}\}$ are observed, the circle is shaded.}
+		\caption{The directed acyclic graph of the CHIPPR model, where circles indicate random variables and arrows indicate causal relationships.
+			The redshift distribution function parameterized by hyperparameters $\ndphi$ exists independent of the survey of $J$ galaxies, indicated as a box.  
+			The redshifts $\{z_{j}\}$ of all galaxies in the survey are latent variables independently drawn from the redshift distribution, which is a function of $\ndphi$. 
+			The photometric data $\data_{j}$ for each galaxy is drawn from a function of its redshift $z_{j}$ and observed, indicated by a shaded circle.}
 		\figlabel{fig:pgm}
 	\end{center}
 \end{figure}
 
-The problem facing cosmologists is to determine the true values of $\ndphi$ from observing the photometry $\{\data_{j}\}$ of a large sample of $J$ galaxies $j$.
+The problem facing cosmologists is to determine the true value of $\ndphi$ from observing the photometry $\{\data_{j}\}$ of a large sample of $J$ galaxies $j$.
 To self-consistently propagate the uncertainty in the redshifts, however, it is more appropriate to estimate the posterior $\pr{\ndphi \gvn \{\data_{j}\}}$ over all possible values of $\ndphi$ conditioned on all the observed data $\{\data_{j}\}$ available in a generic catalog.
-
 In order to use the DAG of \Fig{fig:pgm} to derive an expression for $\pr{\ndphi \gvn \{\data_{j}\}}$ in terms of \pzpdf s, we must introduce two more concepts, confusingly named the implicit prior and the prior probability density.
 
-When we constrain the redshift of a galaxy using its observed photometric data $\data_{j}$, we are effectively estimating a posterior $\Pr(z \mid d_{j})$.
+When we constrain the redshift of a galaxy using its observed photometric data $\data_{j}$, we are effectively estimating a posterior $\pr{z \gvn \data_{j}}$.
 However, to do this, we must have a model for the general relationship between redshifts and photometry, whether empirical, as is the case for machine learning \pzpdf\ methods, or analytic, as is the case for template-based \pzpdf\ methods.
-Such a relationship is defined in the space of probability density over redshift, so it must be able to be parameterized by the same functional form $f_{\ndphi}(z)$ as \nz .
-It is thus natural to write it as $\Pr(z \mid \phi^{*})$, where $\phi^{*}$ is the parameters for this relationship under some generic \pzpdf\ method.
-We call $\Pr(z \mid \phi^{*})$ the \textit{implicit prior}, as it is rarely explicitly known nor chosen by the researcher; for template-based methods where it can be chosen to be ``realistic,'' it may be appropriate to call it an \textit{interim prior}.
-Because the implicit prior is unavoidable, the \pzpdf s reported by any method are really \textit{implicit-weighted posteriors} $\Pr(z \mid d, \phi^{*})$.
+Such a relationship is defined in the space of probability density over redshift, so it must be able to be parameterized by the same functional form $f(z; \ndphi)$ as \nz .
+It is thus natural to write it as $\pr{z \gvn \ndphi^{*}}$, where $\ndphi^{*}$ is the parameters for this relationship under some generic \pzpdf\ method.
+We call $\pr{z \gvn \ndphi^{*}}$ the \textit{implicit prior}, as it is rarely explicitly known nor chosen by the researcher; for template-based methods where it can be chosen to be ``realistic,'' it may be appropriate to call it an \textit{interim prior}.
+Because the implicit prior is unavoidable, the \pzpdf s reported by any method are really \textit{implicit-weighted posteriors} $\pr{z \gvn \data, \ndphi^{*}}$.
 
-The prior probability density $\Pr(\phi)$ is a more familiar concept in astronomy; to progress, we will have to choose a prior probability density over all possible parameters $\phi$.
+%Posteriors differ from likelihoods by way of a prior distribution, so we cannot simply assume that the available data products are \pz\ posteriors $\pr{z \gvn \data_{j}}$.  
+%Rather, we have a catalog of implicit-prior weighted \pz\ posteriors $\pr{z \gvn \data_{j}, \ndphi^{*}}$.  
+%There must have been some interim prior probability distribution $p(z|\vec{\theta}^{*})$ defined in terms of the interim prior parameter values (hereafter the interim prior) $\vec{\theta}^{*}$ explicitly chosen or implicitly made to perform the calculation of the probabilistic photo-$z$s.  
+%If it is implicit, it may not be representable in the parametrization we have chosen, and furthermore it may not be known at all; a method that produces interim photo-$z$ posteriors of this kind is not suitable for inference.  
+%However, so long as the implicit prior is known, hierarchical inference is possible. 
+
+The implicit prior $\ndphi^{*}$ may be thought of as an initial guess for the parameters contained in $\ndphi$, inspired by the generative model for photometry from the redshift distribution functions and including some parameters defining intrinsic galaxy spectra and instrumental effects. 
+(See \citealt{Benitez2000} for more detail.)  
+For statistical purposes, we would like any interim prior to be uninformative, but this is rarely achievable.  
+In the case of estimating \nz\ photometrically, it is common to use $\ndphi^{*}$ corresponding to \nz\ derived from some different, spectroscopically confirmed sample or from a cosmological simulation.
+
+The prior probability density $\pr{\ndphi}$ is a more familiar concept in astronomy; to progress, we will have to choose a prior probability density over all possible parameters $\ndphi$.
 This prior need not be excessively proscriptive; for example, it may be chosen to enforce smoothness at physically motivated scales in redshift without imposing any particular region as over- or under-dense.
 
-With these definitions, we obtain the desired expression for $\Pr(\phi \mid \{d_{j}\})$,
+With these definitions, we obtain the desired expression for $\pr{\ndphi \gvn \{\data_{j}\}}$,
 \begin{align}
 \begin{split}
-\eqlabel{eqn:fullpost}
-\ln[\Pr(\phi \mid \{d_{j}\})] & \propto \ln[\Pr(\phi)] + \ln \left[\int dz \right.\\
-& \left. \exp \left[\sum_{j=1}^{J} \left(\ln[\Pr(z \mid d_{j}, \phi^{*})] \right. \right. \right.\\
-& \left. \left. \left. + \ln[\Pr(z \mid \phi)] - \ln[\Pr(z \mid \phi^{*})]\ \right)\ \right]\ \right] ,
+\eqlabel{eqn:fullunlogpost}
+\pr{\ndphi \gvn \{\data_{j}\}} & \propto \pr{\ndphi}\left[\integral{\prod_{j=1}^{J} \left(\pr{z \gvn \data_{j}, \ndphi^{*}}\pr{z \gvn \ndphi}(\pr{z \gvn \ndphi^{*}})^{-1}\right)}{z}\right] ,
 \end{split}
 \end{align}
-which is the heart of \chippr.
-We now derive \Eq{eqn:fullpost}.
+the heart of \Chippr.
+The derivation is provided below in \Sect{app:math}.
 
 \subsubsection{Derivation}
 \sectlabel{app:math}
 
-We begin by parametrizing $N(z)$ in terms of $\vec{\theta}$, comprising some set of hyperparameters that define the form $N(z)$ may take in whatever basis we choose.  
-At this point, these hyperparameters are quite general and may represent coefficients in a high-order polynomial as a function of redshift, a set of means and variances defining Gaussians that sum to the desired distribution, a set of histogram heights that describe a binned version of the redshift distribution function, etc.  
-We define a function $f_{\vec{\theta}}(z)=N(z)$ that transforms these hyperparameters into the redshift distribution function $N(z)$.  
-Because 
+%We begin by parametrizing $N(z)$ in terms of $\vec{\theta}$, comprising some set of hyperparameters that define the form $N(z)$ may take in whatever basis we choose.  
+%We define a function $f_{\vec{\theta}}(z)=N(z)$ that transforms these hyperparameters into the redshift distribution function $N(z)$.  
+%Because 
+%\begin{equation}
+%\eqlabel{eq:definition}
+%N(z) \propto p(z \gvn \vec{\theta}),
+%\end{equation}
+%we may discontinue discussion of $N(z)$ in favor of the likelihood $p(z|\vec{\theta})$.
+
+In this \paper, we work exclusively with log-probabilities.  
+What we wish to estimate is then the full log-posterior probability distribution (hereafter the full log-posterior) of the hyperparameters $\ndphi$ given the catalog of photometry $\{\data_{j}\}$.
+
+By Bayes' Rule, the full log-posterior
 \begin{equation}
-\eqlabel{eq:definition}
-N(z) \propto p(z \gvn \vec{\theta}),
+\eqlabel{eq:basicbayes}
+\ln[\pr{\ndphi \gvn \{\data_{j}\}}] = \ln[\pr{\{\data_{j}\} \gvn \ndphi}] + \ln[\pr{\ndphi}] - \ln[\pr{\{\data_{j}\}}]
 \end{equation}
-we may discontinue discussion of $N(z)$ in favor of the likelihood $p(z|\vec{\theta})$.
+may be expressed in terms of the full log-likelihood probability distribution (hereafter the full log-likelihood) $\ln[\pr{\{\data_{j}\} \gvn \ndphi}]$ by way of a hyperprior log-probability distribution (hereafter the hyperprior) $\ln[\pr{\ndphi}]$ over the hyperparameters and the log-evidence probability of the data $\ln[\pr{\{\data_{j}\}}]$.
+However, the evidence is rarely known, so we probe the full log-posterior modulo an unknown constant of proportionality.
 
-In this paper, we shall work exclusively with log-probabilities.  
-What we wish to estimate is the full log-posterior probability distribution (hereafter the full log-posterior) of the hyperparameters $\vec{\theta}$ given the data $\{\vec{d}_{j}\}$.  
-By Bayes' Rule, the full log-posterior $\ln[p(\vec{\theta}|\{\vec{d}_{j}\})]$ may be expressed in terms of the full log-likelihood probability distribution (hereafter the full log-likelihood) $\ln[p(\{\vec{d}_{j}\}|\vec{\theta})]$ by way of a hyperprior log-probability distribution (hereafter the hyperprior) $\ln p(\vec{\theta})$ over the hyperparameters and the log-probability of the data $\ln[p(\{\vec{d}_{j}\})]$.  
-The hyperprior expresses our beliefs about the distribution of the hyperparameters comprising $\vec{\theta}$.  
-This matter is a choice we cannot avoid making and one which is often inspired by the results of previous galaxy surveys.  
-The hyperprior chosen here will be elaborated upon in \Sect{sec:exp}.
-
-The full log-posterior can be probed with a quantity proportional to it so the log-probability of the data is never explicitly necessary.  
 The full log-likelihood may be expanded in terms of a marginalization over the redshifts as parameters, as in 
 \begin{equation}
 \eqlabel{eq:marginalize}
-\ln[p(\{\vec{d}_{j}\}|\vec{\theta})] = \ln\left[\int\ p(\{\vec{d}_{j}\}|\{z_{j}\})\ p(\{z_{j}\}|\vec{\theta})\ d\{z_{j}\}\right].
+\ln[\pr{\{\data_{j}\} \gvn \ndphi}] = \ln\left[\integral{\pr{\{\data_{j}\} \gvn \{z_{j}\}} \pr{\{z_{j}\} \gvn \ndphi}}{\{z_{j}\}}\right].
 \end{equation}
 
 We shall make two assumptions of independence in order to make the problem tractable; their limitations are be discussed below.  
-First, we take $\ln[p(\{\vec{d}_{j}\}|\{z_{j}\})]$ to be the sum of $J$ individual log-likelihood distribution functions $\ln[p(\vec{d}_{j}|z_{j})]$, as in 
+First, we take $\ln[\pr{\{\data_{j}\} \gvn \{z_{j}\}}]$ to be the sum of $J$ individual log-likelihood distribution functions $\ln[\pr{\data_{j} \gvn z_{j}}]$, as in 
 \begin{equation}
 \eqlabel{eq:indiedat}
-\ln[p(\{\vec{d}_{j}\}|\{z_{j}\})] = \sum_{j=1}^{J}\ \ln[p(\vec{d}_{j}|z_{j})],
+\ln[\pr{\{\data_{j}\} \gvn \{z_{j}\}}] = \sum_{j=1}^{J}\ \ln[\pr{\data_{j} \gvn z_{j}}],
 \end{equation}
-a result of the definition of probabilistic independence.  
-Second, we shall assume the true redshifts $\{z_{j}\}$ are $J$ independent draws from the true $p(z|\vec{\theta})$.  
+a result of the definition of probabilistic independence encoded by the box in \Fig{fig:pgm}.
+Second, we shall assume the true redshifts $\{z_{j}\}$ are $J$ independent draws from the true $\pr{z \gvn \ndphi}$.  
 Additionally, $J$ itself is a Poisson random variable.  
 The combination of these assumptions is given by 
 \begin{equation}
 \eqlabel{eq:indie}
-\ln[p(\{z_{j}\}|\vec{\theta})] = -\int\ f_{\vec{\theta}}(z)\ dz + \sum_{j=1}^{J}\ \ln[p(z_{j}|\vec{\theta})].
+\ln[\pr{\{z_{j}\} \gvn \ndphi}] = -\integral{f(z; \ndphi)}{z} + \sum_{j=1}^{J}\ \ln[\pr{z_{j} \gvn \ndphi}].
 \end{equation}
-It is important to note that the integral $\int N(z)\ dz$ is not constrained to equal the variable defining the Poisson distribution but instead $J$ by \Eq{eq:definition}, which can be thought of as another parameter.  
+%It is important to note that the integral $\integral{n(z)}{z} N(z)\ dz$ is not constrained to equal the variable defining the Poisson distribution but instead $J$ by \Eq{eq:definition}, which can be thought of as another parameter.  
+The derivation differs when $J$ is not known, say, when we want to learn about a distribution in nature rather than a distribution specific to data in hand, but for a photometric galaxy catalog where the desired quantity is $n(z)$ for the galaxies entering a larger cosmology calculation, it is a fixed quantity.
 A detailed discussion of this matter may be found in \citet{Foreman-Mackey2014}.  
 Applying Bayes' Rule, we may combine terms to obtain 
 \begin{equation}
 \eqlabel{eq:posterior}
-\ln[p(\vec{\theta}|\{\vec{d}_{j}\})] \propto \ln[p(\vec{\theta})]\ -\int f_{\vec{\theta}}(z)\ dz + \sum_{j=1}^{J}\ \ln\left[\int\ p(\vec{d}_{j}|z_{j})\ p(z_{j}|\vec{\theta})\ dz_{j}\right].
+\ln[\pr{\ndphi \gvn \{\data_{j}\}}] \propto \ln[\pr{\ndphi}] - \integral{f(z; \ndphi)}{z} + \sum_{j=1}^{J}\ln\left[\integral{\pr{\data_{j} \gvn z} \pr{z \gvn \ndphi}}{z}\right].
 \end{equation}
 
-\Eq{eq:posterior} contains two quantities that merit further discussion, the prior distribution $p(\vec{\theta})$ discussed further in \Sect{sec:exp} and the photo-$z$ log-likelihoods $\ln[p(\vec{d}_{j}|z_{j})]$ that have not been mentioned since \Eq{eq:marginalize}.  
-Though photo-$z$ log-likelihoods would be desirable for use in these equations, they are not generally the product of either empirical and data-driven methods for obtaining photo-$z$ probability distributions.  
-Though probabilistic photo-$z$s are typically reported as generic probability distributions $p(z_{j})$, the methods that produce them may be understood to always yield posteriors, probability distributions conditioned on the data we believe to be true.  
-If they were not based in this assumption, they would require a sum over an infinite space of possible datasets.
+%\Eq{eq:posterior} contains two quantities that merit further discussion, the prior distribution $p(\vec{\theta})$ discussed further in \Sect{sec:exp} and the photo-$z$ log-likelihoods $\ln[p(\vec{d}_{j}|z_{j})]$ that have not been mentioned since \Eq{eq:marginalize}.  
+%Though photo-$z$ log-likelihoods would be desirable for use in these equations, they are not generally the product of either empirical and data-driven methods for obtaining photo-$z$ probability distributions.  
+%Though probabilistic photo-$z$s are typically reported as generic probability distributions $p(z_{j})$, the methods that produce them may be understood to always yield posteriors, probability distributions conditioned on the data we believe to be true.  
+%If they were not based in this assumption, they would require a sum over an infinite space of possible datasets.
 
-Posteriors differ from likelihoods by way of a prior distribution, so we cannot simply assume that the available data products are photo-$z$ posteriors $p(z_{j}|\vec{d}_{j})$.  
-Rather, we consider the published catalog of $p(z_{j})$ interim photo-$z$ posteriors $p(z_{j}|\vec{d}_{j},\vec{\theta}^{*})$.  
-There must have been some interim prior probability distribution $p(z|\vec{\theta}^{*})$ defined in terms of the interim prior parameter values (hereafter the interim prior) $\vec{\theta}^{*}$ explicitly chosen or implicitly made to perform the calculation of the probabilistic photo-$z$s.  
-If it is implicit, it may not be representable in the parametrization we have chosen, and furthermore it may not be known at all; a method that produces interim photo-$z$ posteriors of this kind is not suitable for inference.  
-However, so long as the interim prior is known, hierarchical inference is possible. 
+Since we only have access to implicit \pz\ posteriors, we must be able to write the full log-posterior in terms of implicit \pz\ log-posteriors rather than the log-likelihoods of \Eq{eq:posterior}.
+To do so, we will need an explicit statement of this implicit prior $\ndphi^{*}$ for whatever method is chosen to produce the implicit \pz\ posteriors.  
 
-The interim prior $\vec{\theta}^{*}$ may be thought of as an initial guess for the parameters contained in $\vec{\theta}$, inspired by the generative model for photometry from the redshift distribution functions and including some parameters defining intrinsic galaxy spectra and instrumental effects. 
-(See \citealt{Benitez2000} for more detail.)  
-For statistical purposes, we would like any interim prior to be uninformative, but this is rarely achievable.  
-In the case of estimating $N(z)$ photometrically, it is common to use $\vec{\theta}^{*}$ corresponding to $N(z)$ derived from some different, spectroscopically confirmed sample or from a cosmological simulation.
-
-Since we only have access to interim photo-$z$ posteriors, we must be able to write the full log-posterior in terms of interim photo-$z$ log-posteriors rather than the log-likelihoods of \Eq{eq:posterior}.  However, we will need an explicit statement of this interim prior for whatever method is chosen to produce the interim photo-$z$ posteriors.  
 To perform the necessary transformation from likelihoods to posteriors, we follow the reasoning of \citet{Foreman-Mackey2014}.  
 Let us consider the probability of the parameters conditioned on the data and an interim prior and rewrite the problematic likelihood of \Eq{eq:posterior} as 
 \begin{equation}
 \eqlabel{eq:trick}
-p(\vec{d}_{j}|z_{j}) = p(\vec{d}_{j}|z_{j})\ \frac{p(z_{j}|\vec{d}_{j},\vec{\theta}^{*})}{p(z_{j}|\vec{d}_{j},\vec{\theta}^{*})}.
+\ln[\pr{\data_{j} \gvn z}] = \ln[\pr{\data_{j} \gvn z}] + \ln[\pr{z \gvn \data_{j}, \ndphi^{*}}] - \ln[\pr{z \gvn \data_{j}, \ndphi^{*}}].
 \end{equation}
 
-Once the interim prior $\vec{\theta}^{*}$ is explicitly introduced, we may expand the denominator according to Bayes' Rule to get 
+Once the implicit prior $\ndphi^{*}$ is explicitly introduced, we may expand the last term in \Eq{eq:trick} according to Bayes' Rule to get 
 \begin{equation}
 \eqlabel{eq:expand}
-p(\vec{d}_{j}|z_{j}) = p(\vec{d}_{j}|z_{j})\ p(z_{j}|\vec{d}_{j},\vec{\theta}^{*})\ \frac{p(\vec{d}_{j}|\vec{\theta}^{*})}{p(z_{j}|\vec{\theta}^{*})\ p(\vec{d}_{j}|z_{j},\vec{\theta}^{*})}.
+\ln[\pr{\data_{j} \gvn z}] = \ln[\pr{\data_{j} \gvn z}] + \ln[\pr{z \gvn \data_{j}, \ndphi^{*}}] + \ln[\pr{\data_{j} \gvn \ndphi^{*}}] - \ln[\pr{z \gvn \ndphi^{*}}] - \ln[\pr{\data_{j} \gvn z, \ndphi^{*}}].
 \end{equation}
-Because there is no direct dependence of the data upon the hyperparameters, we may again expand the term $p(\vec{d}_{j}|z_{j},\vec{\theta}^{*})$ to obtain 
+Because there is no direct dependence of the data upon the hyperparameters, we may again expand the term $\ln[\pr{\data_{j} \gvn z, \ndphi^{*}}]$ to obtain 
 \begin{equation}
 \eqlabel{eq:indterm}
-p(\vec{d}_{j}|z_{j}) = p(\vec{d}_{j}|z_{j})\ p(z_{j}|\vec{d}_{j},\vec{\theta}^{*})\ \frac{p(\vec{d}_{j}|\vec{\theta}^{*})}{p(z_{j}|\vec{\theta}^{*})\ p(\vec{d}_{j}|z_{j})\ p(\vec{d}_{j}|\vec{\theta}^{*})}.
+\ln[\pr{\vec{d}_{j} \gvn z}] = \ln[\pr{\data_{j} \gvn z}] + \ln[\pr{z \gvn \data_{j}, \ndphi^{*}}] + \ln[\pr{\data_{j} \gvn \ndphi^{*}}] - \ln[\pr{z \gvn \ndphi^{*}}] - \ln[\pr{\data_{j} \gvn z}] - \ln[\pr{\data_{j} \gvn \ndphi^{*}}].
 \end{equation}
-Canceling the undesirable likelihood terms $p(\vec{d}_{j}|z_{j})$ and $p(\vec{d}_{j}|\vec{\theta}^{*})$ yields
+Canceling the undesirable terms for the inaccessible likelihood $\ln[\pr{\data_{j} \gvn z}]$ and trivial $\ln[\pr{\data_{j} \gvn \ndphi^{*}}]$ yields
 \begin{equation}
 \eqlabel{eq:cancel}
-p(\vec{d}_{j}|z_{j}) = \frac{p(z_{j}|\vec{d}_{j},\vec{\theta}^{*})}{p(z_{j}|\vec{\theta}^{*})}.
+\ln[\pr{\data_{j} \gvn z}] = \ln[\pr{z \gvn \data_{j}, \ndphi^{*}}]  - \ln[\pr{z \gvn \ndphi^{*}}].
 \end{equation}
 We put this all together to get the full log-posterior probability distribution of 
 \begin{equation}
 \eqlabel{eq:final}
-\ln[p(\vec{\theta}|\{\vec{d}_{j}\})] \propto \ln[p(\vec{\theta})]-\int\ f_{\vec{\theta}}(z)\ dz + \sum_{j=1}^{J}\ \ln\left[\int\ p(z_{j}|\vec{d}_{j},\vec{\theta}^{*})\ \frac{p(z_{j}|\vec{\theta})}{p(z_{j}|\vec{\theta}^{*})}\ dz_{j}\right].
+\ln[\pr{\ndphi \gvn \{\data_{j}\}}] \propto \ln[\pr{\ndphi}] + \ln \left[\integral{\exp \left[\sum_{j=1}^{J} \left(\ln[\pr{z \gvn \data_{j}, \ndphi^{*}}] + \ln[\pr{z \gvn \ndphi}] - \ln[\pr{z \gvn \ndphi^{*}}]\right)\right]}{z}\right] ,
 \end{equation}
 
-The argument of the integral in the log-posterior of \Eq{eq:final} depends solely on knowable quantities (and those we must assume) and can be calculated for a given set of interim photo-$z$ log-posteriors $\{\ln[p(z_{j}|\vec{d}_{j},\vec{\theta}^{*})]\}$ and the interim prior $p(z|\vec{\theta}^{*})$ upon which their determination was based, noting the relation of 
+The argument of the integral in the log-posterior of \Eq{eq:final} depends solely on knowable quantities (and those we must explicitly assume) and can be calculated for a given sample of \pz\ log-posteriors $\{\ln[\pr{z \gvn \data_{j}, \ndphi^{*}}]\}$ and the implicit prior $\pr{z \gvn \ndphi^{*}}$ with which they were obtained, noting the relation of 
 \begin{equation}
 \eqlabel{eq:params}
-p(z_{j}|\vec{\theta}) = \frac{f_{\vec{\theta}}(z_{j})}{\int\ f_{\vec{\theta}}(z_{j})\ dz_{j}}.
+\pr{z \gvn \ndphi} = \frac{f(z; \ndphi)}{\integral{f(z; \ndphi)}{z}}.
 \end{equation}
-Since we cannot know constant of proportionality, we sample the desired full log-posterior $\ln[p(\vec{\theta}|\{\vec{d}_{j}\})]$ using Monte Carlo-Markov chain (MCMC) methods.  
-The method outlined here is valid regardless of how the interim photo-$z$ log-posteriors are obtained so the many approaches to producing photo-$z$ probability distributions will not be discussed; though the matter is outside the scope of this paper, reviews of various methods have been presented in the literature \citep{Sheldon2012, Ball2008, CarrascoKind2013, CarrascoKind2014a}, and will be briefly reviewed in \Chap{pzdc1}.
+Since we cannot know constant of proportionality, we sample the desired full log-posterior $\ln[\pr{\ndphi \gvn \{\data_{j}\}}]$ using Monte Carlo-Markov chain (MCMC) methods.  
+The method outlined here is valid regardless of how the implicit \pz\ log-posteriors are obtained so the many approaches to producing \pzpdf s will not be rehashed; though the matter is outside the scope of this \paper, reviews of various methods have been presented in the literature \citep{Sheldon2012, Ball2008, CarrascoKind2013, CarrascoKind2014a}, and will be briefly reviewed in \Chap{pzdc1}.
+%
+%\begin{align}
+%\begin{split}
+%\eqlabel{eqn:fullpost}
+%\ln[\pr{\ndphi \gvn \{\data_{j}\}}] & \propto \ln[\pr{\ndphi}] + \ln \left[\integral{\exp \left[\sum_{j=1}^{J} \left(\ln[\pr{z \gvn \data_{j}, \ndphi^{*}}] + \ln[\pr{z \gvn \ndphi}] - \ln[\pr{z \gvn \ndphi^{*}}]\right)\right]}{z}\right] ,
+%\end{split}
+%\end{align}
 
-%\clearpage
 \subsubsection{Model Limitations}
 \sectlabel{sec:limitations}
 
 Finally, we explicitly review the assumptions made by this approach, which are as follows:
 
 \begin{enumerate}
-	\item Photometric measurements of galaxies are independent Poisson draws from the set of all galaxies such that \Eq{eq:indiedat} and \Eq{eq:indie} hold.
+	\item Photometric measurements of galaxies are statistically independent Poisson draws from the set of all galaxies such that \Eq{eq:indiedat} and \Eq{eq:indie} hold.
 	\item We take the reported \pzip s to be accurate, free of model misspecification; draws thereof must not be inconsistent with the distribution of photometry and redshifts.
-	Furthermore, we must be given the implicit prior $\phi^{*}$ used to produce the \pzip s.
-	\item We must assume a hyperprior distribution $\Pr(\phi)$ constraining the underlying probability distribution of the hyperparameters, which is informed by our prior beliefs about the true redshift distribution function.
+	Furthermore, we must be given the implicit prior $\ndphi^{*}$ used to produce the \pzip s.
+	\item We must assume a hyperprior distribution $\pr{\ndphi}$ constraining the underlying probability distribution of the hyperparameters, which is informed by our prior beliefs about the true redshift distribution function.
 \end{enumerate}
 
 These assumptions have known limitations.  
@@ -640,7 +646,17 @@ In simulated tests, $\vec{\theta}^{\ddagger}$ is the true value and $\vec{\theta
 \section{\chippr\ Validation}
 \sectlabel{sec:alldata}
 
-We compare the results of \Chippr\ to those of stacking and the histogram of \pzpdf\ maxima (modes) on mock data in the form of catalogs of emulated \pzpdf s generated via the forward model discussed above and presented in detail in \Sect{sec:data}.
+We compare the results of \Chippr\ to those of stacking and the histogram of \pzpdf\ maxima (modes) on mock data in the form of catalogs of emulated \pzpdf s generated via the forward model discussed in \Sect{sec:forward}.
+\Fig{fig:flowchart} illustrates the implementation of this forward model used in this \paper.
+
+\begin{figure*}
+	\begin{center}
+		\includegraphics[width=\textwidth]{figures/chippr/flowchart.png}
+		\caption{A flow chart illustrating the forward model used to generate mock data in the validation of \Chippr, ad described in \Sect{sec:forward}.}
+		\figlabel{fig:flowchart}
+	\end{center}
+\end{figure*}
+
 The mock data emulates the three sources of error of highest concern to the \pz\ community: intrinsic scatter, catastrophic outliers, and systematic bias.
 \Fig{fig:mega_scatter} illustrates these three effects individually at ten times the tolerance of the upcoming \lsst.
 \begin{figure}
@@ -714,10 +730,6 @@ An example of such samples from the prior are shown in \Fig{fig:prior}.
 \sectlabel{sec:null}
 
 \aim{Commented out but may add back in later.}
-
-\aim{Describe joint space of true and ``observed'' redshift as a special nonlinear projection of the data}
-
-\Fig{fig:pedagogical_scatter}
 
 %The following outlines the ``fiducial'' test case.  
 %We begin by choosing a physically-motivated $p^{*}(z)$ defining the general shape of $N(z)$ over the specified redshift range $[z_{min},z_{max}]$.  
@@ -974,6 +986,8 @@ The \lsst\ Science Requirements Document (SRD)\footnote{\url{https://docushare.l
 	\end{center}
 \end{figure*}
 
+\aim{Address bias as model misspecification.}
+
 \subsection{Violations of the model}
 \sectlabel{sec:violations}
 
@@ -1161,4 +1175,3 @@ Future work will also include the extension of this fully probabilistic approach
 
 I thank Elisabeth Krause for assistance with the \texttt{CosmoLike} code, Mohammadjavad Vakili for statistical insights, Geoffrey Ryan for programming advice, and Boris Leistedt for other helpful comments in the development of \Chippr.
 I also thank David Alonso, Daniel Gruen, Boris Leistedt, Rachel Mandelbaum, Mark Manera, Eduardo Rozo, and Josh Speagle for additional feedback on the mathematical foundations of this work.
-This work was completed under the generous nutritional support of the Center for Computational Astrophysics.
