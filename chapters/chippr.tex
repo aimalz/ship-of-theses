@@ -932,7 +932,7 @@ The alternative estimators are overly broad, whereas \Chippr\ yields an unbiased
 		Right: The results of \Chippr\ (samples in light blue, optimization in dark blue) and the alternative approaches (the stacked estimator in red, the histogram of modes in yellow) on \pzpdf s with uniformly distributed catastrophic outliers, with the true redshift density (black curve) and implicit prior (gray curve).
 		The presence of the catastrophic outlier population broadens the histogram of modes and stacked estimator of the redshift distribution, but the result of \Chippr\ is unbiased.
 	}
-	\figlabel{fig:uniform-outliers-data}
+	\figlabel{fig:uniform-outliers}
 \end{figure}
 
 When one thinks of the \pzpdf s of catastrophic outliers, however, what comes to mind is multimodal \pzpdf s, wherein reducing \pzpdf s to point estimates to make a standard scatterplot of the true and observed redshifts leads to substantial probability density off the diagonal.
@@ -976,6 +976,9 @@ The \Chippr\ \mmle, however, appears unbiased and withstands these effects.
 \sectlabel{sec:bias}
 
 The notion of redshift bias is a form of model misspecification.
+
+\aim{Include the tests here?
+They're trivial but might be worth explaining.}
 
 \subsection{Nontrivial implicit prior}
 \sectlabel{sec:interim}
@@ -1024,6 +1027,8 @@ The alternatives, however, are biased by the implicit prior except where it is f
 \section{Discussion}
 \sectlabel{sec:results}
 
+\aim{I still need to write the intro to the big LSST-like forecast and incorrect implicit prior sections.}
+
 \aim{Q: How does the result of \chippr\ compare to established estimators in terms of the accuracy of $n(z)$?\\
 	A: \chippr\ yields the best possible $n(z)$, conditional on the accuracy of the photo-$z$ PDFs used.}
 
@@ -1036,31 +1041,70 @@ The \lsst\ Science Requirements Document (SRD)\footnote{\url{https://docushare.l
 	\begin{center}
 		\includegraphics[width=0.45\textwidth]{figures/chippr/lsst_scatter.png}
 		\includegraphics[width=0.45\textwidth]{figures/chippr/lsst_log_estimators.png}
-		\caption{Using LSST numbers}
+		\caption{Using LSST numbers
+		\aim{Rerun this with 35 bins and sampling to match other figures.}}
 		\figlabel{fig:lsstdemo}
 	\end{center}
 \end{figure*}
 
-\aim{Address bias as model misspecification.}
+It is of interest to explore the impact of incorrectly estimated \nz\ on the inference of the cosmological parameters \textemdash how wrong will we be in our understanding of the universe if we don't perform a valid inference?
+To answer this question, I considered a set of tomographically binned \nz\ and cosmological parameter covariance matrices used for \desc\ forecasting.
+First, I binned them down to a piecewise constant parameterization with a manageable $15$ parameters for \chippr's sampling capabilities.
+Next, I drew $10^{4}$ true redshifts from the binned true \nz\ for each tomographic bin.
+The original, binned, and drawn \nz\ are shown in \Fig{fig:tomobins}
+
+\begin{figure*}
+	\begin{center}
+		\includegraphics[width=0.99\textwidth]{figures/chippr/cosmolike_inputs.png}
+		\caption{The \lsst-like tomographic binning and true redshift distribution.}
+		\figlabel{fig:tomobins}
+	\end{center}
+\end{figure*}
+
+Using the \lsst\ \pz\ requirements given in \Sect{sec:lsstdemo}, I emulated \pzpdf s corresponding to the $10^{4}$ true redshifts drawn from the true \nz\ in each bin using the procedure of \Fig{fig:flowchart}.
+I then ran \chippr\ as well as two other \nz\ estimation methods on the \pzpdf\ catalog for each tomographic bin.
+The estimates are given in \Fig{fig:per-bin-ests}.
+One can see that the excessive breadth of the stacked estimator and the histogram of the modes of the \pzpdf s.
+\Chippr, on the other hand, yields an estimate with error bars that include the truth in most bins and have a marginalized maximum likelihood solution far closer to the truth than the other estimators.
+
+\begin{figure*}
+	\begin{center}
+		\includegraphics[width=0.49\textwidth]{figures/chippr/0single_lsst_lin_estimators.png}\includegraphics[width=0.49\textwidth]{figures/chippr/1single_lsst_lin_estimators.png}\\
+		\includegraphics[width=0.49\textwidth]{figures/chippr/2single_lsst_lin_estimators.png}\includegraphics[width=0.49\textwidth]{figures/chippr/3single_lsst_lin_estimators.png}
+		\caption{The \chippr-derived and other estimators of \nz\ in each tomographic bin.}
+		\figlabel{fig:per-bin-ests}
+	\end{center}
+\end{figure*}
+
+I then used the different estimators of \nz\ in a cosmological forecasting procedure with \cosmolike.
+\aim{Cite Krause here.}
+
+\begin{figure*}
+	\begin{center}
+		\includegraphics[width=0.99\textwidth]{figures/chippr/final_plot.png}
+		\caption{The result of propagating the estimators of \nz\ of \Fig{fig:per-bin-ests} to a subset of cosmological parameters.}
+		\figlabel{fig:cornerplot}
+	\end{center}
+\end{figure*}
 
 \subsection{Violations of the model}
 \sectlabel{sec:violations}
 
-\aim{mischaracterized interim prior, with idealized or realistic data?}
+In these tests, the \pzip s are made to the \lsst\ requirements but the implicit prior used for the inference is not the same as the implicit prior used for generating the data.
 
 \begin{figure*}
 	\begin{center}
 		\includegraphics[width=0.45\textwidth]{figures/chippr/wrong_scatter.png}
 		\includegraphics[width=0.45\textwidth]{figures/chippr/wrong_log_estimators.png}
-		\caption{this is for wrong implicit prior, not bias, haven't done that one yet}
+		\caption{\aim{Update the figures for this to use the same conditions as \Sect{sec:lsstdemo} but one of the implicit priors from \Sect{sec:interim} for generating the data and the other for the inference.}}
 		\figlabel{fig:mischaracterized}
 	\end{center}
 \end{figure*}
 
-\subsection{Real Data}
-\sectlabel{sec:boss}
-
-\aim{Commented out but may add back in later.}
+%\subsection{Real Data}
+%\sectlabel{sec:boss}
+%
+%\aim{Commented out but may add back in later.}
 
 %We also test this method on subsets of the published \pzpdf s of \sdss\ III DR 10. 
 %A sampling of the provided interim photo-$z$ posteriors of dimension $K=35$ for $z_{min}=0.3$ and $z_{max}=1.4$ is shown in the top panel of \Fig{fig:datapzs}.  
@@ -1131,51 +1175,10 @@ The \lsst\ Science Requirements Document (SRD)\footnote{\url{https://docushare.l
 %Second, the high-redshift feature in the error bars is not present once a magnitude cut is imposed.  
 %From this one can conclude that the signal and associated error bars in that region were caused by the sampler's assignment high redshifts to poorly constrained interim photo-$z$ posteriors corresponding to the dimmest galaxies. 
 
-\subsection{Discussion}
-\sectlabel{sec:discussion}
-
-It is of interest to explore the impact of incorrectly estimated \nz\ on the inference of the cosmological parameters \textemdash how wrong will we be in our understanding of the universe if we don't perform a valid inference?
-To answer this question, I considered a set of tomographically binned \nz\ and cosmological parameter covariance matrices used for \desc\ forecasting.
-First, I binned them down to a piecewise constant parameterization with a manageable $15$ parameters for \chippr's sampling capabilities.
-Next, I drew $10^{4}$ true redshifts from the binned true \nz\ for each tomographic bin.
-The original, binned, and drawn \nz\ are shown in \Fig{fig:tomobins}
-
-\begin{figure*}
-	\begin{center}
-		\includegraphics[width=0.99\textwidth]{figures/chippr/cosmolike_inputs.png}
-		\caption{The \lsst-like tomographic binning and true redshift distribution.}
-		\figlabel{fig:tomobins}
-	\end{center}
-\end{figure*}
-
-Using the \lsst\ \pz\ requirements given in \Sect{sec:lsstdemo}, I emulated \pzpdf s corresponding to the $10^{4}$ true redshifts drawn from the true \nz\ in each bin using the procedure of \Fig{fig:flowchart}.
-I then ran \chippr\ as well as two other \nz\ estimation methods on the \pzpdf\ catalog for each tomographic bin.
-The estimates are given in \Fig{fig:per-bin-ests}.
-One can see that the excessive breadth of the stacked estimator and the histogram of the modes of the \pzpdf s.
-\Chippr, on the other hand, yields an estimate with error bars that include the truth in most bins and have a marginalized maximum likelihood solution far closer to the truth than the other estimators.
-
-\begin{figure*}
-	\begin{center}
-		\includegraphics[width=0.49\textwidth]{figures/chippr/0single_lsst_lin_estimators.png}\includegraphics[width=0.49\textwidth]{figures/chippr/1single_lsst_lin_estimators.png}\\
-		\includegraphics[width=0.49\textwidth]{figures/chippr/2single_lsst_lin_estimators.png}\includegraphics[width=0.49\textwidth]{figures/chippr/3single_lsst_lin_estimators.png}
-		\caption{The \chippr-derived and other estimators of \nz\ in each tomographic bin.}
-		\figlabel{fig:per-bin-ests}
-	\end{center}
-\end{figure*}
-
-I then used the different estimators of \nz\ in a cosmological forecasting procedure with \cosmolike.
-\aim{Cite Krause here.}
-
-\begin{figure*}
-	\begin{center}
-		\includegraphics[width=0.99\textwidth]{figures/chippr/final_plot.png}
-		\caption{The result of propagating the estimators of \nz\ of \Fig{fig:per-bin-ests} to a subset of cosmological parameters.}
-		\figlabel{fig:cornerplot}
-	\end{center}
-\end{figure*}
-
 \section{Conclusion}
 \sectlabel{sec:con}
+
+\aim{I still need to update the language in this section for consistency with the rest of \Chap{chippr}.}
 
 This study derives and demonstrates a mathematically consistent implementation of inference of a one-point statistic based on implicit \pzpdf s.  
 The fully Bayesian method, based in the fundamental laws of probability, begins with a graphical model corresponding to equations for the full posterior.  
@@ -1184,7 +1187,7 @@ The technique developed in this paper is applied to the example of the redshift 
 In the tests on simulated data performed here, the full posterior distribution over the hyperparameters defining $N(z)$ derived by this method is consistent with the true redshift distribution function, making the mean of sampled values an excellent point estimator of $N(z)$.  
 The information contained in the full posterior distribution's shape convey the traditional error bar information without having to explicitly propagate any error estimates.  
 The results of those tests is summarized below and in Tab. \ref{tab:kld}, where lower values indicate a closer match between the true $N(z)$ and the estimator.  
-Tests were also performed on subsets of BOSS DR10 data with results consistent with those of simulations.
+%Tests were also performed on subsets of BOSS DR10 data with results consistent with those of simulations.
 
 The following conclusions and recommendations can be made with confidence:
 
@@ -1196,24 +1199,24 @@ The following conclusions and recommendations can be made with confidence:
 	\item When the interim prior is known to be a poor approximation to the data, only the marginalized MLE and mean of sampled values are satisfactory estimators of the redshift distribution function because they are the only methods that can account for the bias introduced into the photo-$z$ posteriors; this is the most compelling case for the sampler because of the ubiquity of inappropriate interim priors.
 \end{enumerate}
 
-\begin{table}
-	\begin{tabular}{lccccc}
-				& Mean of 		& Marginalized 	& Stacked 		& Marginalized 	& Marginalized\\
-				& Samples 		& MLE 			& Estimator 	& MAP 			& Expected Value\\
-	Fiducial 	&\textbf{0.0041}&0.0057			&0.0139			&0.0098			&0.0072\\
-	Precise 	&\textbf{0.0035}&0.0065			&0.0176			&0.0112			&0.0102\\
-	Imprecise 	&\textbf{0.0068}&0.0155			&0.1014			&0.1207			&0.1028\\
-	Trending 	&\textbf{0.0199}&0.0262			&0.1057			&0.1288			&0.0813\\
-	Multimodal 	&\textbf{0.0052}&0.0054			&0.0508			&0.0385			&0.0250\\
-	Sampled 	&0.0189			&\textbf{0.0026}&0.0475			&0.0446			&0.0230\\
-	Featured 	&0.0104			&\textbf{0.0060}&0.2902			&0.1721			&0.1720\\
-	Unimodal 	&\textbf{0.0030}&0.0046			&0.0150			&0.0128			&0.0127\\
-	Bimodal 	&\textbf{0.0037}&0.0056			&0.0143			&0.0122			&0.0141
-	\end{tabular}
-	\caption{The KLD values for all estimators in each simulated test are provided here.
-		The best-fit estimator in each case is bolded.}
-	\tablabel{tab:kld}
-\end{table}
+%\begin{table}
+%	\begin{tabular}{lccccc}
+%				& Mean of 		& Marginalized 	& Stacked 		& Marginalized 	& Marginalized\\
+%				& Samples 		& MLE 			& Estimator 	& MAP 			& Expected Value\\
+%	Fiducial 	&\textbf{0.0041}&0.0057			&0.0139			&0.0098			&0.0072\\
+%	Precise 	&\textbf{0.0035}&0.0065			&0.0176			&0.0112			&0.0102\\
+%	Imprecise 	&\textbf{0.0068}&0.0155			&0.1014			&0.1207			&0.1028\\
+%	Trending 	&\textbf{0.0199}&0.0262			&0.1057			&0.1288			&0.0813\\
+%	Multimodal 	&\textbf{0.0052}&0.0054			&0.0508			&0.0385			&0.0250\\
+%	Sampled 	&0.0189			&\textbf{0.0026}&0.0475			&0.0446			&0.0230\\
+%	Featured 	&0.0104			&\textbf{0.0060}&0.2902			&0.1721			&0.1720\\
+%	Unimodal 	&\textbf{0.0030}&0.0046			&0.0150			&0.0128			&0.0127\\
+%	Bimodal 	&\textbf{0.0037}&0.0056			&0.0143			&0.0122			&0.0141
+%	\end{tabular}
+%	\caption{The KLD values for all estimators in each simulated test are provided here.
+%		The best-fit estimator in each case is bolded.}
+%	\tablabel{tab:kld}
+%\end{table}
 
 By showing that this method is effective in recovering the true redshift distribution function and posterior distributions on its parameters from catalogs of \pzpdf s, this work supports the production of \pzpdf s by upcoming photometric surveys such as \lsst\ so that more accurate inference of physical parameters may be accessible to the scientific community.  
 We discourage researchers from co-adding \pzpdf s or converting them into point estimates of redshift and instead recommend the use of Bayesian probability to guide the usage of \pzpdf s in science.  
@@ -1224,7 +1227,7 @@ Future work will also include the extension of this fully probabilistic approach
 
 \textbf{What else should I be putting here?  
 	Is this a good place to put the discussion of how different estimators of \Nz\ affect different estimators of the weak lensing power spectrum?  
-	That analysis has been completed, but I'm not sure where it fits into the paper.}
+	That analysis is currently in \Sect{lsstdemo}.}
 
 \section*{Chapter acknowledgements}
 
