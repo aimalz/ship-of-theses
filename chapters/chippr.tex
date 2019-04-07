@@ -169,27 +169,6 @@ Though it doesn't matter for our science, let's consider all possible orderings 
 %	The number of possible orderings of all $\comb{N_{tot}}{N}$ subsets of $N$ galaxies out of a set of $N_{tot} \geq N$ is $\perm{N_{tot}}{N} \equiv \frac{N_{tot}!}{(N_{tot}-N)!} = N!\comb{N_{tot}}{N}$.
 %\end{definition}
 
-To apply Lemma \ref{lem:expectednz}, we next seek $\pr{N_{z}}$.
-
-\aim{Break this up into some smaller pieces with a lemma or two.}
-\begin{theorem}\label{thm:general}
-	The expected value of $N_{z}$ is given by
-	\begin{align}
-	\eqlabel{eq:complete}
-	\langle N_{z} \rangle &= \sum_{N_{z} = 0}^{N_{tot}} N_{z} \sum_{c}^{N_{tot}! / N_{z}! (N_{tot} - N_{z})!} \left[ \prod_{i_{c} \in \mathbb{S}^{c}_{z}} \pr{z_{i_{c}}} \prod_{j_{c} \in \mathbb{S}^{c}_{\lnot z}} 1 - \pr{z_{j_{k}}} \right].
-\end{align}
-	\textul{Proof}:\\
-	Let's start from a single combination $\mathbb{S}^{z}_{c}$.
-	By Lemma \ref{lem:independence}, the probability of that set leading to $N_{z}$ is the product of the probability that all the galaxies in that set have redshift $z$ and the probability that all the galaxies outside that set have redshift $\lnot z$.
-	By Lemma \ref{lem:independence} again, the probability that all the galaxies in that set have redshift $z$ is the product of the $N_{z}$ probabilities $\{\pr{z_{i} = z}\}_{i \in \mathbb{S}^{z}_{c}}$ of the galaxies in $\mathbb{S}^{z}_{c}$, and the probability that all the galaxies outside that set have redshift $\lnot z$ is the product of the $N_{tot} - N_{z}$ probabilities $\{\pr{z_{j} \neq z}\}_{j \notin \mathbb{S}^{z}_{c}}$.
-	By Definition \ref{def:binarystatespace}, $\pr{z_{j} \neq z} = \pr{z_{j} = \lnot z} = 1 - \pr{z_{j} = z}$.
-	So the probability $\pr{\mathbb{S}^{z}_{c}}$ of a single combination $\mathbb{S}^{z}_{c}$ is $\prod_{i \in \mathbb{S}^{z}_{c}} \pr{z_{i} = z} \prod_{j \notin \mathbb{S}^{z}_{c}} 1 - \pr{z_{j} = z}$.
-	Invoking Definition \ref{def:disjoint}, we know that $\pr{N_{z}} = \sum_{c}^{C} \pr{\mathbb{S}^{z}_{c}}$.
-	Then we simply apply Definition \ref{def:expected} to arrive at \Eq{eq:complete}.
-\end{theorem}
-
-The goal here is to figure out when, if ever, this is equivalent to \Eq{eq:stacked}.
-
 \subsubsection{A two-redshift universe of identical galaxies}
 \sectlabel{sec:tworedshift}
 
@@ -204,41 +183,61 @@ If we want the probability of $N_{z}$ successes, we sum over all combinations of
 Bearing in mind that our galaxies have $\pr{\lnot z} = 1 - \phi_{b}$, due to Definitions \ref{def:binarystatespace} and \ref{def:disjoint}, the probability of $N_{z}$ galaxies having redshift $z$ is given by the binomial theorem
 \begin{equation}
 \eqlabel{eq:binomial}
-p(N_{z} \gvn \phi_{b}) = \binom{N_{tot}}{N_{z}} \times \phi_{b}^{N_{z}} \times (1 - \phi_{b})^{N_{tot} - N_{z}} .
+\pr{N_{z}} = \binom{N_{tot}}{N_{z}} \phi_{b}^{N_{z}} (1 - \phi_{b})^{N_{tot} - N_{z}} .
 \end{equation}
 \end{theorem}
 
-We may generalize the two-redshift universe to a many-redshift universe by considering the generalization of the binomial theorem to the birthday problem, which asks for the probability that $N$ people in a room of $N_{tot}$ people share the same birthday.
-We will consider one redshift at a time to maintain the simple phase space; the proof of the birthday problem case is left as an exercise for the reader.
+We may generalize the two-redshift universe to a many-redshift universe by considering the generalization of the binomial theorem to the birthday problem, which asks for the probability that $N_{z}$ people in a room of $N_{tot}$ people share the same birthday.
+We will, however, proceed by considering only one redshift at a time to maintain the simple phase space; the proof of the birthday problem case is left as an exercise for the reader.
 %the birthday problem is solved by $p(N_{z}) = 1 - p(z)^{N_{tot}} \times \perm{N_{tot}}{N_{z}}$
+\aim{Am I allowed to leave a proof as an exercise for the reader?}
 
 \subsubsection{A universe of unique galaxies}
+\sectlabel{sec:unique}
 
-Of course galaxies do not share the same \pzpdf; the \pzpdf s differ because the photometry $\vec{d}_{i}$ differs.
-Now, each galaxy $i$ has $p(z \gvn \data_{i})$.
-\aim{Figure: isolating one redshift slice of $N(z)$}
-The probability that the summary statistic $N(z)$ takes the value $N$ is 
-\begin{align}
-\eqlabel{eq:general}
-p(N) &= \sum_{combination\ k}^{N_{tot}! / N! (N_{tot} - N)!} \left[ \prod_{i_{k} \in \mathbb{S}_{z}} p(z \gvn \data_{i_{k}}) \prod_{j_{k} \in \mathbb{S}_{\sim z}} 1 - p(z \gvn \data_{j_{k}}) \right] .
-\end{align}
-\aim{Figure: posterior samples of $N_{z}$ for that slice}
+Of course galaxies do not share the same \pzpdf; the \pzpdf s differ because the photometry $\data_{i}$ differs.
+%Now, each galaxy $i$ has $p(z \gvn \data_{i})$.
+%\aim{Figure: isolating one redshift slice of $N(z)$}
+\begin{lemma}\label{lem:unique}
+	The probability of $N(z)$ takes the value $N_{z}$ is 
+	\begin{align}
+	\eqlabel{eq:general}
+	\pr{N_{z}} &= \sum_{combination\ c}^{N_{tot}! / N_{z}! (N_{tot} - N_{z})!} \left[ \prod_{i_{c} \in \mathbb{S}_{z}^{c}} \pr{z_{i_{c}}} \prod_{j_{c} \in \mathbb{S}_{\lnot z}^{c}} 1 - \pr{z_{j_{c}}} \right] .
+	\end{align}
+	\textul{Proof}:\\
+	By Lemma \ref{lem:independence}, the probability of that set leading to $N_{z}$ is the product of the probability that all the galaxies in that set have redshift $z$ and the probability that all the galaxies outside that set have redshift $\lnot z$.
+	By Lemma \ref{lem:independence} again, the probability that all the galaxies in that set have redshift $z$ is the product of the $N_{z}$ probabilities $\{\pr{z_{i} = z}\}_{i \in \mathbb{S}^{z}_{c}}$ of the galaxies in $\mathbb{S}^{z}_{c}$, and the probability that all the galaxies outside that set have redshift $\lnot z$ is the product of the $N_{tot} - N_{z}$ probabilities $\{\pr{z_{j} \neq z}\}_{j \notin \mathbb{S}^{z}_{c}}$.
+	By Definition \ref{def:binarystatespace}, $\pr{z_{j} \neq z} = \pr{z_{j} = \lnot z} = 1 - \pr{z_{j} = z}$.
+	So the probability $\pr{\mathbb{S}^{z}_{c}}$ of a single combination $\mathbb{S}^{z}_{c}$ is $\prod_{i \in \mathbb{S}^{z}_{c}} \pr{z_{i} = z} \prod_{j \notin \mathbb{S}^{z}_{c}} 1 - \pr{z_{j} = z}$.
+	Invoking Definition \ref{def:disjoint}, we know that $\pr{N_{z}} = \sum_{c}^{C} \pr{\mathbb{S}^{z}_{c}}$ for $C = \binom{N_{tot}}{N_{z}}$.
+\end{lemma}
+%\aim{Figure: posterior samples of $N_{z}$ for that slice}
 
 \subsection{Results}
-\sectlabel{sec:res}
+\sectlabel{sec:pedanticres}
 
-However, there are additional complications!
+\begin{theorem}\label{thm:general}
+	The expected value of $N_{z}$ in the general case of a universe of unique galaxies is given by
+	\begin{align}
+	\eqlabel{eq:complete}
+	\langle N_{z} \rangle &= \sum_{N_{z} = 0}^{N_{tot}} N_{z} \sum_{c}^{N_{tot}! / N_{z}! (N_{tot} - N_{z})!} \left[ \prod_{i_{c} \in \mathbb{S}^{c}_{z}} \pr{z_{i_{c}}} \prod_{j_{c} \in \mathbb{S}^{c}_{\lnot z}} 1 - \pr{z_{j_{k}}} \right].
+	\end{align}
+	\textul{Proof}:\\
+	Apply Definition \ref{def:expected} to Lemma \ref{lem:unique} to arrive at \Eq{eq:complete}.
+\end{theorem}
 
+Though mentioned before, we must reiterate the following caveats, because they will guide our investigation of the sleight of hand that enables the thoroughly unmotivated \Eq{eq:stacked} to masquerade as an acceptable approximation to the provably correct but computationally intractable \Eq{eq:complete}.
 \begin{itemize}
-	\item \pzpdf s are posteriors conditioned on data $\pr{z \gvn \data_{i}}$, must be posterior  and $\pr{z_{i}}$ doesn't make sense because the domain of $z$ is the same for any galaxy $i$
-	\item \pzpdf s are also conditioned on the information $I$ used to derive them, such as a template library or training set.
-	\item there is also a prior due to the method used to combine $I$ and $\data_{i}$ to yield an estimated $\pr{z \gvn \data_{i}, I}$, which is an implicit prior, making \pzpdf s implicit posteriors $\pr{z \gvn \data_{i}, I}$
+	\item \Pzpdf s are posteriors conditioned on data $\pr{z \gvn \data_{i}}$; referring to $\pr{z_{i}}$ is a gross abuse of notation that doesn't even make sense because the domain of $z$ is the same for any galaxy $i$.
+	\item \Pzpdf s are also conditioned on the prior information $I$ used to derive them, such as a template library or training set.
+	\item There is also an implicit prior $H$ due to the method used to combine $I$ and $\data_{i}$ to yield an estimated posterior, $\pr{z \gvn \data_{i}, I, H}$.
 \end{itemize}
-
 Here I explore what assumptions must hold for \Eq{eq:general} to be equivalent to \Eq{eqn:stackwithdata}.
 
 \subsubsection{Perfectly informative data}
 \sectlabel{sec:informative}
+
+\aim{Section still requires text description.}
 
 \begin{theorem}
 	$\hat{N}(z)$ asymptotically approaches the true number $N'$ of galaxies with redshift $z$ under perfectly informative photometry, i.e. $p(z \gvn d_{i}) = \delta(z, z_{i})$.
@@ -267,6 +266,8 @@ in realistic circumstances of photometry being noisy and less informative, stack
 \subsubsection{Perfectly uninformative data}
 \label{sec:prior}
 
+\aim{Section still requires text description.}
+
 \begin{theorem}
 if PDFs were solely dependent on data, $p(z \mid d_{i})$ would be same for all codes [CITE PZDC1], so they really must be implicit posteriors conditioned on data and assumptions $p(z \mid d_{i}, \tilde{N}_{z})$
 
@@ -294,12 +295,14 @@ this expression always reduces to the result of stacking
 \subsection{Summary}
 \sectlabel{sec:disco}
 
-i just showed when the right procedure is equivalent to stacking, but in that final case, it only approaches the true $\textbf{N}_{z}$ when $\tilde{n}(z) = \frac{\textbf{N}_{z}}{N_{tot}}$, i.e. when the truth is already known and baked into the PDFs.\\
-if this were true, we would not need to take more data!
+The preceding proofs show not only the most complete and correct way to frame the redshift distribution \Nz, but they also address the question of how stacking can fool even clever astrophysicists into thinking it works.
+The only cases in which stacking works are when the \pzpdf s are perfect or when the prior information is perfect.
+%when the right procedure is equivalent to stacking, but in that final case, it only approaches the true $\textbf{N}_{z}$ when $\tilde{n}(z) = \frac{\textbf{N}_{z}}{N_{tot}}$, i.e. when the truth is already known and baked into the PDFs.\\
+Note that if those conditions held, we would not need \lsst\ at all.
+Though the conditions of \Sect{sec:informative} and \Sect{sec:prior} may not have been strongly violated in the past, they will be nowhere near satisfied for ongoing and upcoming surveys.
+Thus, we must not stack!
+\aim{Maybe beef up this section to tie in to cosmology.}
 
-The conditions of \Sect{sec:informative} and \Sect{sec:prior} sort of occurred in the past but will never occur for ongoing and upcoming surveys, hence why we must not stack!
-
-%\clearpage
 \section{The \Chippr\ Method}
 \sectlabel{sec:meth}
 
