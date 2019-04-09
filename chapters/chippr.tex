@@ -261,33 +261,34 @@ We know that \Eq{eqn:stack} works in this case and will answer whether \Eq{eqn:c
 \begin{proof}
 	First, we replace all instances of $\pr{z_{i}}$ in \Eq{eqn:complete} with $\pr{z \gvn \data_{i}}$, yielding
 	\begin{align}
-	\eqlabel{eqn:proofwithdata0}
+	\eqlabel{eqn:proofwithdata1}
 	\langle N(z') \rangle &= \sum_{N' = 0}^{\ntot} N' \sum_{combination\ k}^{\ntot! / N'! (\ntot - N')!} \left[ \prod_{i_{k} \in \mathbb{S}^{N'; z'}_{k}} \pr{z' \gvn \data_{i_{k}}} \prod_{i_{k} \in \mathbb{S}^{\ntot - N'; \lnot z'}_{k}} 1 - \pr{z' \gvn \data_{i_{k}}} \right]
 	\end{align}
-	For perfectly informative data, each of these $\pr{z \gvn \data_{i}}$ becomes $\delta(z,\ z^{\dagger}_{i})$, making \Eq{eqn:proofwithdata}
+	For perfectly informative data, each of these $\pr{z \gvn \data_{i}}$ becomes $\delta(z,\ z^{\dagger}_{i})$, making \Eq{eqn:proofwithdata1} into
 	\begin{align}
-	\eqlabel{eqn:proofwithdata1}
+	\eqlabel{eqn:proofwithdata2}
 	\langle N(z') \rangle &= \sum_{N' = 0}^{\ntot} N' \sum_{combination\ k}^{\ntot! / N'! (\ntot - N')!} \left[ \prod_{i_{k} \in \mathbb{S}^{N'; z'}} \delta(z', z^{\dagger}_{i_{k}}) \prod_{i_{k} \in \mathbb{S}^{\ntot - N'; \lnot z'}} 1 - \delta(z', z^{\dagger}_{i_{k}}) \right]
 	\end{align}
-	Each of the delta function terms will be 1 when $z' = z^{\dagger}_{i_{k}}$ and 0 otherwise.
+	Each of the delta function terms in \Eq{eqn:proofwithdata2} will be 1 when $z' = z^{\dagger}_{i_{k}}$ and 0 otherwise.
 	There is only one combination $k^{\dagger}$ that will result in a nonzero product, the one whose $\mathbb{S}^{N'; z'}_{k}$ contains all $N' = N^{\dagger}$ galaxies with $z^{\dagger}_{i_{k}} = z'$ and no interlopers with $z^{\dagger}_{i_{k}} \neq z'$.
 	Thus there is only one nonzero term in the entire sum, and it can only correspond to 
 	\begin{align}
-	\eqlabel{eqn:proofwithdata2}
+	\eqlabel{eqn:proofwithdata3}
 	\langle N(z') \rangle &= N^{\dagger} \left[ \prod_{i_{k} \in \mathbb{S}^{N^{\dagger}; z'}_{k^{\dagger}}} \delta(z', z^{\dagger}_{i_{k}}) \prod_{i_{k} \in S^{\ntot - N^{\dagger}; z'}_{k^{\dagger}}} 1 - \delta(z', z^{\dagger}_{i_{k}}) \right]
 	\end{align}
-	Since the entire quantity in brackets is 1, we arrive at the desired $\langle N(z') \rangle = N^{\dagger}$, the same as what stacking yields.
+	Since the entire bracketed quantity in \Eq{eqn:proofwithdata3} is $1$, we arrive at the desired $\langle N(z') \rangle = N^{\dagger}$, the same as what stacking yields.
 \end{proof}
 
-\aim{restate that this is one of the only conditions where stacking definitely works, and this is the assumption you have to make for the right thing to give the same result as stacking}
+To reiterate, a fully probabilistic treatment of \Nz\ is equivalent to stacking in the case of delta function \pzpdf s, like those that arise from spectroscopic redshifts, a case when both approaches recover the truth.
+\Sect{sec:alldata} constrains the response of the stacked estimator to deviations from delta function \pzpdf s and the sensitivity of its validity to realistic violations of the assumption of perfectly informative data.
 
-\aim{what happens when we deviate away from this assumption of $p(z \mid d_{i}) = \delta(z, z_{i})$?
-
-Figure:\\
-left: rugplot, smoothing/histogram, recover $N(z)$\\
-right: broadening of \zpdf s broadens $N(z)$
-
-in realistic circumstances of photometry being noisy and less informative, stacking is guaranteed to yield an overly broad $N(z)$.}
+%\aim{what happens when we deviate away from this assumption of $p(z \mid d_{i}) = \delta(z, z_{i})$?
+%
+%Figure:\\
+%left: rugplot, smoothing/histogram, recover $N(z)$\\
+%right: broadening of \zpdf s broadens $N(z)$
+%
+%in realistic circumstances of photometry being noisy and less informative, stacking is guaranteed to yield an overly broad $N(z)$.}
 
 \subsubsection{Perfectly uninformative data}
 \sectlabel{sec:prior}
