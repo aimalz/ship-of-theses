@@ -119,7 +119,7 @@ Let's consider a universe with only $N_{tot} = 2$ galaxies, $i$ and $j$, and ask
 	By Definition \ref{def:independence}, the probability of finding a galaxy $i$ at $z$ and another galaxy $j$ at $z$ is $\pr{z_{i} = z \cap z_{j} = z} = \pr{z_{i} = z} \pr{z_{j} = z}$ if the redshift of one is not causally dependent on the redshift of the other.
 \end{lemma}
 
-\Eq{eq:stackwithdata} can only hold if $\pr{z_{i} = z \cap z_{j} = z} = \pr{z_{i} = z} + \pr{z_{j} = z}$, which does not directly follow from any combination of the above definitions.
+\Eq{eqn:stackwithdata} can only hold if $\pr{z_{i} = z \cap z_{j} = z} = \pr{z_{i} = z} + \pr{z_{j} = z}$, which does not directly follow from any combination of the above definitions.
 
 \begin{proposition}\label{prp:union}
 	The probability that either of two independent events occur is $\pr{z_{i} \cup z_{j}} = \pr{z_{i}} \pr{\lnot z_{j}} + \pr{\lnot z_{i}} \pr{z_{j}} + \pr{z_{i}} \pr{z_{j}} = \pr{z_{i}} (1 - \pr{z_{j}}) + (1 - \pr{z_{i}}) \pr{z_{j}} + \pr{z_{i}} \pr{z_{j}} = 1 - \pr{\lnot z_{i} \cap \lnot z_{j}}$, by Definitions \ref{def:normalization} and \ref{def:independence}.
