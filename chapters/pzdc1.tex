@@ -10,6 +10,7 @@
 \newcommand{\hsc}{\project{HSC}}
 \newcommand{\wfirst}{\project{WFIRST}}
 \newcommand{\buzz}{\project{Buzzard}}
+\newcommand{\pzwg}{\textit{PZWG}}
 
 % can easily change these to specify posterior throughout, etc
 \newcommand{\chisq}{$\chi^{2}$}
@@ -34,7 +35,20 @@
 
 \chapter{ Evaluation of probabilistic photometric redshift estimation approaches for \textsc{LSST}\chaplabel{pzdc1}}
 
-This \paper\ represents joint work with [people] published in [place] as [citation].
+This \paper\ represents joint work with Sam Schmidt (UC Davis) and the entire Photo-Z Working Group (\pzwg) of the \desc, which is intended for submission to MNRAS and whose public draft\footnote{\url{{https://github.com/LSSTDESC/PZDC1paper}}} is currently in \desc\ internal review by Mike Troxel (Duke), Markus Michael Rau (CMU), and Daniel Gruen (Stanford).
+
+At the time I joined \desc\ in early 2016, the experimental design had already been set by Ofer Lahav (UCL), Jeff Newman (Pitt), Sam Schmidt (UC Davis), and Tony Tyson (UC Davis).
+The mock data set had been produced by Alex Abate (Dia\&Co), Sam Schmidt (UC Davis), Eve Kovacs (Argonne), Joe DeRose (Stanford), Risa Wechsler (Stanford).
+The data set was being validated by Sam Schmidt (UC Davis), Jeff Newman (Pitt), and Tina Peters (Toronto).
+
+By late 2016, the data set had been distributed to the teams representing different \pzpdf\ codes, including Ibrahim Almosallam (King Abdulaziz City for Science and Technology), Massimo Brescia (INAF-Capodimonte), Stefano Cavuoti (University Federico II), Johann Cohen-Tanugi (Universit\'e de Montpellier),  Andy Connolly (UW), Peter Freeman (CMU), Melissa Graham (UW), Rafael Izbicki (Federal University of Sao Carlos), Matt Jarvis (Oxford; University of the Western Cape), Ann Lee (CMU), Giuseppe Longo (University Federico II), Erfan Nourbakhsh (UC Davis), Eric Nuss (Universit\'e de Montpellier), Taylor Pospisil (CMU), Cecile Roucelle (U Clermont-Ferrand), and Hugo Tranin (Universit\'e de Montpellier).
+The final results of the codes became available to the \pzwg\ in late 2017.
+
+My role was to choose, implement, and interpret the metrics by which the \pzpdf\ codes would be evaluated, an important aspect of experimental design that had not been addressed already.
+I chose the metrics with input from Jeff Newman (Pitt) and Ann Lee (CMU), as well as discussions with the entire \pzwg\ from late 2016 through early 2018.
+In summer and fall 2017, I implemented the metrics in code and ran them on the results of the \pzpdf\ codes with the assistance of Rongpu Zhou (Pitt), Bryce Kalmbach (UW), Kartik Iyer (Rutgers), Sam Schmidt (UC Davis), and Chris Morrison (UW).
+The interpretation of the metrics, culminating in both of the major discoveries of the paper, those of the isolation of the implicit prior and the flaws of traditional metrics, was mine alone, though the presentation of these points benefited from input from Sam Schmidt (UC Davis) and Chris Morrison (UW) througout 2018.
+The words of the paper were written by the entire \pzwg\ over the course of three years, though the bulk of the writing was executed by myself, Sam Schmidt (UC Davis), and John Soo (U. of Science Malaysia).
 
 \section*{Chapter abstract}
 
