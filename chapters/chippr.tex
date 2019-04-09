@@ -943,11 +943,11 @@ The alternative estimators are overly broad, whereas \Chippr\ yields an unbiased
 
 When one thinks of the \pzpdf s of catastrophic outliers, however, what comes to mind is multimodal \pzpdf s, wherein reducing \pzpdf s to point estimates to make a standard scatterplot of the true and observed redshifts leads to substantial probability density off the diagonal.
 These coordinated catastrophic outliers may be emulated in the joint probability space of true and estimated redshifts by using a mixture of the unbiased diagonal defined by the intrinsic scatter and an additional Gaussian in one dimension, with constant observed redshift for a template-fitting code and constant true redshift for a machine learning code.
-In the case of a catastrophic outlier population like that anticipated of template-fitting codes, $10\%$ of all galaxies have their observed redshift at a particular value unrelated to their true redshift, illustrated in the left panel of \Fig{fig:nonuniform-outlier-probs}.
+In the case of a catastrophic outlier population like that anticipated of template-fitting codes, $10\%$ of all galaxies have their observed redshift at a particular value unrelated to their true redshift, illustrated in the left panel of \Fig{fig:nonuniform-outliers-data}.
 This case is subject to the same caveat as the uniformly distributed outliers when it comes to the \lsst\ requirement.
 
 It is less straightforward to emulate catastrophic outliers like those anticipated of a machine learning code.
-The test here gives $10\%$ of galaxies at the redshift affected by outliers an observed redshift that is uniformly distributed relative to the true redshift, illustrated in the right panel of \Fig{fig:nonuniform-outlier-probs}.
+The test here gives $10\%$ of galaxies at the redshift affected by outliers an observed redshift that is uniformly distributed relative to the true redshift, illustrated in the right panel of \Fig{fig:nonuniform-outliers-data}.
 This means that far fewer than $10\%$ of all galaxies in the sample are catastrophic outliers.
 \aim{Probably won't have time to change code to address this inconsistency}
 This second variety of outliers is the only kind that can lead to multimodal \pzpdf s under the forward model.
