@@ -85,34 +85,37 @@ This letter aims to bridge that gap by addressing the contrapositive of the more
 \subsection{Definitions}
 \sectlabel{sec:def}
 
-We first establish some basic definitions by considering the chance that a single galaxy $i$ has a given redshift $z$.
+We first establish some basic definitions by considering the chance that a single galaxy $i$ has a given redshift $z'$.
 
 \begin{definition}\label{def:binarystatespace}
-	The \textit{state space} of a particular galaxy's redshift can be broken down into two states, that of redshift equal to $z$ and that of any other redshift $\lnot z$.
+	The \textit{state space} of a particular galaxy's redshift can be broken down into two states, that of redshift equal to $z'$ and that of any other redshift $\lnot z'$.
 \end{definition}
 
 \begin{definition}\label{def:disjoint}
-	The elements of the state space are \textit{disjoint} if one occurring means that all others do not occur; our single galaxy cannot have both redshift $z$ and a redshift $\lnot z$.
+	The elements of the state space are \textit{disjoint} if one occurring means that all others do not occur; our single galaxy cannot have both redshift $z = z'$ and a redshift $z = \lnot z'$.
 \end{definition}
 
 \begin{definition}\label{def:pdens}
-	The \textit{probability density function (PDF)} $\pr{z} \geq 0$ is the chance that a galaxy takes a redshift $z$.
+	The \textit{probability density function (PDF)} $\pr{z} \geq 0$ is the chance that a galaxy has each possible redshift $z$.
+	It can be evaluated at any specific redshift $z'$ to give the chance $\pr{z'}$ that the galaxy has that particular redshift.
 \end{definition}
 
 \begin{definition}\label{def:normalization}
-	A probability density must satisfy the \textit{normalization} condition $\integral{\pr{z}}{z} = 1$, which is also $\pr{z} + \pr{\lnot z} = 1$ for our single galaxy relative to a specific redshift $z$.
+	A probability density must satisfy the \textit{normalization} condition $\integral{\pr{z}}{z} = 1$.
+	Combined with Definition \ref{def:disjoint}, the normalization condition is equivalent to $\pr{z'} + \pr{\lnot z'} = 1$ for our single galaxy and reference redshift $z'$.
 \end{definition}
 
-These definitions pertain to the redshift of a single galaxy, but this document concerns the distribution \Nz\ of redshifts of an ensemble of $N_{tot}$ galaxies.
-Since galaxies have true redshifts in nature, there is a set $\mathbb{S}^{z}$ of $N_{z}$ galaxies that really do have redshift $z$, for every possible redshift $z$.
-The state space of $N_{z}$ is the set of non-negative integers $\{0, \dots, N_{tot}\}$, so $N_{tot} + 1$ possibilities.
-The probability $\pr{N_{z}}$ that $N_{z}$ takes any particular value is a quantity we can define.
+These definitions pertain to the redshift of a single galaxy, but this \paper concerns the distribution \Nz\ of redshifts of an ensemble of \ntot\ galaxies.
+Since galaxies have true redshifts in nature, there is a set $\mathbb{S}^{N}$ of $N$ galaxies that really do have redshift $z$, for every possible redshift $z$.
+The state space of $N$ is the set of non-negative integers $\{0, \dots, \ntot\}$, so $\ntot + 1$ possibilities.
+We can consider the probability $\pr{N(z')}$ that $N(z)$ takes any particular value at each fixed $z'$.
 
 \begin{definition}\label{def:independence}
 	The probability of multiple \textit{statistically independent} events occurring is the product of the probabilities of the individual events.
 \end{definition}
 
-Let's consider a universe with only $N_{tot} = 2$ galaxies, $i$ and $j$, and ask for the probability that $\pr{N_{z} = 2}$.
+\aim{Questioning my new notation already -- unaltered past this point.}
+Let's consider a universe with $\ntot = 2$ galaxies $i = 1, 2$, and ask for the probability $\pr{N(z') = 2}$ that they both have redshift $z'$.
 
 \begin{lemma}\label{lem:independence}
 	By Definition \ref{def:independence}, the probability of finding a galaxy $i$ at $z$ and another galaxy $j$ at $z$ is $\pr{z_{i} = z \cap z_{j} = z} = \pr{z_{i} = z} \pr{z_{j} = z}$ if the redshift of one is not causally dependent on the redshift of the other.
@@ -181,7 +184,7 @@ The $N_{tot}$ coin flips build a set $\mathbb{S}_{z}$ of $N_{z}$ galaxies with r
 If we want the probability of $N_{z}$ successes, we sum over all combinations of galaxies that could define these sets.
 Bearing in mind that our galaxies have $\pr{\lnot z} = 1 - \phi_{b}$, due to Definitions \ref{def:binarystatespace} and \ref{def:disjoint}, the probability of $N_{z}$ galaxies having redshift $z$ is given by the binomial theorem
 \begin{equation}
-\eqlabel{eq:binomial}
+\eqlabel{eqn:binomial}
 \pr{N_{z}} = \binom{N_{tot}}{N_{z}} \phi_{b}^{N_{z}} (1 - \phi_{b})^{N_{tot} - N_{z}} .
 \end{equation}
 \end{theorem}
@@ -200,7 +203,7 @@ Of course galaxies do not share the same \pzpdf; the \pzpdf s differ because the
 \begin{lemma}\label{lem:unique}
 	The probability that $N(z)$ takes the value $N_{z}$ is 
 	\begin{align}
-	\eqlabel{eq:general}
+	\eqlabel{eqn:general}
 	\pr{N_{z}} &= \sum_{combination\ c}^{N_{tot}! / N_{z}! (N_{tot} - N_{z})!} \left[ \prod_{i_{c} \in \mathbb{S}_{z}^{c}} \pr{z_{i_{c}}} \prod_{j_{c} \in \mathbb{S}_{\lnot z}^{c}} 1 - \pr{z_{j_{c}}} \right] .
 	\end{align}
 	\textul{Proof}:\\
@@ -218,46 +221,65 @@ Of course galaxies do not share the same \pzpdf; the \pzpdf s differ because the
 \begin{theorem}\label{thm:general}
 	The expected value of $N_{z}$ in the general case of a universe of unique galaxies is given by
 	\begin{align}
-	\eqlabel{eq:complete}
+	\eqlabel{eqn:complete}
 	\langle N_{z} \rangle &= \sum_{N_{z} = 0}^{N_{tot}} N_{z} \sum_{c}^{N_{tot}! / N_{z}! (N_{tot} - N_{z})!} \left[ \prod_{i_{c} \in \mathbb{S}^{c}_{z}} \pr{z_{i_{c}}} \prod_{j_{c} \in \mathbb{S}_{c}^{\lnot z}} 1 - \pr{z_{j_{k}}} \right].
 	\end{align}
 	\textul{Proof}:\\
-	Apply Definition \ref{def:expected} to Lemma \ref{lem:unique} to arrive at \Eq{eq:complete}.
+	Apply Definition \ref{def:expected} to Lemma \ref{lem:unique} to arrive at \Eq{eqn:complete}.
 \end{theorem}
 
-Though mentioned before, we must reiterate the following caveats, because they will guide our investigation of the sleight of hand that enables the thoroughly unmotivated \Eq{eq:stack} to masquerade as an acceptable approximation to the provably correct but computationally intractable \Eq{eq:complete}.
+Though mentioned before, we must reiterate the following caveats, because they will guide our investigation of the sleight of hand that enables the thoroughly unmotivated \Eq{eqn:stack} to masquerade as an acceptable approximation to the provably correct but computationally intractable \Eq{eqn:complete}.
 \begin{itemize}
 	\item \Pzpdf s are posteriors conditioned on data $\pr{z \gvn \data_{i}}$; referring to $\pr{z_{i}}$ is a gross abuse of notation that doesn't even make sense because the domain of $z$ is the same for any galaxy $i$.
-	\item \Pzpdf s are also conditioned on the prior information, $I_{P}$, used to derive them, such as a template library or training set.
-	\item There is also an implicit prior $I_{M}$ due to the method used to combine $I_{P}$ and $\data_{i}$ to yield an estimated posterior, $\pr{z \gvn \data_{i}, I_{P}, I_{M}}$.
+	\item \Pzpdf s are also conditioned on the prior information, $I_{P}$, used to derive them, such as a template library or training set, as well as the method used to combine this information with the data of each galaxy.
+%	\item There is also an implicit prior $I_{M}$ due to the method used to combine $I_{P}$ and $\data_{i}$ to yield an estimated posterior, $\pr{z \gvn \data_{i}, I_{P}, I_{M}}$.
 \end{itemize}
-Here I explore what assumptions must hold for \Eq{eq:general} to be equivalent to \Eq{eqn:stack}.
+These points will be expanded upon Here I explore what assumptions must hold for \Eq{eqn:complete} to be equivalent to \Eq{eqn:stack}.
 
 \subsubsection{Perfectly informative data}
 \sectlabel{sec:informative}
 
 \aim{Section still requires text description, consistent notation.}
-
+The simplistic notation of the above sections glosses over something important.
+What differentiates \pzpdf s for each galaxy?
+The redshifts are always defined over the same dimension, but what's different is the photometric data $\data_{i}$ for each galaxy.
+The way that enters into the \pzpdf\ is that $\pr{z_{i}}$ is really a horrible shorthand for $\pr{z \gvn \data_{i}}$, the probability that a galaxy is observed at each redshift conditional on the data  observed.
+From this point on, we'll use the full form of \Eq{eqn:stack},
 \begin{align}
 \eqlabel{eqn:stackwithdata}
-\hat{N}(z) &= \sum_{i = 0}^{N_{tot}} p(z \mid d_{i})
+\hat{N}(z) &= \sum_{i = 0}^{\ntot} \pr{z \gvn \data_{i}} .
 \end{align}
+If the data is perfectly informative, then $\pr{z \gvn \data_{i}} = \delta(z,\ z_{i}^{\dagger})$, where $z_{i}^{\dagger}$ is the true redshift of galaxy $i$.
+\Pzpdf s are not delta functions because the data are inherently noisy and because our model for the relationship between photometry and redshift is imperfect.
+However, if we wanted to write the PDF of a spectroscopic redshift, it could be considered a delta function like this.
+We know that \Eq{eqn:stack} works in this case and will answer whether \Eq{eqn:complete} yields an equivalent result in the idealized case of spectroscopic-quality observations.
 
 \begin{theorem}
-	$\hat{N}(z)$ asymptotically approaches the true number $N'$ of galaxies with redshift $z$ under perfectly informative photometry, i.e. $p(z \gvn d_{i}) = \delta(z, z_{i})$.
+	The mathematically valid $\langle N(z) \rangle$ asymptotically approaches the true number $N^{\dagger}$ of galaxies with redshift $z'$ under perfectly informative photometry, i.e. $\pr{z \gvn \data_{i}} = \delta(z,\ z^{\dagger}_{i})$.
 \end{theorem}
 
 \begin{proof}
-\begin{align}
-\label{eq:data}
-\langle N(z) \rangle &= \sum_{N_{z} = 0}^{N_{tot}} N \sum_{combination\ k}^{N_{tot}! / N! (N_{tot} - N)!} \left[ \prod_{i_{k} \in \mathbb{S}_{z}} p(z \gvn \data_{i_{k}}) \prod_{j_{k} \in \mathbb{S}_{\sim z}} 1 - p(z \gvn \data_{j_{k}}) \right]\\
-&= \sum_{N = 0}^{N_{tot}} N \sum_{combination\ k}^{N_{tot}! / N! (N_{tot} - N)!} \left[ \prod_{i_{k} \in \mathbb{S}_{z}} \delta(z, z_{i_{k}}) \prod_{j_{k} \in \mathbb{S}_{\sim z}} 1 - \delta(z, z_{j_{k}}) \right]\\
-&= N' \left[ \prod_{i_{k} \in \mathbb{S}_{N'}} \delta(z, z_{i_{k}}) \prod_{j_{k} \in S_{N_{tot} -N'}} 1 - \delta(z, z_{j_{k}}) \right]\\
-&= N' \times (1 + 0)\\
-\end{align}
-
-every term is 0 except where $z=z_{jk}$, where it is 1, which only occurs for the true configuration is the PDFs are delta functions centered at the truth, so $\langle N_{z}\rangle = \hat{N}_{z}$, a histogram of spec-zs
+	First, we replace all instances of $\pr{z_{i}}$ in \Eq{eqn:complete} with $\pr{z \gvn \data_{i}}$, yielding
+	\begin{align}
+	\eqlabel{eqn:proofwithdata0}
+	\langle N(z') \rangle &= \sum_{N' = 0}^{\ntot} N' \sum_{combination\ k}^{\ntot! / N'! (\ntot - N')!} \left[ \prod_{i_{k} \in \mathbb{S}^{N'; z'}_{k}} \pr{z' \gvn \data_{i_{k}}} \prod_{i_{k} \in \mathbb{S}^{\ntot - N'; \lnot z'}_{k}} 1 - \pr{z' \gvn \data_{i_{k}}} \right]
+	\end{align}
+	For perfectly informative data, each of these $\pr{z \gvn \data_{i}}$ becomes $\delta(z,\ z^{\dagger}_{i})$, making \Eq{eqn:proofwithdata}
+	\begin{align}
+	\eqlabel{eqn:proofwithdata1}
+	\langle N(z') \rangle &= \sum_{N' = 0}^{\ntot} N' \sum_{combination\ k}^{\ntot! / N'! (\ntot - N')!} \left[ \prod_{i_{k} \in \mathbb{S}^{N'; z'}} \delta(z', z^{\dagger}_{i_{k}}) \prod_{i_{k} \in \mathbb{S}^{\ntot - N'; \lnot z'}} 1 - \delta(z', z^{\dagger}_{i_{k}}) \right]
+	\end{align}
+	Each of the delta function terms will be 1 when $z' = z^{\dagger}_{i_{k}}$ and 0 otherwise.
+	There is only one combination $k^{\dagger}$ that will result in a nonzero product, the one whose $\mathbb{S}^{N'; z'}_{k}$ contains all $N' = N^{\dagger}$ galaxies with $z^{\dagger}_{i_{k}} = z'$ and no interlopers with $z^{\dagger}_{i_{k}} \neq z'$.
+	Thus there is only one nonzero term in the entire sum, and it can only correspond to 
+	\begin{align}
+	\eqlabel{eqn:proofwithdata2}
+	\langle N(z') \rangle &= N^{\dagger} \left[ \prod_{i_{k} \in \mathbb{S}^{N^{\dagger}; z'}_{k^{\dagger}}} \delta(z', z^{\dagger}_{i_{k}}) \prod_{i_{k} \in S^{\ntot - N^{\dagger}; z'}_{k^{\dagger}}} 1 - \delta(z', z^{\dagger}_{i_{k}}) \right]
+	\end{align}
+	Since the entire quantity in brackets is 1, we arrive at the desired $\langle N(z') \rangle = N^{\dagger}$, the same as what stacking yields.
 \end{proof}
+
+\aim{restate that this is one of the only conditions where stacking definitely works, and this is the assumption you have to make for the right thing to give the same result as stacking}
 
 \aim{what happens when we deviate away from this assumption of $p(z \mid d_{i}) = \delta(z, z_{i})$?
 
