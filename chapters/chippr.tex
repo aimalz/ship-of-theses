@@ -229,8 +229,8 @@ Of course galaxies do not share the same \pzpdf; the \pzpdf s differ because the
 Though mentioned before, we must reiterate the following caveats, because they will guide our investigation of the sleight of hand that enables the thoroughly unmotivated \Eq{eq:stacked} to masquerade as an acceptable approximation to the provably correct but computationally intractable \Eq{eq:complete}.
 \begin{itemize}
 	\item \Pzpdf s are posteriors conditioned on data $\pr{z \gvn \data_{i}}$; referring to $\pr{z_{i}}$ is a gross abuse of notation that doesn't even make sense because the domain of $z$ is the same for any galaxy $i$.
-	\item \Pzpdf s are also conditioned on the prior information $I$ used to derive them, such as a template library or training set.
-	\item There is also an implicit prior $H$ due to the method used to combine $I$ and $\data_{i}$ to yield an estimated posterior, $\pr{z \gvn \data_{i}, I, H}$.
+	\item \Pzpdf s are also conditioned on the prior information, $I_{P}$, used to derive them, such as a template library or training set.
+	\item There is also an implicit prior $I_{M}$ due to the method used to combine $I_{P}$ and $\data_{i}$ to yield an estimated posterior, $\pr{z \gvn \data_{i}, I_{P}, I_{M}}$.
 \end{itemize}
 Here I explore what assumptions must hold for \Eq{eq:general} to be equivalent to \Eq{eqn:stackwithdata}.
 
