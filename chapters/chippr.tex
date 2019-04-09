@@ -7,12 +7,19 @@
 \newcommand{\boss}{\project{BOSS}}
 \newcommand{\mmle}{marginalized maximum likelihood estimate}% really marginalized maximum a posteriori estimate, may still change this
 \newcommand{\ndphi}{\bvec{\phi}}
+\newcommand{\ntot}{\ensuremath{N_{\mathrm{tot}}}}
+
+% rules for my math notation, in case I get confused
+% galaxies i, redshifts j, combinations k
+% N galaxies out of N_tot galaxies
+% dagger for "truth", tilde for interim, prime for proposed/different
+% prior info I_[informative subscript]
 
 \chapter{How to obtain the redshift distribution from probabilistic redshift estimates\chaplabel{chippr}}
 
 This \paper\ contains work on the problem of obtaining the distribution of galaxy redshifts from catalogs of \pzpdf s, approaching the matter from two angles.
 The first portion addresses why established methodologies appear correct despite being invalid, work inspired by conversations with Phil Marshall during the summer of 2017.
-The second portion was incubated with David Hogg during the summer and fall of 2015 and has been publicly available on \github\ since its inception; I further developed the code and scope with Phil Marshall in the spring and fall of 2017.
+The second portion was incubated with David Hogg during the summer and fall of 2015 and has been publicly available on \github\footnote{\url{https://github.com/aimalz/chippr}} since its inception; I further developed the code and scope with Phil Marshall in the spring and fall of 2017.
 
 \section*{Chapter abstract}
 
@@ -37,41 +44,33 @@ Despite the growing prevalence of \pzpdf\ production, no implementation of infer
 I present and validate a hierarchical Bayesian technique for the use of \pzpdf\ in inference of arbitrary statistics relevant to cosmology, large-scale structure, and galaxy evolution.  
 For simplicity, we consider only one-point statistics, though future work will extend this methodology to higher-order statistics.
 
-The redshift density function \nz, a normalized adaptation of \Eq{eqn:Nz}, serves as an ideal statistic upon which to demonstrate this novel approach.  
+The \textit{redshift distribution function \Nz}, or, almost interchangably, its normalized cousin the \textit{redshift density function \nz}, serves as an ideal statistic upon which to demonstrate this novel approach.  
 \Nz\ is necessary for calculations of two-point correlation functions of weak gravitational lensing and counting statistics that are used to probe dark energy \citep{Masters2015}.  
 The observed \Nz\ also been used to validate survey selection functions used in generation of realistic, multi-purpose mock catalogs \citep{Norberg2002}.  
 Additionally, \Nz\ has been the subject of inference using \pzpdf s before \citep{Sheldon2012, Hildebrandt2012, Kelly2014, Benjamin2013, Bonnett2015a, Viironen2015, Asorey2016, Leistedt2016}, so comparisons to the literature may easily be made. 
 
-The prevailing way to estimate \nz\ for a sample of $J$ galaxies $j$ is to ``stack'' \pzpdf s according to
+The prevailing way to estimate \nz\ for a sample of $N_{tot}$ galaxies $i$ is to ``stack'' \pzpdf s according to
 \begin{align}
 \eqlabel{eqn:stack}
-\hat{n}(z) &= \frac{1}{J} \sum_{i = 0}^{J} \pr{z_{j}} .
+\hat{n}(z) &= \frac{1}{\ntot} \sum_{i = 0}^{\ntot} \pr{z_{i}} .
 \end{align}
-The stacked estimator \nz\ of the redshift density function is effectively an average of the \pzpdf\ catalog and, as I will show in this \Chap, not in general mathematically valid.
-
+The stacked estimator of the redshift density function is effectively an average of the \pzpdf\ catalog and, as I will show in this \paper, not in general mathematically valid.
 Stacking is considered the preferred method for obtaining \Nz\ from a dataset of interim photo-$z$ posteriors \citep{Sheldon2012, Kelly2014, Benjamin2013, Bonnett2015a, Viironen2015, Asorey2016}.  
 However, it must be noted here that \Eq{eq:stack} is not in general mathematically valid.  
 (See \citet{Hogg2012} for a complete discussion.)  
 The estimator produced by stacking shall henceforth be referred to as the ``stacked'' estimator.
 
-I aim to develop a clear methodology guiding the use of \pzpdf s in inference so they may be utilized effectively by the cosmology community.
+\aim{Motivate how well we need to know \Nz\ and why it matters.
+	New paragraph here: Say what precision is needed for \Nz\ for future weak lensing surveys. 
+	Say what precision the mass function is needed (in, say cluster studies) for precision cosmology.}
 
-%\textbf{New paragraph here: Say what precision is needed for N(z) for future weak lensing surveys. Say what precision the mass function is needed (in, say cluster studies) for precision cosmology.}
+I aim to develop a clear methodology guiding the use of \pzpdf s in inference so they may be utilized effectively by the cosmology community.
+This \paper peoposes
 
 In \Sect{sec:pedantry}, I establish a mathematical formalism for \pzpdf s and present original proofs concerning the conditions under which the stacked estimator of the redshift distribution can be accurate.
 In \Sect{sec:meth}, I present the \Chippr\ model and \chippr\ implementation for characterizing the full posterior probability landscape of \Nz\ using \pzpdf s. 
 In \Sect{sec:alldata}, I describe the experimental design for testing the fully probabilistic approach to mock and real datasets, the results of which are found in \Sect{sec:results}.
-
-%\begin{itemize}
-%	\item
-%	Q: How can we improve the effectiveness of using \pzpdf s in inference?\\
-%	A: Hierarchical inference is the only self-consistent way; see flow chart for outline of how it works in practice.
-%	\item
-%	Q: How does the result of \chippr compare to established estimators in terms of the accuracy of \nz ?\\
-%	A: \chippr\ yields the best possible \nz , conditional on the accuracy of the \pzpdf s used.
-%	\item
-%	Q: How does the result of \chippr compare to established estimators in terms of the precision on cosmological constraints?
-%\end{itemize}
+In \Sect{sec:results}, I stress-test the \Chippr\ model against stacking and its other competitors in the context of cosmology.
 
 \section{Pedagogical Framework}
 \sectlabel{sec:pedantry}
@@ -86,7 +85,7 @@ This letter aims to bridge that gap by addressing the contrapositive of the more
 \subsection{Definitions}
 \sectlabel{sec:def}
 
-We first establish some basic definitions by considering the chance that a single galaxy has a given redshift $z$.
+We first establish some basic definitions by considering the chance that a single galaxy $i$ has a given redshift $z$.
 
 \begin{definition}\label{def:binarystatespace}
 	The \textit{state space} of a particular galaxy's redshift can be broken down into two states, that of redshift equal to $z$ and that of any other redshift $\lnot z$.
