@@ -355,7 +355,7 @@ Note that $z_{j}$ does not depend on the redshift $z_{j'}$ of some other galaxy 
 In addition to believing \nz\ is a PDF from which redshifts are drawn, we also believe that there is some higher dimensional probability space $\pr{z, \data}$ of redshift and photometric data vectors $\data$, which may be any combination of fluxes, magnitudes, colors, and their observational errors.
 In that sense \nz\ is equivalent to an integral
 \begin{equation}
-\label{eqn:integral}
+\eqlabel{eqn:integral}
 n(z)\ =\ \integral{\pr{z, \data}}{\data}
 \end{equation}
 over the dimension of data in that joint probability space.
@@ -367,7 +367,7 @@ The photometry results from the redshifts, not the other way around.
 This is the fundamental assumption upon which \pz\ estimation is based.
 The forward model corresponds to first drawing redshifts according to \Eq{eqn:pz} and then drawing data from the likelihood
 \begin{equation}
-\label{eqn:pzpdf}
+\eqlabel{eqn:pzpdf}
 \data_{j}\ \sim\ \pr{\data \gvn z_{j}}
 \end{equation}
 of photometry conditioned on redshift, illustrated in \Fig{fig:pedagogical_scatter}.
