@@ -45,12 +45,11 @@ The most common application of \pzpdf s is their use in estimating \Nz, the dist
 If the true redshifts $\{z_{j'}\}$ were known, the redshift probabilities would be delta functions $\{\delta(z, z'_{j})\}$ centered at the true redshift, and the redshift distribution could be approximated by a histogram or other interpolation of the delta functions $\{\delta(z, z'_{j})\}$.
 When \pzpdf s are available instead of true redshifts, the simplest approach reduces them to point estimates of redshift by using $\delta(z, \hat{z}_{j})$ in place of $\delta(z, z'_{j})$, where $\hat{z}_{j}$ may be the mode (maximum) of the \pzpdf, though there are other, more principled options.
 \aim{Cite Mineo.}
-However, it is more common at this point to calculate the \textit{stacked estimator} of the redshift distribution \citep{Lima2008}
-\begin{align}
-\eqlabel{eqn:stacked}
-\hat{N}(z) &\equiv \sum_{j=1}^{J}\ \pr{z_{j}} ,
-\end{align}
-though it is mathematically invalid.
+However, it is more common at this point to calculate the mathematically invalid but conceptually simple \textit{stacked estimator} of the redshift distribution \citep{Lima2008}.
+%\begin{align}
+%\eqlabel{eqn:stacked}
+%\hat{N}(z) &\equiv \sum_{j=1}^{J}\ \pr{z_{j}} ,
+%\end{align}
 In \Chap{chippr}, I challenge the paradigm of stacking and present a probabilistic graphical model that self-consistently propagates redshift uncertainty to constrain \Nz.
 
 \aim{Hogg says ``I think it would be good to talk a little quantitatively about where people need to know N(z) and other one-point statistics, and how much they will get various things wrong if they don't know these correctly. 
