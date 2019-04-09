@@ -776,7 +776,7 @@ The hyperprior distribution chosen here is a multivariate normal distribution wi
 \Sigma_{k,k'} = q\ \exp[-\frac{e}{2}\ (\bar{z}_{k}-\bar{z}_{k'})^{2}]\ +\ t\delta(k,k')
 \end{equation}
 inspired by one used in Gaussian processes, where $k$ and $k'$ are indices ranging from $1$ to $K$ and $q=1.0$, $e=100.0$, and $t=q\cdot10^{-5}$ are constants chosen to permit draws from this prior distribution to produce shapes similar to that of a true $\tilde{\ndphi}$.  
-We adapt the full log-posterior of \Eq{eq:final} to the binning of redshift space chosen in \Sect{sec:mock}.
+We adapt the full log-posterior of \Eq{eqn:final} to the chosen binning of redshift space.
 An example of such samples from the prior are shown in \Fig{fig:prior}.
 
 \begin{figure}
