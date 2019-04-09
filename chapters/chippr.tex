@@ -44,7 +44,7 @@ Additionally, \Nz\ has been the subject of inference using \pzpdf s before \cite
 
 The prevailing way to estimate \nz\ for a sample of $J$ galaxies $j$ is to ``stack'' \pzpdf s according to
 \begin{align}
-\eqlabel{eqn:stackwithdata}
+\eqlabel{eqn:stack}
 \hat{n}(z) &= \frac{1}{J} \sum_{i = 0}^{J} \pr{z_{j}} .
 \end{align}
 The stacked estimator \nz\ of the redshift density function is effectively an average of the \pzpdf\ catalog and, as I will show in this \Chap, not in general mathematically valid.
@@ -119,7 +119,7 @@ Let's consider a universe with only $N_{tot} = 2$ galaxies, $i$ and $j$, and ask
 	By Definition \ref{def:independence}, the probability of finding a galaxy $i$ at $z$ and another galaxy $j$ at $z$ is $\pr{z_{i} = z \cap z_{j} = z} = \pr{z_{i} = z} \pr{z_{j} = z}$ if the redshift of one is not causally dependent on the redshift of the other.
 \end{lemma}
 
-\Eq{eqn:stackwithdata} can only hold if $\pr{z_{i} = z \cap z_{j} = z} = \pr{z_{i} = z} + \pr{z_{j} = z}$, which does not directly follow from any combination of the above definitions.
+\Eq{eqn:stack} can only hold if $\pr{z_{i} = z \cap z_{j} = z} = \pr{z_{i} = z} + \pr{z_{j} = z}$, which does not directly follow from any combination of the above definitions.
 
 \begin{proposition}\label{prp:union}
 	The probability that either of two independent events occur is $\pr{z_{i} \cup z_{j}} = \pr{z_{i}} \pr{\lnot z_{j}} + \pr{\lnot z_{i}} \pr{z_{j}} + \pr{z_{i}} \pr{z_{j}} = \pr{z_{i}} (1 - \pr{z_{j}}) + (1 - \pr{z_{i}}) \pr{z_{j}} + \pr{z_{i}} \pr{z_{j}} = 1 - \pr{\lnot z_{i} \cap \lnot z_{j}}$, by Definitions \ref{def:normalization} and \ref{def:independence}.
@@ -135,7 +135,7 @@ Let's consider a universe with only $N_{tot} = 2$ galaxies, $i$ and $j$, and ask
 	The expected value $\langle X \rangle = \integral{X\pr{X}}{X}$ for a continuous random variable $X$.
 \end{definition}
 
-Because the stacked estimator of the redshift distribution given in \Eq{eqn:stackedwithdata} yields a single value $\hat{N}_{z}$ for $N_{z}$ rather than the probability distribution $\pr{N_{z}}$, we'll work with the expected value so we can compare apples to apples.
+Because the stacked estimator of the redshift distribution given in \Eq{eqn:stack} yields a single value $\hat{N}_{z}$ for $N_{z}$ rather than the probability distribution $\pr{N_{z}}$, we'll work with the expected value so we can compare apples to apples.
 
 \begin{lemma}\label{lem:expectednz}
 	As a discrete random variable, the expected value $\langle N_{z} \rangle$ of $N_{z}$ is $\sum_{N_{z} = 0}^{N_{tot}} N_{z}\pr{N_{z}}$.
@@ -226,18 +226,23 @@ Of course galaxies do not share the same \pzpdf; the \pzpdf s differ because the
 	Apply Definition \ref{def:expected} to Lemma \ref{lem:unique} to arrive at \Eq{eq:complete}.
 \end{theorem}
 
-Though mentioned before, we must reiterate the following caveats, because they will guide our investigation of the sleight of hand that enables the thoroughly unmotivated \Eq{eq:stacked} to masquerade as an acceptable approximation to the provably correct but computationally intractable \Eq{eq:complete}.
+Though mentioned before, we must reiterate the following caveats, because they will guide our investigation of the sleight of hand that enables the thoroughly unmotivated \Eq{eq:stack} to masquerade as an acceptable approximation to the provably correct but computationally intractable \Eq{eq:complete}.
 \begin{itemize}
 	\item \Pzpdf s are posteriors conditioned on data $\pr{z \gvn \data_{i}}$; referring to $\pr{z_{i}}$ is a gross abuse of notation that doesn't even make sense because the domain of $z$ is the same for any galaxy $i$.
 	\item \Pzpdf s are also conditioned on the prior information, $I_{P}$, used to derive them, such as a template library or training set.
 	\item There is also an implicit prior $I_{M}$ due to the method used to combine $I_{P}$ and $\data_{i}$ to yield an estimated posterior, $\pr{z \gvn \data_{i}, I_{P}, I_{M}}$.
 \end{itemize}
-Here I explore what assumptions must hold for \Eq{eq:general} to be equivalent to \Eq{eqn:stackwithdata}.
+Here I explore what assumptions must hold for \Eq{eq:general} to be equivalent to \Eq{eqn:stack}.
 
 \subsubsection{Perfectly informative data}
 \sectlabel{sec:informative}
 
-\aim{Section still requires text description.}
+\aim{Section still requires text description, consistent notation.}
+
+\begin{align}
+\eqlabel{eqn:stackwithdata}
+\hat{N}(z) &= \sum_{i = 0}^{N_{tot}} p(z \mid d_{i})
+\end{align}
 
 \begin{theorem}
 	$\hat{N}(z)$ asymptotically approaches the true number $N'$ of galaxies with redshift $z$ under perfectly informative photometry, i.e. $p(z \gvn d_{i}) = \delta(z, z_{i})$.
@@ -266,13 +271,13 @@ in realistic circumstances of photometry being noisy and less informative, stack
 \subsubsection{Perfectly uninformative data}
 \label{sec:prior}
 
-\aim{Section still requires text description.}
+\aim{Section still requires text description, consistent notation.}
 
 \begin{theorem}
 if PDFs were solely dependent on data, $p(z \mid d_{i})$ would be same for all codes [CITE PZDC1], so they really must be implicit posteriors conditioned on data and assumptions $p(z \mid d_{i}, \tilde{N}_{z})$
 
 \begin{align}
-\label{eq:stackwithprior}
+\eqlabel{eqn:stackwithprior}
 \hat{N}(z) &= \sum_{i = 0}^{N_{tot}} p(z \mid d_{i}, \tilde{N}_{z})
 \end{align}
 \end{theorem}
