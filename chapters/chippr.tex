@@ -7,7 +7,6 @@
 \newcommand{\boss}{\project{BOSS}}
 \newcommand{\mmle}{marginalized maximum likelihood estimate}% really marginalized maximum a posteriori estimate, may still change this
 \newcommand{\ndphi}{\bvec{\phi}}
-\newcommand{\ntot}{\ensuremath{N_{\mathrm{tot}}}}
 
 % rules for my math notation, in case I get confused
 % galaxies i, redshifts j, combinations k
@@ -15,15 +14,14 @@
 % dagger for "truth", tilde for interim, prime for proposed/different
 % prior info I_[informative subscript]
 
-\chapter{How to obtain the redshift distribution from probabilistic redshift estimates\chaplabel{chippr}}
+\chapter{ How to obtain the redshift distribution from probabilistic redshift estimates \chaplabel{chippr} }
 
-This \paper\ contains work on the problem of obtaining the distribution of galaxy redshifts from catalogs of \pzpdf s, approaching the matter from two angles.
-The first portion addresses why established methodologies appear correct despite being invalid, work inspired by conversations with Phil Marshall during the summer of 2017.
-The second portion was incubated with David Hogg during the summer and fall of 2015 and has been publicly available on \github\footnote{\url{https://github.com/aimalz/chippr}} since its inception; I further developed the code and scope with Phil Marshall in the spring and fall of 2017.
+This \paper\ was incubated with David Hogg (NYU) during the summer and fall of 2015 and has been publicly available on \github\footnote{\url{https://github.com/aimalz/chippr}} since its inception.
+I further developed the code and refined the scope with Phil Marshall (SLAC) in the spring and fall of 2017.
 
 \section*{Chapter abstract}
 
-A trustworthy estimate of the redshift distribution \nz\ is crucial for weak-lensing cosmology as we know it.
+A trustworthy estimate of the redshift distribution \nz\ is crucial for using galaxy catalogs to study cosmology via weak gravitational lensing and large-scale structure.
 Spectroscopic redshifts for the dim and numerous galaxies of weak-lensing surveys are expected to be inaccessible, making photometric redshifts (photo-$z$s) the next-best alternative.
 The nontrivial systematics affecting photo-$z$ estimation have motivated the weak-lensing community to favor photo-$z$ probability density functions (PDFs) as a more comprehensive alternative to photo-$z$ point estimates.
 However, analytic methods for utilizing these new data products in cosmological inference are still evolving.
@@ -65,309 +63,12 @@ The estimator produced by stacking shall henceforth be referred to as the ``stac
 	Say what precision the mass function is needed (in, say cluster studies) for precision cosmology.}
 
 I aim to develop a clear methodology guiding the use of \pzpdf s in inference so they may be utilized effectively by the cosmology community.
-This \paper peoposes
 
-In \Sect{sec:pedantry}, I establish a mathematical formalism for \pzpdf s and present original proofs concerning the conditions under which the stacked estimator of the redshift distribution can be accurate.
 In \Sect{sec:meth}, I present the \Chippr\ model and \chippr\ implementation for characterizing the full posterior probability landscape of \Nz\ using \pzpdf s. 
 In \Sect{sec:alldata}, I describe the experimental design for testing the fully probabilistic approach to mock and real datasets, the results of which are found in \Sect{sec:results}.
 In \Sect{sec:results}, I stress-test the \Chippr\ model against stacking and its other competitors in the context of cosmology.
 
-\section{Pedagogical Framework}
-\sectlabel{sec:pedantry}
-
-\aim{Might not be distinguishing definitions, propositions, lemmas, and theorems properly, and also not using the notation right with respect to actually putting the proof where it's supposed to be rather than in the problem statement.}
-\aim{Also, the notation in here is neither self-consistent, nor is it consistent with the rest of the \paper, but I'm going to deal with it once all the content is there and I'm no longer changing my mind about what the notation ought to be.}
-
-Initial applications of \pzpdf s in weak gravitational lensing studies of cosmology have employed naive methodologies for obtaining the redshift distribution function \Nz.
-Though computationally straightforward, such techniques violate the laws of probability, triggering a proliferation of mathematically self-consistent models of varying complexity answering the question, ``What is the right way to obtain the redshift distribution function from a catalog of photometric redshift PDFs?''
-However, adoption of these principled models has been slow, perhaps due to a gap in understanding between those developing the methods and those applying them to real data.
-This letter aims to bridge that gap by addressing the contrapositive of the more common presentation of such models, answering the question, ``Under what conditions do traditional stacking methods recover the true redshift distribution function?''
-
-\subsection{Definitions}
-\sectlabel{sec:def}
-
-We first establish some basic definitions by considering the chance that a single galaxy $i$ has a given redshift $z'$.
-
-\begin{definition}\label{def:binarystatespace}
-	The \textit{state space} of a particular galaxy's redshift can be broken down into two states, that of redshift equal to $z'$ and that of any other redshift $\lnot z'$.
-\end{definition}
-
-\begin{definition}\label{def:disjoint}
-	The elements of the state space are \textit{disjoint} if one occurring means that all others do not occur; our single galaxy cannot have both redshift $z = z'$ and a redshift $z = \lnot z'$.
-\end{definition}
-
-\begin{definition}\label{def:pdens}
-	The \textit{probability density function (PDF)} $\pr{z} \geq 0$ is the chance that a galaxy has each possible redshift $z$.
-	It can be evaluated at any specific redshift $z'$ to give the chance $\pr{z'}$ that the galaxy has that particular redshift.
-\end{definition}
-
-\begin{definition}\label{def:normalization}
-	A probability density must satisfy the \textit{normalization} condition $\integral{\pr{z}}{z} = 1$.
-	Combined with Definition \ref{def:disjoint}, the normalization condition is equivalent to $\pr{z'} + \pr{\lnot z'} = 1$ for our single galaxy and reference redshift $z'$.
-\end{definition}
-
-These definitions pertain to the redshift of a single galaxy, but this \paper concerns the distribution \Nz\ of redshifts of an ensemble of \ntot\ galaxies.
-Since galaxies have true redshifts in nature, there is a set $\mathbb{S}^{N}$ of $N$ galaxies that really do have redshift $z$, for every possible redshift $z$.
-The state space of $N$ is the set of non-negative integers $\{0, \dots, \ntot\}$, so $\ntot + 1$ possibilities.
-We can consider the probability $\pr{N(z')}$ that $N(z)$ takes any particular value at each fixed $z'$.
-
-\begin{definition}\label{def:independence}
-	The probability of multiple \textit{statistically independent} events occurring is the product of the probabilities of the individual events.
-\end{definition}
-
-\aim{Questioning my new notation already -- unaltered past this point.}
-Let's consider a universe with $\ntot = 2$ galaxies $i = 1, 2$, and ask for the probability $\pr{N(z') = 2}$ that they both have redshift $z'$.
-
-\begin{lemma}\label{lem:independence}
-	By Definition \ref{def:independence}, the probability of finding a galaxy $i$ at $z$ and another galaxy $j$ at $z$ is $\pr{z_{i} = z \cap z_{j} = z} = \pr{z_{i} = z} \pr{z_{j} = z}$ if the redshift of one is not causally dependent on the redshift of the other.
-\end{lemma}
-
-\Eq{eqn:stack} can only hold if $\pr{z_{i} = z \cap z_{j} = z} = \pr{z_{i} = z} + \pr{z_{j} = z}$, which does not directly follow from any combination of the above definitions.
-
-\begin{proposition}\label{prp:union}
-	The probability that either of two independent events occur is $\pr{z_{i} \cup z_{j}} = \pr{z_{i}} \pr{\lnot z_{j}} + \pr{\lnot z_{i}} \pr{z_{j}} + \pr{z_{i}} \pr{z_{j}} = \pr{z_{i}} (1 - \pr{z_{j}}) + (1 - \pr{z_{i}}) \pr{z_{j}} + \pr{z_{i}} \pr{z_{j}} = 1 - \pr{\lnot z_{i} \cap \lnot z_{j}}$, by Definitions \ref{def:normalization} and \ref{def:independence}.
-\end{proposition}
-
-\aim{Should I include the proof by induction that follows from Lemma \ref{lem:independence} or leave it as an exercise for the reader?}
-
-%More generally, we can quantify \Nz\ with a summary statistic $\ndphi$, which under some function $N(z) = f(z; \ndphi)$ provides the number of galaxies \Nz\ at a redshift $z$.
-%The redshift distribution itself can be used to define a probability density $n(z) \equiv \pr{z \gvn \ndphi} = N(z) / N_{tot}$ of finding a galaxy at a given redshift under the parameter $\ndphi$.
-%Thus the state space of $\pr{\ndphi}$ depends on the function $f$, but the state space of $\pr{z \gvn \ndphi}$ must only satisfy Definitions \ref{def:pdens} and \ref{def:normalization}.
-
-\begin{definition}\label{def:expected}
-	The expected value $\langle X \rangle = \integral{X\pr{X}}{X}$ for a continuous random variable $X$.
-\end{definition}
-
-Because the stacked estimator of the redshift distribution given in \Eq{eqn:stack} yields a single value $\hat{N}_{z}$ for $N_{z}$ rather than the probability distribution $\pr{N_{z}}$, we'll work with the expected value so we can compare apples to apples.
-
-\begin{lemma}\label{lem:expectednz}
-	As a discrete random variable, the expected value $\langle N_{z} \rangle$ of $N_{z}$ is $\sum_{N_{z} = 0}^{N_{tot}} N_{z}\pr{N_{z}}$.
-	%; note that $\hat{n}(z) = \langle p(z) \rangle$ assuming $p(p(z)) = \mathcal{U}(0, 1)$
-\end{lemma}
-
-However, all we have to work with are the members of the catalog of \pzpdf s, $\{\pr{z}\}$, not $\pr{N_{z}}$.
-\Sect{sec:pedanticmath} connects our \pzpdf s to the distribution of possible \Nz s.
-
-\subsection{Derivation}
-\sectlabel{sec:pedanticmath}
-
-The following proofs establish the relationship between a catalog of individual galaxy redshift PDFs and the redshift distribution from a combinatorial perspective.
-Though it doesn't matter for our science, let's consider all possible orderings of the whole set of $N_{tot}$ galaxies.
-
-\begin{definition}\label{def:permutations}
-	The number of possible orderings of the $N_{tot}$ galaxies in the set $\mathbb{S}$ of galaxies is $N_{tot}! = N_{tot} \cdot (N_{tot} - 1) \cdot (N_{tot} - 2) \cdot \dots \cdot 1$.
-\end{definition}
-
-\begin{lemma}\label{lem:combinations}
-	The number of possible unordered subsets of $N_{z}$ galaxies that can be selected from a set of $N_{tot} \geq N_{z}$ galaxies is $\binom{N_{tot}}{N_{z}} \equiv \frac{N_{tot}!}{N_{z}! (N_{tot} - N_{z})!}$.
-\end{lemma}
-\begin{proof}
-	If there are $N_{z}$ galaxies with redshift $z$, we can think of them as the first $N_{z}$ in an ordering of the full $N_{tot}$ galaxies.
-	We expect that many of the $N_{tot}!$ orderings can result in the same set $\mathbb{S}^{z}$ of $N_{z}$ at the beginning.
-	Not only do we not care about the ordering within the first $N_{z}$ galaxies, but we also don't care about the last $N_{tot} - N_{z}$ galaxies whatsoever.
-	Thus there are $C = \frac{N_{tot}!}{N_{z}! (N_{tot} - N_{z})!}$ combinations of the first $N_{z}$ galaxies, defining $C$ possible sets $\mathbb{S}^{z}_{c}$ of galaxies to consider.
-\end{proof}
-
-%\begin{definition}
-%	\aim{define orderings above and turn this into a proposition?}
-%	The number of possible orderings of all $\comb{N_{tot}}{N}$ subsets of $N$ galaxies out of a set of $N_{tot} \geq N$ is $\perm{N_{tot}}{N} \equiv \frac{N_{tot}!}{(N_{tot}-N)!} = N!\comb{N_{tot}}{N}$.
-%\end{definition}
-
-\subsubsection{A two-redshift universe of identical galaxies}
-\sectlabel{sec:tworedshift}
-
-It is helpful to consider the special case in which all galaxies have the same \pzpdf\ $\pr{z}$.
-Further, we will make the simplifying assumption of a two-redshift universe to start with.
-
-\begin{theorem}
-	In a two-redshift universe in which all galaxies have the same \pzpdf with probability $\phi_{b}$ of having redshift $z'$, the probability mass function over the redshift distribution is
-	\begin{equation}
-	\eqlabel{eqn:binomial}
-	\pr{N_{z'}} = \binom{N_{tot}}{N_{z'}} \phi_{b}^{N_{z'}} (1 - \phi_{b})^{N_{tot} - N_{z'}} .
-	\end{equation}
-\end{theorem}
-
-\begin{proof}
-If there are only two possible redshifts, those of Definition \ref{def:binarystatespace}, then the problem is equivalent to that of counting $N_{z'}$ successes after flipping a single coin with $\pr{z'} = \phi_{b}$ a total of \ntot\ times.
-The \ntot\ coin flips build a set $\mathbb{S}^{N'; z'}$ of $N_{z'}$ galaxies with redshift $z'$ and $\mathbb{S}^{\ntot - N'; \lnot z}$ of $\ntot - N_{z'}$ galaxies with redshift $\lnot z$.
-If we want the probability of $N_{z'}$ successes, we sum over all combinations of galaxies that could define these sets.
-Bearing in mind that our galaxies have $\pr{\lnot z} = 1 - \phi_{b}$, due to Definitions \ref{def:binarystatespace} and \ref{def:disjoint}, the probability of $N_{z'}$ galaxies having redshift $z'$ is given by the binomial theorem, which is \Eq{eqn:binomial}.
-\end{proof}
-
-We may generalize the two-redshift universe to a many-redshift universe by considering the extension of the binomial theorem to the birthday problem, which asks for the probability that $N_{z}$ people in a room of $N_{tot}$ people share the same birthday $z$.
-We will, however, proceed by considering only one redshift at a time to maintain the simple phase space; the proof of the birthday problem case is left as an exercise for the reader.
-%the birthday problem is solved by $p(N_{z}) = 1 - p(z)^{N_{tot}} \times \perm{N_{tot}}{N_{z}}$
-%\aim{Am I allowed to leave a proof as an exercise for the reader?}
-
-\subsubsection{A universe of unique galaxies}
-\sectlabel{sec:unique}
-
-Of course galaxies do not share the same \pzpdf; the \pzpdf s differ because the photometry $\data_{i}$ differs.
-%Now, each galaxy $i$ has $p(z \gvn \data_{i})$.
-%\aim{Figure: isolating one redshift slice of $N(z)$}
-\begin{lemma}\label{lem:unique}
-	The probability that $N(z)$ takes the value $N_{z}$ is 
-	\begin{align}
-	\eqlabel{eqn:general}
-	\pr{N_{z}} &= \sum_{combination\ c}^{N_{tot}! / N_{z}! (N_{tot} - N_{z})!} \left[ \prod_{i_{c} \in \mathbb{S}_{z}^{c}} \pr{z_{i_{c}}} \prod_{j_{c} \in \mathbb{S}_{\lnot z}^{c}} 1 - \pr{z_{j_{c}}} \right] .
-	\end{align}
-\end{lemma}
-\begin{proof}
-	By Lemma \ref{lem:independence}, the probability of that set leading to $N_{z}$ is the product of the probability that all the galaxies in that set have redshift $z$ and the probability that all the galaxies outside that set have redshift $\lnot z$.
-	By Lemma \ref{lem:independence} again, the probability that all the galaxies in that set have redshift $z$ is the product of the $N_{z}$ probabilities $\{\pr{z_{i} = z}\}_{i \in \mathbb{S}^{z}_{c}}$ of the galaxies in $\mathbb{S}^{z}_{c}$, and the probability that all the galaxies outside that set have redshift $\lnot z$ is the product of the $N_{tot} - N_{z}$ probabilities $\{\pr{z_{j} \neq z}\}_{j \notin \mathbb{S}^{z}_{c}}$.
-	By Definition \ref{def:binarystatespace}, $\pr{z_{j} \neq z} = \pr{z_{j} = \lnot z} = 1 - \pr{z_{j} = z}$.
-	So the probability $\pr{\mathbb{S}^{z}_{c}}$ of a single combination $\mathbb{S}^{z}_{c}$ is $\prod_{i \in \mathbb{S}^{z}_{c}} \pr{z_{i} = z} \prod_{j \notin \mathbb{S}^{z}_{c}} 1 - \pr{z_{j} = z}$.
-	Invoking Definition \ref{def:disjoint}, we know that $\pr{N_{z}} = \sum_{c}^{C} \pr{\mathbb{S}^{z}_{c}}$ for $C = \binom{N_{tot}}{N_{z}}$.
-\end{proof}
-%\aim{Figure: posterior samples of $N_{z}$ for that slice}
-
-\subsection{Results}
-\sectlabel{sec:pedanticres}
-
-\begin{theorem}\label{thm:general}
-	The expected value of $N_{z}$ in the general case of a universe of unique galaxies is given by
-	\begin{align}
-	\eqlabel{eqn:complete}
-	\langle N_{z} \rangle &= \sum_{N_{z} = 0}^{N_{tot}} N_{z} \sum_{c}^{N_{tot}! / N_{z}! (N_{tot} - N_{z})!} \left[ \prod_{i_{c} \in \mathbb{S}^{c}_{z}} \pr{z_{i_{c}}} \prod_{j_{c} \in \mathbb{S}_{c}^{\lnot z}} 1 - \pr{z_{j_{k}}} \right].
-	\end{align}
-\end{theorem}
-\begin{proof}
-	Apply Definition \ref{def:expected} to Lemma \ref{lem:unique} to arrive at \Eq{eqn:complete}.
-\end{proof}
-
-Though mentioned before, we must reiterate the following caveats, because they will guide our investigation of the sleight of hand that enables the thoroughly unmotivated \Eq{eqn:stack} to masquerade as an acceptable approximation to the provably correct but computationally intractable \Eq{eqn:complete}.
-\begin{itemize}
-	\item \Pzpdf s are posteriors conditioned on data $\pr{z \gvn \data_{i}}$; referring to $\pr{z_{i}}$ is a gross abuse of notation that doesn't even make sense because the domain of $z$ is the same for any galaxy $i$.
-	\item \Pzpdf s are also conditioned on the prior information, $\tilde{N}$, used to derive them, such as a template library or training set, as well as the method used to combine this information with the data of each galaxy.
-%	\item There is also an implicit prior $I_{M}$ due to the method used to combine $I_{P}$ and $\data_{i}$ to yield an estimated posterior, $\pr{z \gvn \data_{i}, I_{P}, I_{M}}$.
-\end{itemize}
-These points will be expanded upon Here I explore what assumptions must hold for \Eq{eqn:complete} to be equivalent to \Eq{eqn:stack}.
-
-\subsubsection{Perfectly informative data}
-\sectlabel{sec:informative}
-
-The simplistic notation of the above sections glosses over something important.
-Let's investigate what differentiates \pzpdf s for each galaxy.
-The redshifts are always defined over the same dimension, but what's different is the photometric data $\data_{i}$ for each galaxy.
-The way that enters into the \pzpdf\ is that $\pr{z_{i}}$ is really a horrible shorthand for $\pr{z \gvn \data_{i}}$, the probability that a galaxy is observed at each redshift conditional on the data  observed.
-From this point on, we'll use the full form of \Eq{eqn:stack},
-\begin{align}
-\eqlabel{eqn:stackwithdata}
-\hat{N}(z) &= \sum_{i = 0}^{\ntot} \pr{z \gvn \data_{i}} .
-\end{align}
-If the data is perfectly informative, then $\pr{z \gvn \data_{i}} = \delta(z,\ z_{i}^{\dagger})$, where $z_{i}^{\dagger}$ is the true redshift of galaxy $i$.
-\Pzpdf s are not delta functions because the data are inherently noisy and because our model for the relationship between photometry and redshift is imperfect.
-However, if we wanted to write the PDF of a spectroscopic redshift, it could be considered a delta function like this.
-We know that \Eq{eqn:stack} works in this case and will answer whether \Eq{eqn:complete} yields an equivalent result in the idealized case of spectroscopic-quality observations.
-
-\begin{theorem}
-	\label{thm:informative}
-	The mathematically valid $\langle N(z') \rangle$ asymptotically approaches the result of stacking and the true number $N^{\dagger}$ of galaxies with redshift $z'$ under perfectly informative photometry, i.e. $\pr{z' \gvn \data_{i}} = \delta(z',\ z^{\dagger}_{i})$.
-\end{theorem}
-\begin{proof}
-	First, we replace all instances of $\pr{z_{i}}$ in \Eq{eqn:complete} with $\pr{z \gvn \data_{i}}$, yielding
-	\begin{align}
-	\eqlabel{eqn:proofwithdata1}
-	\langle N(z') \rangle &= \sum_{N' = 0}^{\ntot} N' \sum_{combination\ k}^{\ntot! / N'! (\ntot - N')!} \left[ \prod_{i_{k} \in \mathbb{S}^{N'; z'}_{k}} \pr{z' \gvn \data_{i_{k}}} \prod_{i_{k} \in \mathbb{S}^{\ntot - N'; \lnot z'}_{k}} 1 - \pr{z' \gvn \data_{i_{k}}} \right]
-	\end{align}
-	For perfectly informative data, each of these $\pr{z \gvn \data_{i}}$ becomes $\delta(z,\ z^{\dagger}_{i})$, making \Eq{eqn:proofwithdata1} into
-	\begin{align}
-	\eqlabel{eqn:proofwithdata2}
-	\langle N(z') \rangle &= \sum_{N' = 0}^{\ntot} N' \sum_{combination\ k}^{\ntot! / N'! (\ntot - N')!} \left[ \prod_{i_{k} \in \mathbb{S}^{N'; z'}} \delta(z', z^{\dagger}_{i_{k}}) \prod_{i_{k} \in \mathbb{S}^{\ntot - N'; \lnot z'}} 1 - \delta(z', z^{\dagger}_{i_{k}}) \right]
-	\end{align}
-	Each of the delta function terms in \Eq{eqn:proofwithdata2} will be 1 when $z' = z^{\dagger}_{i_{k}}$ and 0 otherwise.
-	There is only one combination $k^{\dagger}$ that will result in a nonzero product, the one whose $\mathbb{S}^{N'; z'}_{k}$ contains all $N' = N^{\dagger}$ galaxies with $z^{\dagger}_{i_{k}} = z'$ and no interlopers with $z^{\dagger}_{i_{k}} \neq z'$.
-	Thus there is only one nonzero term in the entire sum, and it can only correspond to 
-	\begin{align}
-	\eqlabel{eqn:proofwithdata3}
-	\langle N(z') \rangle &= N^{\dagger} \left[ \prod_{i_{k} \in \mathbb{S}^{N^{\dagger}; z'}_{k^{\dagger}}} \delta(z', z^{\dagger}_{i_{k}}) \prod_{i_{k} \in S^{\ntot - N^{\dagger}; z'}_{k^{\dagger}}} 1 - \delta(z', z^{\dagger}_{i_{k}}) \right]
-	\end{align}
-	Since the entire bracketed quantity in \Eq{eqn:proofwithdata3} is $1$, we arrive at the desired $\langle N(z') \rangle = N^{\dagger}$, the same as what stacking yields.
-\end{proof}
-
-\aim{Perhaps I should write out the result of stacking more formally as well?}
-
-To reiterate, a fully probabilistic treatment of \Nz\ is equivalent to stacking in the case of delta function \pzpdf s, like those that arise from spectroscopic redshifts, a case when both approaches recover the truth.
-\Sect{sec:alldata} constrains the response of the stacked estimator to deviations from delta function \pzpdf s and the sensitivity of its validity to realistic violations of the assumption of perfectly informative data.
-
-%\aim{what happens when we deviate away from this assumption of $p(z \mid d_{i}) = \delta(z, z_{i})$?\\
-%Figure:\\
-%left: rugplot, smoothing/histogram, recover $N(z)$\\
-%right: broadening of \zpdf s broadens $N(z)$\\
-%in realistic circumstances of photometry being noisy and less informative, stacking is guaranteed to yield an overly broad $N(z)$.}
-
-\subsubsection{Perfectly uninformative data}
-\sectlabel{sec:uninformative}
-
-In \Sect{sec:informative}, we assumed that the \pzpdf s were completely informed by the photometry, but there the notation was also overly simplistic.
-If \pzpdf s were conditioned solely on data, there would be no disagreement about how to derive them from photometric catalogs, because every approach would yield the same result.
-Thus \pzpdf s must be conditioned not only on data unique to each galaxy but also on prior information $\tilde{N}$ which could be interpreted as an interim guess for $N^{\dagger}(z')$ that may come from a template library, a training set, and/or the method by which either of those is combined with the observations.
-So, \pzpdf s should be more completely written as $\pr{z \gvn \data_{i}, \tilde{N}}$ making \Eq{eqn:stackwithdata} into
-\begin{align}
-\eqlabel{eqn:stackwithprior}
-\hat{N}(z) &= \sum_{i = 0}^{\ntot} \pr{z \gvn \data_{i}, \tilde{N}_{z}} .
-\end{align}
-If the data were totally uninformative, each galaxy would have the same $\pr{z \gvn \data_{i}, \tilde{N}} = \pr{z \gvn \tilde{N}}$.
-Now, we consider what happens to \Eq{eqn:complete} under perfectly uninformative data.
-
-\begin{theorem}
-	\label{thm:uninformative}
-	The mathematically valid $\langle N(z') \rangle$ asymptotically approaches the result of stacking and the true number $N^{\dagger}$ of galaxies with redshift $z'$ under a special case of perfectly uninformative photometry and perfect prior information.
-\end{theorem}
-\begin{proof}
-	To start, let's update \Eq{eqn:complete} to reflect our new understanding of the role of the prior $\tilde{N}$ in \pzpdf s.
-	\begin{align}
-	\label{eqn:proofwithprior1}
-	\langle N(z') \rangle &= \sum_{N' = 0}^{\ntot} N' \sum_{combination\ k}^{\ntot! / N'! (\ntot - N')!} \left[ \prod_{i_{k} \in \mathbb{S}^{N'; z'}_{k}} \pr{z' \gvn \data_{i_{k}}, \tilde{N}} \prod_{i_{k} \in \mathbb{S}^{\ntot - N'; \lnot z'}_{k}} 1 - \pr{z' \gvn \data_{i_{k}}, \tilde{N}} \right]
-	\end{align}
-	Perfectly uninformative data corresponds to $\pr{z \gvn \tilde{\data_{i}}, \tilde{N}} = \tilde{N} / \ntot$, so we make that substitution into \Eq{eqn:complete}.
-	\begin{align}
-	\eqlabel{eqn:proofwithprior2}
-	\langle N(z') \rangle &= \sum_{N' = 0}^{\ntot} N' \sum_{combination\ k}^{\ntot! / N'! (\ntot - N')!} \left[ \prod_{i_{k} \in \mathbb{S}^{N'; z'}} \frac{\tilde{N}}{\ntot} \prod_{i_{k} \in \mathbb{S}^{\ntot - N'; \lnot z'}} 1 - \frac{\tilde{N}}{\ntot} \right]
-	\end{align}
-	Without having to worry about $z^{\dagger}_{i_{k}}$, we can very straightforwardly rewrite this in the form of \Eq{eqn:binomial} as
-	\begin{align}
-	\eqlabel{eqn:proofwithprior3}
-	\langle N(z') \rangle &= \sum_{N' = 0}^{\ntot} N' \sum_{combination\ k}^{\ntot! / N'! (\ntot - N')!} \left[ \left(\frac{\tilde{N}}{\ntot}\right)^{N'} \left(1 - \frac{\tilde{N}}{\ntot}\right)^{\ntot - N'} \right] .
-	\end{align}
-	Since the \pzpdf s are identical to one another, the bracketed terms are the same for a given $N'$, meaning each term in the inner sum is the same, so we can eliminate it as 
-	\begin{align}
-	\eqlabel{eqn:proofwithprior4}
-	\langle N(z') \rangle &= \sum_{N' = 0}^{\ntot} N' \frac{\ntot!}{N'! (\ntot - N')!} \left(\frac{\tilde{N}}{\ntot}\right)^{N'} \left(1 - \frac{\tilde{N}}{\ntot}\right)^{\ntot - N'} .
-	\end{align}
-	Noting that the first term with $N' = 0$ always vanishes, canceling factors of $N'$, and factoring out a guess inspired by the coin-flipping analogy, we can rewrite \Eq{eqn:proofwithprior4} as
-	\begin{align}
-	\eqlabel{eqn:proofwithprior5}
-	\langle N(z') \rangle &= \ntot \frac{\tilde{N}}{\ntot} \sum_{N' = 1}^{\ntot} \frac{(\ntot - 1)!}{(N' - 1)! ((\ntot - 1) - (N' - 1))!} \left(\frac{\tilde{N}}{\ntot}\right)^{N' - 1} \left(1 - \frac{\tilde{N}}{\ntot}\right)^{(\ntot - 1) - (N' - 1)} .
-	\end{align}
-	From here, we can recursively apply \Eq{eqn:binomial} to yield
-	\begin{align}
-	\eqlabel{eqn:proofwithprior6}
-	\langle N(z') \rangle &= \tilde{N} \left(\frac{\tilde{N}}{\ntot} + 1 - \frac{\tilde{N}}{\ntot}\right)^{\ntot - 1} ,
-	\end{align}
-	and since the term in parentheses is $1$, we arrive at $\langle N(z') \rangle = \tilde{N}$ for this case.
-\end{proof}
-
-If we stacked such a catalog, we would be taking the average of identical distributions, so $\hat{N}(z) = \ntot \pr{z \gvn \tilde{N}} = \tilde{N}$, the same as the result of Theorem \ref{thm:uninformative}.
-Everything thus far has not compared either of these to the true value $N^{\dagger}$ of the redshift distribution.
-Indeed, neither can approach the truth unless $\tilde{N} = N^{\dagger}$, i.e. the prior must be the truth in order for stacking to work.
-If we knew the truth sufficiently to use it as a prior, then we wouldn't need \lsst!
-%\aim{Figure: sum of same $N_{z}$ building up to that times $N_{tot}$}
-The sensitivity of the stacked estimator of the redshift distribution to deviations from this assumption is explored in \Sect{sec:interim}.
-
-\subsection{Summary}
-\sectlabel{sec:disco}
-
-The preceding proofs show not only the most complete and correct way to frame the redshift distribution \Nz, but they also address the question of how stacking can fool even clever astrophysicists into thinking it works.
-\aim{Be explicit in \Sect{sec:pedanticres} about how these conditions weren't as far from true in the past.}
-The only cases in which stacking works are when the \pzpdf s are perfect or when the prior information is perfect.
-%when the right procedure is equivalent to stacking, but in that final case, it only approaches the true $\textbf{N}_{z}$ when $\tilde{n}(z) = \frac{\textbf{N}_{z}}{N_{tot}}$, i.e. when the truth is already known and baked into the PDFs.\\
-Note that if those conditions held, we would not need \lsst\ at all.
-Though the conditions of \Sect{sec:informative} and \Sect{sec:uninformative} may not have been strongly violated in the past, they will be nowhere near satisfied for ongoing and upcoming surveys.
-Thus, we must not stack!
-\aim{Maybe beef up this section to tie in to cosmology.}
-
-\section{The \Chippr\ Method}
+\section{Method}
 \sectlabel{sec:meth}
 
 \aim{Q: How can we improve the effectiveness of using \pzpdf s in inference?\\
@@ -437,9 +138,9 @@ The likelihoods can be thought of as cuts through the joint probability space of
 	\begin{center}
 		\includegraphics[width=\textwidth]{figures/chippr/jain05.png}
 		\caption{
-			\aim{Cite Jain+05, WebPlotDigitizer.}
+			\aim{Cite Jain+05, WebPlotDigitizer for inspiring this figure.}
 			A generic probability space of redshift (x-axis) and data (y-axis), projected into a single dimension, with vertical cuts and marginals (cyan) indicating the construction of likelihoods and horizontal cuts and marginals (magenta) indicating the construction of posteriors.
-			\aim{Maybe choose better colors here?}
+			\aim{I need to fix the hideous font and possibly choose better colors.}
 		}
 		\figlabel{fig:pedagogical_scatter}
 	\end{center}
@@ -758,7 +459,7 @@ We note that $KL_{\dagger,\ddagger} \neq KL_{\ddagger,\dagger}$ and is only inte
 In simulated tests, $\ndphi^{\dagger}$ is the true value and $\ndphi^{\ddagger}$ is the value produced by one of the methods in question.  
 \aim{Triple check that this isn't backwards of what I did.}
 
-\section{\chippr\ Validation}
+\section{Validation}
 \sectlabel{sec:alldata}
 
 We compare the results of \Chippr\ to those of stacking and the histogram of \pzpdf\ maxima (modes) on mock data in the form of catalogs of emulated \pzpdf s generated via the forward model discussed in \Sect{sec:forward}.
@@ -1305,4 +1006,3 @@ Future work will also include the extension of this fully probabilistic approach
 \section*{Chapter acknowledgements}
 
 I thank Elisabeth Krause for assistance with the \texttt{CosmoLike} code, Mohammadjavad Vakili for statistical insights, Geoffrey Ryan for programming advice, and Boris Leistedt for other helpful comments in the development of \Chippr.
-I also thank David Alonso, Daniel Gruen, Boris Leistedt, Rachel Mandelbaum, Mark Manera, Eduardo Rozo, and Josh Speagle for additional feedback on the mathematical foundations of this work.
