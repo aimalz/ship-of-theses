@@ -33,7 +33,7 @@
 \def\x{{\mathbf{x}}}
 \def\E{{\mathbb{E}}}
 
-\chapter{ Evaluation of probabilistic photometric redshift estimation approaches for \textsc{LSST}\chaplabel{pzdc1}}
+\chapter{ Evaluation of probabilistic photometric redshift estimation approaches \chaplabel{pzdc1} }
 
 This \paper\ represents joint work with Sam Schmidt (UC Davis) and the entire Photo-Z Working Group (\pzwg) of the \desc, which is intended for submission to MNRAS and whose public draft\footnote{\url{{https://github.com/LSSTDESC/PZDC1paper}}} is currently in \desc\ internal review by Mike Troxel (Duke), Markus Michael Rau (CMU), and Daniel Gruen (Stanford).
 
@@ -867,7 +867,7 @@ In appendices, we also present metrics of point estimates and a prevalent summar
 We observe that no one code dominates in all metrics, and that the standard metrics of \pzpdf s and the stacked estimator of the redshift distribution can be gamed by a vacuously wrong procedure that asserts the prior over the data.
 We emphasize to the \pz\ community that \textbf{metrics used to vet \pzpdf\ methods must be scrutinized to ensure they correspond to the quantities that matter to our science}.
 
-\section{Evaluation of the redshift distribution}
+\section*{Evaluation of the redshift distribution}
 \sectlabel{sec:moments}
 %(Alex Malz)
 
@@ -978,7 +978,7 @@ Accuracy of the moments varies widely between codes, raising concerns about the 
 \skynet\ exhibits redshift bias in Figure~\ref{fig:nz} and is a clear outlier in the first moment of $\hat{N}(z)$ in Table~\ref{tab:moments}.
 The \skynet\ algorithm employs a random subsampling of the training set without testing that the subset is representative of the full population, and the implementation used here does not upweight rarer low- and high-redshift galaxies, as in \citet{Bonnett:15}, suggesting a possible cause that may be addressed in future work.
 
-\section{\Pz\ point estimation and metrics}
+\section*{\Pz\ point estimation and metrics}
 \sectlabel{sec:allpointmetrics}
 
 While this work assumes that science applications value the information of the full \pzpdf, we present conventional metrics of \pz\ point estimates as a quick and dirty diagnostic tool and to facilitate direct comparisons to historical studies.
