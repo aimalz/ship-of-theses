@@ -53,7 +53,7 @@ The prevailing way to estimate \nz\ for a sample of $N_{tot}$ galaxies $i$ is to
 \end{align}
 The stacked estimator of the redshift density function is effectively an average of the \pzpdf\ catalog and, as I will show in this \paper, not in general mathematically valid.
 Stacking is considered the preferred method for obtaining \Nz\ from a dataset of interim photo-$z$ posteriors \citep{Sheldon2012, Kelly2014, Benjamin2013, Bonnett2015a, Viironen2015, Asorey2016}.  
-However, it must be noted here that \Eq{eq:stack} is not in general mathematically valid.  
+However, it must be noted here that \Eq{eqn:stack} is not in general mathematically valid.  
 (See \citet{Hogg2012} for a complete discussion.)  
 The estimator produced by stacking shall henceforth be referred to as the ``stacked'' estimator.
 
@@ -226,7 +226,7 @@ What we wish to estimate is then the full log-posterior probability distribution
 
 By Bayes' Rule, the full log-posterior
 \begin{equation}
-\eqlabel{eq:basicbayes}
+\eqlabel{eqn:basicbayes}
 \ln[\pr{\ndphi \gvn \{\data_{j}\}}] = \ln[\pr{\{\data_{j}\} \gvn \ndphi}] + \ln[\pr{\ndphi}] - \ln[\pr{\{\data_{j}\}}]
 \end{equation}
 may be expressed in terms of the full log-likelihood probability distribution (hereafter the full log-likelihood) $\ln[\pr{\{\data_{j}\} \gvn \ndphi}]$ by way of a hyperprior log-probability distribution (hereafter the hyperprior) $\ln[\pr{\ndphi}]$ over the hyperparameters and the log-evidence probability of the data $\ln[\pr{\{\data_{j}\}}]$.
@@ -234,14 +234,14 @@ However, the evidence is rarely known, so we probe the full log-posterior modulo
 
 The full log-likelihood may be expanded in terms of a marginalization over the redshifts as parameters, as in 
 \begin{equation}
-\eqlabel{eq:marginalize}
+\eqlabel{eqn:marginalize}
 \ln[\pr{\{\data_{j}\} \gvn \ndphi}] = \ln\left[\integral{\pr{\{\data_{j}\} \gvn \{z_{j}\}} \pr{\{z_{j}\} \gvn \ndphi}}{\{z_{j}\}}\right].
 \end{equation}
 
 We shall make two assumptions of independence in order to make the problem tractable; their limitations are be discussed below.  
 First, we take $\ln[\pr{\{\data_{j}\} \gvn \{z_{j}\}}]$ to be the sum of $J$ individual log-likelihood distribution functions $\ln[\pr{\data_{j} \gvn z_{j}}]$, as in 
 \begin{equation}
-\eqlabel{eq:indiedat}
+\eqlabel{eqn:indiedat}
 \ln[\pr{\{\data_{j}\} \gvn \{z_{j}\}}] = \sum_{j=1}^{J}\ \ln[\pr{\data_{j} \gvn z_{j}}],
 \end{equation}
 a result of the definition of probabilistic independence encoded by the box in \Fig{fig:pgm}.
@@ -249,7 +249,7 @@ Second, we shall assume the true redshifts $\{z_{j}\}$ are $J$ independent draws
 Additionally, $J$ itself is a Poisson random variable.  
 The combination of these assumptions is given by 
 \begin{equation}
-\eqlabel{eq:indie}
+\eqlabel{eqn:indie}
 \ln[\pr{\{z_{j}\} \gvn \ndphi}] = -\integral{f(z; \ndphi)}{z} + \sum_{j=1}^{J}\ \ln[\pr{z_{j} \gvn \ndphi}].
 \end{equation}
 %It is important to note that the integral $\integral{n(z)}{z} N(z)\ dz$ is not constrained to equal the variable defining the Poisson distribution but instead $J$ by \Eq{eq:definition}, which can be thought of as another parameter.  
@@ -257,7 +257,7 @@ The derivation differs when $J$ is not known, say, when we want to learn about a
 A detailed discussion of this matter may be found in \citet{Foreman-Mackey2014}.  
 Applying Bayes' Rule, we may combine terms to obtain 
 \begin{equation}
-\eqlabel{eq:posterior}
+\eqlabel{eqn:posterior}
 \ln[\pr{\ndphi \gvn \{\data_{j}\}}] \propto \ln[\pr{\ndphi}] - \integral{f(z; \ndphi)}{z} + \sum_{j=1}^{J}\ln\left[\integral{\pr{\data_{j} \gvn z} \pr{z \gvn \ndphi}}{z}\right].
 \end{equation}
 
@@ -266,40 +266,40 @@ Applying Bayes' Rule, we may combine terms to obtain
 %Though probabilistic photo-$z$s are typically reported as generic probability distributions $p(z_{j})$, the methods that produce them may be understood to always yield posteriors, probability distributions conditioned on the data we believe to be true.  
 %If they were not based in this assumption, they would require a sum over an infinite space of possible datasets.
 
-Since we only have access to implicit \pz\ posteriors, we must be able to write the full log-posterior in terms of implicit \pz\ log-posteriors rather than the log-likelihoods of \Eq{eq:posterior}.
+Since we only have access to implicit \pz\ posteriors, we must be able to write the full log-posterior in terms of implicit \pz\ log-posteriors rather than the log-likelihoods of \Eq{eqn:posterior}.
 To do so, we will need an explicit statement of this implicit prior $\ndphi^{*}$ for whatever method is chosen to produce the implicit \pz\ posteriors.  
 
 To perform the necessary transformation from likelihoods to posteriors, we follow the reasoning of \citet{Foreman-Mackey2014}.  
-Let us consider the probability of the parameters conditioned on the data and an interim prior and rewrite the problematic likelihood of \Eq{eq:posterior} as 
+Let us consider the probability of the parameters conditioned on the data and an interim prior and rewrite the problematic likelihood of \Eq{eqn:posterior} as 
 \begin{equation}
-\eqlabel{eq:trick}
+\eqlabel{eqn:trick}
 \ln[\pr{\data_{j} \gvn z}] = \ln[\pr{\data_{j} \gvn z}] + \ln[\pr{z \gvn \data_{j}, \ndphi^{*}}] - \ln[\pr{z \gvn \data_{j}, \ndphi^{*}}].
 \end{equation}
 
-Once the implicit prior $\ndphi^{*}$ is explicitly introduced, we may expand the last term in \Eq{eq:trick} according to Bayes' Rule to get 
+Once the implicit prior $\ndphi^{*}$ is explicitly introduced, we may expand the last term in \Eq{eqn:trick} according to Bayes' Rule to get 
 \begin{equation}
-\eqlabel{eq:expand}
+\eqlabel{eqn:expand}
 \ln[\pr{\data_{j} \gvn z}] = \ln[\pr{\data_{j} \gvn z}] + \ln[\pr{z \gvn \data_{j}, \ndphi^{*}}] + \ln[\pr{\data_{j} \gvn \ndphi^{*}}] - \ln[\pr{z \gvn \ndphi^{*}}] - \ln[\pr{\data_{j} \gvn z, \ndphi^{*}}].
 \end{equation}
 Because there is no direct dependence of the data upon the hyperparameters, we may again expand the term $\ln[\pr{\data_{j} \gvn z, \ndphi^{*}}]$ to obtain 
 \begin{equation}
-\eqlabel{eq:indterm}
+\eqlabel{eqn:indterm}
 \ln[\pr{\vec{d}_{j} \gvn z}] = \ln[\pr{\data_{j} \gvn z}] + \ln[\pr{z \gvn \data_{j}, \ndphi^{*}}] + \ln[\pr{\data_{j} \gvn \ndphi^{*}}] - \ln[\pr{z \gvn \ndphi^{*}}] - \ln[\pr{\data_{j} \gvn z}] - \ln[\pr{\data_{j} \gvn \ndphi^{*}}].
 \end{equation}
 Canceling the undesirable terms for the inaccessible likelihood $\ln[\pr{\data_{j} \gvn z}]$ and trivial $\ln[\pr{\data_{j} \gvn \ndphi^{*}}]$ yields
 \begin{equation}
-\eqlabel{eq:cancel}
+\eqlabel{eqn:cancel}
 \ln[\pr{\data_{j} \gvn z}] = \ln[\pr{z \gvn \data_{j}, \ndphi^{*}}]  - \ln[\pr{z \gvn \ndphi^{*}}].
 \end{equation}
 We put this all together to get the full log-posterior probability distribution of 
 \begin{equation}
-\eqlabel{eq:final}
+\eqlabel{eqn:final}
 \ln[\pr{\ndphi \gvn \{\data_{j}\}}] \propto \ln[\pr{\ndphi}] + \ln \left[\integral{\exp \left[\sum_{j=1}^{J} \left(\ln[\pr{z \gvn \data_{j}, \ndphi^{*}}] + \ln[\pr{z \gvn \ndphi}] - \ln[\pr{z \gvn \ndphi^{*}}]\right)\right]}{z}\right] ,
 \end{equation}
 
-The argument of the integral in the log-posterior of \Eq{eq:final} depends solely on knowable quantities (and those we must explicitly assume) and can be calculated for a given sample of \pz\ log-posteriors $\{\ln[\pr{z \gvn \data_{j}, \ndphi^{*}}]\}$ and the implicit prior $\pr{z \gvn \ndphi^{*}}$ with which they were obtained, noting the relation of 
+The argument of the integral in the log-posterior of \Eq{eqn:final} depends solely on knowable quantities (and those we must explicitly assume) and can be calculated for a given sample of \pz\ log-posteriors $\{\ln[\pr{z \gvn \data_{j}, \ndphi^{*}}]\}$ and the implicit prior $\pr{z \gvn \ndphi^{*}}$ with which they were obtained, noting the relation of 
 \begin{equation}
-\eqlabel{eq:params}
+\eqlabel{eqn:params}
 \pr{z \gvn \ndphi} = \frac{f(z; \ndphi)}{\integral{f(z; \ndphi)}{z}}.
 \end{equation}
 Since we cannot know constant of proportionality, we sample the desired full log-posterior $\ln[\pr{\ndphi \gvn \{\data_{j}\}}]$ using Monte Carlo-Markov chain (MCMC) methods.  
@@ -318,7 +318,7 @@ The method outlined here is valid regardless of how the implicit \pz\ log-poster
 Finally, we explicitly review the assumptions made by this approach, which are as follows:
 
 \begin{enumerate}
-	\item Photometric measurements of galaxies are statistically independent Poisson draws from the set of all galaxies such that \Eq{eq:indiedat} and \Eq{eq:indie} hold.
+	\item Photometric measurements of galaxies are statistically independent Poisson draws from the set of all galaxies such that \Eq{eqn:indiedat} and \Eq{eqn:indie} hold.
 	\item We take the reported \pzip s to be accurate, free of model misspecification; draws thereof must not be inconsistent with the distribution of photometry and redshifts.
 	Furthermore, we must be given the implicit prior $\ndphi^{*}$ used to produce the \pzip s.
 	\item We must assume a hyperprior distribution $\pr{\ndphi}$ constraining the underlying probability distribution of the hyperparameters, which is informed by our prior beliefs about the true redshift distribution function.
@@ -359,7 +359,7 @@ with $K$ bins of width $\delta z^{1}, \dots, \delta z^{K}$ defined by endpoints 
 Thus each $\pr{z \gvn \data_{j}} = f(z; \ndphi_{j})$ has parameters $\ndphi_{j}$ that are defined in the same basis as those of \nz.
 To infer the full log-posterior distribution $\ln[\pr{\ndphi \gvn \{\data_{j}\}}]$, one must provide a plaintext file with $K+1$ redshift bin endpoints $\{z_{k}\}$, the parameters $\ndphi^{*}$ of the implicit log-prior, and the parameters $\{\ndphi_{j}\}$ of the log-posteriors $\ln[\pr{z \gvn \data_{j}, \ndphi^{*})}$.
 
-The \emcee \citep{Foreman-Mackey2013} implementation of ensemble sampling is used to sample the full log-posterior of \Eq{eq:final}. 
+The \emcee \citep{Foreman-Mackey2013} implementation of ensemble sampling is used to sample the full log-posterior of \Eq{eqn:final}. 
 \chippr\ accepts a configuration file of user-specified parameters, among them the number $W$ of walkers.
 At each iteration $i$ and for each walker, a proposal distribution $\hat{\ndphi}_{i}$ is drawn from the log-prior distribution and evaluated for acceptance to or rejection from the full log-posterior distribution.
 
@@ -393,7 +393,7 @@ Low autocorrelation times are a necessary but not always sufficient convergence 
 
 The Gelman-Rubin statistic
 \begin{equation}
-\eqlabel{eq:gr}
+\eqlabel{eqn:gr}
 R_{k} = \sqrt{\frac{(1 - \frac{2}{I_{0}}) w_{k} + \frac{2}{I_{0}} b_{k}}{w_{k}}},
 \end{equation}
 a weighted sum of the mean $w_{k}$ of the variances within individual walkers' chains and the variance $b_{k}$ between chains of different walkers $m$, is calculated over each sub-run $i$ to determine the duration of the burn-in period.  
@@ -404,12 +404,12 @@ Convergence is achieved when the statistic approaches unity.
 
 In this study, we compare the results of \Eq{eqn:fullpost} to those of the two most common approaches to estimating \nz\ from a catalog of \pzpdf s: the distribution $n(z_{\mathrm{max}})$ of the redshifts at maximum posterior probability
 \begin{equation}
-\eqlabel{eq:mmap}
+\eqlabel{eqn:mmap}
 f^{MMAP}(z; \hat{\ndphi}) = \sum_{j=1}^{J}\ \delta(z, \mathrm{mode}[\pr{z \gvn \data_{j}, \ndphi^{*}}])
 \end{equation}
 (i.e. the distribution of modes of the \pzpdf s) and the stacked estimator of \Eq{eqn:stacked}, which can be rewritten as 
 \begin{equation}
-\eqlabel{eq:stack}
+\eqlabel{eqn:stacked}
 f^{stack}(z; \hat{\ndphi}) = \sum_{j=1}^{J}\ \pr{z \gvn \data_{j}, \ndphi^{*}}
 \end{equation}
 in terms of the implicit \pz\ posteriors we have.
@@ -425,7 +425,7 @@ When the point estimator of redshift is equal to the true redshift, stacking del
 However, stacking is in general applied indiscriminately to broader \pzpdf s and imperfect point estimators of redshift.  
 It is for these reasons that alternatives are considered here.
 
-A final estimator of the hyperparameters is the maximum marginalized likelihood estimator (MMLE), the value of $\ndphi$ maximizing the log posterior given by \Eq{eq:final} using any optimization code.  
+A final estimator of the hyperparameters is the maximum marginalized likelihood estimator (MMLE), the value of $\ndphi$ maximizing the log posterior given by \Eq{eqn:final} using any optimization code.  
 To compare with sampling, the MMLE also depends on the choice of the hyperprior distribution, and it does not produce a full posterior probability distribution over the parameters of interest, only point estimators.  
 It must be noted that computation of the MMLE may be unstable depending on the strengths and weaknesses of the optimizer.  
 In general, derivatives will not be available for the full posterior distribution, restricting optimization methods used.
@@ -450,7 +450,7 @@ Since MCMC samples of hyperparameters are Gaussian distributions, we can quantif
 
 In simulated cases where the true parameter values are known, we calculate the Kullback-Leibler divergence (KLD), given by 
 \begin{equation}
-\eqlabel{eq:kl}
+\eqlabel{eqn:kl}
 KL_{\dagger,\ddagger} = \integral{\pr{z \gvn \ndphi^{\dagger}} \ln \left[ \frac{\pr{z \gvn \ndphi^{\dagger}}}{\pr{z \gvn \ndphi^{\ddagger}}} \right]}{z} ,
 \end{equation}
 which measures a distance between from parameter values $\ndphi^{\ddagger}$ to parameter values $\ndphi^{\dagger}$, which is invariant under changes of variables.  
@@ -490,6 +490,8 @@ The mock data emulates the three sources of error of highest concern to the \pz\
 			The points indicate samples in the space of mock data and redshift, akin to the standard scatterplots of true and estimated redshift.
 			Colored lines indicate posterior probabilities evaluated at the given estimated redshift.
 			The insets show marginal histograms (gray) in each dimension, that can be compared with the true \nz\ used to make the figure (blue curve) to see the effect of the isolated systematic.
+			\aim{Make the labels bigger if there's time for it.
+			Also, fix the scaling on the insets.}
 		}
 		\figlabel{fig:mega_scatter}
 	\end{center}
