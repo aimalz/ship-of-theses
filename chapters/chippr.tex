@@ -472,8 +472,12 @@ We compare the results of \Chippr\ to those of stacking and the histogram of \pz
 	\end{center}
 \end{figure*}
 
-The true redshift distribution used in these tests is a particular instance of the gamma function that has also been used in forecasting studies for \des\ and \lsst.
-\aim{Add in the math and constants here.}
+The true redshift distribution used in these tests is a particular instance of the gamma function
+\begin{equation}
+\eqlabel{eqn:gamma}
+n^{\dagger}(z) = \frac{1}{2 c_{z}} \left(\frac{z}{c_{z}}\right)^{2}\ \exp\left[-\frac{z}{c_{z}}\right]
+\end{equation}
+with $c_{z} = 0.3$ that has also been used in forecasting studies for \des\ and \lsst.
 
 The mock data emulates the three sources of error of highest concern to the \pz\ community: intrinsic scatter, catastrophic outliers, and systematic bias.
 \Fig{fig:mega_scatter} illustrates these three effects individually at twice the tolerance of \lsst.
