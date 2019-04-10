@@ -467,7 +467,9 @@ We compare the results of \Chippr\ to those of stacking and the histogram of \pz
 \begin{figure*}
 	\begin{center}
 		\includegraphics[width=\textwidth]{figures/chippr/flowchart.png}
-		\caption{A flow chart illustrating the forward model used to generate mock data in the validation of \Chippr, as described in \Sect{sec:forward}.}
+		\caption{A flow chart illustrating the forward model used to generate mock data in the validation of \Chippr, as described in \Sect{sec:forward}.
+		Ovals indicate a quantity I choose in order to generate the data, rectangles indicate an operation I perform, and rounded rectangles indicate a quantity created by the forward model.
+		Arrows indicate the inputs and outputs of each operation performed to simulate mock \pzpdf\ catalogs.}
 		\figlabel{fig:flowchart}
 	\end{center}
 \end{figure*}
@@ -477,7 +479,8 @@ The true redshift distribution used in these tests is a particular instance of t
 \eqlabel{eqn:gamma}
 n^{\dagger}(z) = \frac{1}{2 c_{z}} \left(\frac{z}{c_{z}}\right)^{2}\ \exp\left[-\frac{z}{c_{z}}\right]
 \end{equation}
-with $c_{z} = 0.3$ that has also been used in forecasting studies for \des\ and \lsst.
+with $c_{z} = 0.3$, because it has been used in forecasting studies for \des\ and \lsst.
+\aim{I learned this from talking to people and don't know of a published source that talks about the nitty gritty of the internal validation tests performed before there was data.}
 
 The mock data emulates the three sources of error of highest concern to the \pz\ community: intrinsic scatter, catastrophic outliers, and systematic bias.
 \Fig{fig:mega_scatter} illustrates these three effects individually at twice the tolerance of \lsst.
@@ -809,12 +812,25 @@ The alternatives, however, are biased by the implicit prior except where it is f
 \sectlabel{sec:lsstdemo}
 
 The \lsst\ Science Requirements Document (SRD)\footnote{\url{https://docushare.lsstcorp.org/docushare/dsweb/Get/LPM-17}} states that the main cosmological sample of $\sim 10^{7}$ galaxies must have \pz s satisfying root-mean-square error $\sigma_z < 0.02 (1+z)$, $3 \sigma$ catastrophic outlier rate $< 10\%$, and bias $< 0.003$.
+To test the impact of these uncertainties, we simulated mock data with all three effects and did a Fisher matrix forecast using \cosmolike.
+\aim{Cite CosmoLike.}
+
+Using 35 evenly spaced tomographic bins $0.0101 < z < 3.4101$, 
+\aim{Update figures for 35 rather than 15 bins.}
+
+\begin{figure*}
+	\begin{center}
+		\includegraphics[width=\textwidth]{figures/chippr/cosmolike_inputs.png}
+		\caption{The underlying, drawn, and binned, \nz\ for the four tomographic bins.}
+		\figlabel{fig:lsstdemo}
+	\end{center}
+\end{figure*}
 
 \begin{figure*}
 	\begin{center}
 		\includegraphics[width=0.45\textwidth]{figures/chippr/lsst_scatter.png}
 		\includegraphics[width=0.45\textwidth]{figures/chippr/lsst_log_estimators.png}
-		\caption{Using LSST numbers
+		\caption{T
 		\aim{Rerun this with 35 bins and sampling to match other figures.}}
 		\figlabel{fig:lsstdemo}
 	\end{center}
