@@ -318,9 +318,9 @@ Now, we consider what happens to \Eq{eqn:complete} under perfectly uninformative
 	To start, let's update \Eq{eqn:complete} to reflect our new understanding of the role of the prior $\tilde{N}$ in \pzpdf s.
 	\begin{align}
 	\label{eqn:proofwithprior1}
-	\langle N(z') \rangle &= \sum_{N' = 0}^{\ntot} N' \sum_{combination\ k}^{\ntot! / N'! (\ntot - N')!} \left[ \prod_{i_{k} \in \mathbb{S}^{N'; z'}_{k}} \pr{z' \gvn \data_{i_{k}}, tilde{N}} \prod_{i_{k} \in \mathbb{S}^{\ntot - N'; \lnot z'}_{k}} 1 - \pr{z' \gvn \data_{i_{k}}, \tilde{N}} \right]
+	\langle N(z') \rangle &= \sum_{N' = 0}^{\ntot} N' \sum_{combination\ k}^{\ntot! / N'! (\ntot - N')!} \left[ \prod_{i_{k} \in \mathbb{S}^{N'; z'}_{k}} \pr{z' \gvn \data_{i_{k}}, \tilde{N}} \prod_{i_{k} \in \mathbb{S}^{\ntot - N'; \lnot z'}_{k}} 1 - \pr{z' \gvn \data_{i_{k}}, \tilde{N}} \right]
 	\end{align}
-	Perfectly uninformative data corresponds to $\pr{z \gvn \tilde{data_{i}}, \tilde{N}} = \tilde{N} / \ntot$, so we make that substitution into \Eq{eqn:complete}.
+	Perfectly uninformative data corresponds to $\pr{z \gvn \tilde{\data_{i}}, \tilde{N}} = \tilde{N} / \ntot$, so we make that substitution into \Eq{eqn:complete}.
 	\begin{align}
 	\eqlabel{eqn:proofwithprior2}
 	\langle N(z') \rangle &= \sum_{N' = 0}^{\ntot} N' \sum_{combination\ k}^{\ntot! / N'! (\ntot - N')!} \left[ \prod_{i_{k} \in \mathbb{S}^{N'; z'}} \frac{\tilde{N}}{\ntot} \prod_{i_{k} \in \mathbb{S}^{\ntot - N'; \lnot z'}} 1 - \frac{\tilde{N}}{\ntot} \right]
@@ -363,7 +363,7 @@ The preceding proofs show not only the most complete and correct way to frame th
 The only cases in which stacking works are when the \pzpdf s are perfect or when the prior information is perfect.
 %when the right procedure is equivalent to stacking, but in that final case, it only approaches the true $\textbf{N}_{z}$ when $\tilde{n}(z) = \frac{\textbf{N}_{z}}{N_{tot}}$, i.e. when the truth is already known and baked into the PDFs.\\
 Note that if those conditions held, we would not need \lsst\ at all.
-Though the conditions of \Sect{sec:informative} and \Sect{sec:prior} may not have been strongly violated in the past, they will be nowhere near satisfied for ongoing and upcoming surveys.
+Though the conditions of \Sect{sec:informative} and \Sect{sec:uninformative} may not have been strongly violated in the past, they will be nowhere near satisfied for ongoing and upcoming surveys.
 Thus, we must not stack!
 \aim{Maybe beef up this section to tie in to cosmology.}
 
