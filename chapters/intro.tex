@@ -1,4 +1,7 @@
-\chapter*{Introduction}\addcontentsline{toc}{chapter}{Introduction}
+\renewcommand{\chapid}{intro}
+
+\chapter{ Introduction \chaplabel{intro} }
+%\addcontentsline{toc}{chapter}{Introduction}
 
 %[Why do we need redshifts? cosmology problems and galaxy evolution, use as distance proxy via Hubble law]
 
@@ -11,19 +14,21 @@ Many more \pz s may be obtained in the time it would take to observe a smaller n
 Calculations of correlation functions of cosmic shears and galaxy positions require large numbers of high-confidence redshifts of surveyed galaxies.  
 
 However, \pz s are susceptible to inaccuracy and imprecision via a number of effects, particularly their inherent noisiness due to the coarseness of photometric filters, catastrophic errors in which galaxies of one type at one redshift are mistaken for galaxies of another type at a different redshift, and systematics introduced by observational techniques, data reduction processes, and training set limitations.  
-The projection of these effects into the space of true and estimated redshifts is discussed extensively in \Chap{pzdc1}, and their impact on cosmological parameter constraints is addressed in \Chap{chippr}, and \Fig{fig:pedagogical_scatter} in particular.
+The projection of these effects into the space of true and estimated redshifts is discussed extensively in \Chap{pzdc1}, and their impact on cosmological parameter constraints is addressed in \Chap{chippr}, and Figure~\ref{chippr:fig:fig:pedagogical_scatter} in particular.
 Based on the goals of a photometric galaxy survey, requirements can be placed on the accuracy of \pz\ estimates.
-For example, the Large Synoptic Survey Telescope (\lsst) states requirements for the main cosmological sample in the \lsst\ Science Requirements Document (SRD)\footnote{\url{https://docushare.lsstcorp.org/docushare/dsweb/Get/LPM-17}} and reproduced in \Tab{tab:lsst-srd}.
+For example, the Large Synoptic Survey Telescope (\lsst) states requirements for the main cosmological sample in the \lsst\ Science Requirements Document (SRD)\footnote{\url{https://docushare.lsstcorp.org/docushare/dsweb/Get/LPM-17}} and reproduced in \Tab{tab:lsstsrd}.
 
 \begin{table}
+	\begin{center}
+		\caption{\Pz\ requirements for \lsst\ cosmology.}
+		\tablabel{tab:lsstsrd}
 	\begin{tabular}{ll}
 		Number of galaxies & $\sim 10^{7}$\\
 		Root-mean-square error & $\sigma_z < 0.02 (1+z)$\\
 		$3 \sigma$ catastrophic outlier rate & $< 10\%$\\
 		bias & $< 0.003$
 	\end{tabular}
-\tablabel{tab:lsstsrd}
-\caption{\Pz\ requirements for \lsst\ cosmology.}
+	\end{center}
 \end{table}
 
 In addition to these limitations in accuracy, there is also the matter of uncertainty quantification; \pz s are often reported with presumed-Gaussian error bars derived without inclusion of all systematic errors, including the different selection effects between the photometric color- or magnitude-spaces of galaxies for which \pz s are desired and galaxies with \sz s are used to calibrate \pz\ estimators.
@@ -130,7 +135,7 @@ Here, I describe my specific contributions to each \chapname and acknowledge the
 	The \pzpdf\ codes themselves were written and/or run by Ibrahim Almosallam (King Abdulaziz City for Science and Technology), Massimo Brescia (INAF-Capodimonte), Stefano Cavuoti (University Federico II), Johann Cohen-Tanugi (Universit\'e de Montpellier),  Andy Connolly (UW), Peter Freeman (CMU), Melissa Graham (UW), Rafael Izbicki (Federal University of Sao Carlos), Matt Jarvis (Oxford; University of the Western Cape), Ann Lee (CMU), Giuseppe Longo (University Federico II), Erfan Nourbakhsh (UC Davis), Eric Nuss (Universit\'e de Montpellier), Taylor Pospisil (CMU), Cecile Roucelle (U Clermont-Ferrand), and Hugo Tranin (Universit\'e de Montpellier).
 	The paper is intended for submission to MNRAS but is still under internal review by \desc\ members Mike Troxel (Duke), Markus Michael Rau (CMU), and Daniel Gruen (Stanford).}
 
-{\item For \chap{qp}, I devised the idea for the project, conducted the investigation, wrote and validated the \texttt{qp} code, and wrote the paper under the supervision of Phil Marshall (SLAC), with contributions to the mock data production by Sam Schmidt (UC Davis), Melissa Graham (UW), Joe DeRose (Stanford), and Risa Wechsler (Stanford).
+{\item For \chap{qp}, I devised the idea for the project, conducted the investigation, wrote and validated the \qp\ code, and wrote the paper under the supervision of Phil Marshall (SLAC), with contributions to the mock data production by Sam Schmidt (UC Davis), Melissa Graham (UW), Joe DeRose (Stanford), and Risa Wechsler (Stanford).
 	The paper was internally reviewed by \desc\ members Chad Schafer (CMU), Boris Leistedt (NYU), and Chris Morrison (UW).}
 
 \end{enumerate}
