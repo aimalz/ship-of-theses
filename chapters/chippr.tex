@@ -161,7 +161,7 @@ Because the parameters $\ndphi$ that we seek are causally separated from the dat
 
 \begin{figure}
 	\begin{center}
-		\includegraphics[width=0.25\textwidth]{figures/chippr/pgm.png}
+		\includegraphics[width=0.2\textwidth]{figures/chippr/pgm.png}
 		\caption{The directed acyclic graph of the CHIPPR model, where circles indicate random variables and arrows indicate causal relationships.
 			The redshift distribution function parameterized by hyperparameters $\ndphi$ exists independent of the survey of $J$ galaxies, indicated as a box.  
 			The redshifts $\{z_{j}\}$ of all galaxies in the survey are latent variables independently drawn from the redshift distribution, which is a function of $\ndphi$. 
@@ -359,7 +359,7 @@ The \emcee \citep{Foreman-Mackey2013} implementation of ensemble sampling is use
 \chippr\ accepts a configuration file of user-specified parameters, among them the number $W$ of walkers.
 At each iteration $i$ and for each walker, a proposal distribution $\hat{\ndphi}_{i}$ is drawn from the log-prior distribution and evaluated for acceptance to or rejection from the full log-posterior distribution.
 
-Two threshold conditions are defined, one designating all previous samples to be ignored as as products of a "burn-in" phase and another indicating when a sufficient number of "post-burn" samples have been accepted.  
+Two threshold conditions are defined, one designating all previous samples to be ignored as as products of a burn-in phase and another indicating when a sufficient number of post-burn samples have been accepted.  
 In this case, the first threshold (described in \Sect{sec:acorr}) is defined in terms of sub-runs of $10^{3}$ accepted samples, and the second is defined as an accumulation of $10^{4}$ samples.
 
 Though previous versions used \texttt{HDF5} for the primary I/O format due to its efficiency for large quantities of data, it was abandoned in favor of \texttt{pickle} in the working release due to the instability of the \python\ implementation of the format on high-performance computing systems.  
@@ -413,7 +413,7 @@ These two approaches have been compared to one another by \citet{Hildebrandt2012
 
 Point estimation converts the interim photo-$z$ posteriors $\pr{z \gvn \data_{j}, \ndphi^{*}}$ into delta functions with all probability at a single estimated redshift.  
 Some variants of point estimation choose this single redshift to be that of maximum a posteriori probability $\mathrm{mode}[\pr{z \gvn \data_{j}, \ndphi^{*}}]$ or the expected value of redshift $\langle z \rangle = \integral{z \pr{z \gvn \data_{j}, \ndphi^{*}}}{z}$.
-\aim{Cite Mineo here and mention more comprehensive point estimator.}  
+\cite{tanaka_photometric_2018-1} directs attention to deriving an optimal point estimate reduction of a \pzpdf, but since the purpose of this \paper is to compare against the most established alternative estimators of \nz, its use will be postponed until a future study.
 Stacking these modified \pzpdf s leads to the marginalized maximum a posteriori (MMAP) estimator and the marginalized expected value (MExp) estimator, though only the former is included in this study since the latter has fallen out of favor in recent years.
 
 It is worth discussing the relationship between point estimation and stacking.  
