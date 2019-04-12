@@ -45,7 +45,7 @@ We first establish some basic definitions by considering the chance that a singl
 	The \textit{probability density function (PDF)} $\pr{z} \geq 0$ is the chance that a galaxy has each possible redshift $z$.
 	It can be evaluated at any specific redshift $z'$ to give the chance $\pr{z'}$ that the galaxy has that particular redshift.
 	\aim{As @davidwhogg correctly points out, this is at best circular and at worst wrong.
-	I'll need to introduce the function $f_{z}(\ndphi)$ whose integral about $z'$ is understood as $\pr{z'}$.}
+	I'll need to introduce the function $f_{z}(\ndphi)$ whose integral about $z'$ is understood as $\pr{z'}$, currently not mentioned until \Eq{eqn:fz}.}
 \end{definition}
 
 \begin{definition}\label{def:normalization}
@@ -160,8 +160,8 @@ Of course galaxies do not share the same \pzpdf; the \pzpdf s differ because the
 	\end{align}
 \end{lemma}
 \begin{proof}
-	By Lemma \ref{lem:independence}, the probability of that set leading to $N_{z}$ is the product of the probability that all the galaxies in that set have redshift $z$ and the probability that all the galaxies outside that set have redshift $\lnot z$.
-	By Lemma \ref{lem:independence} again, the probability that all the galaxies in that set have redshift $z$ is the product of the $N_{z}$ probabilities $\{\pr{z_{i} = z}\}_{i \in \mathbb{S}^{z}_{c}}$ of the galaxies in $\mathbb{S}^{z}_{c}$, and the probability that all the galaxies outside that set have redshift $\lnot z$ is the product of the $N_{tot} - N_{z}$ probabilities $\{\pr{z_{j} \neq z}\}_{j \notin \mathbb{S}^{z}_{c}}$.
+	By Definition \ref{def:independence}, the probability of that set leading to $N_{z}$ is the product of the probability that all the galaxies in that set have redshift $z$ and the probability that all the galaxies outside that set have redshift $\lnot z$.
+	By Definition \ref{def:independence} again, the probability that all the galaxies in that set have redshift $z$ is the product of the $N_{z}$ probabilities $\{\pr{z_{i} = z}\}_{i \in \mathbb{S}^{z}_{c}}$ of the galaxies in $\mathbb{S}^{z}_{c}$, and the probability that all the galaxies outside that set have redshift $\lnot z$ is the product of the $N_{tot} - N_{z}$ probabilities $\{\pr{z_{j} \neq z}\}_{j \notin \mathbb{S}^{z}_{c}}$.
 	By Definition \ref{def:binarystatespace}, $\pr{z_{j} \neq z} = \pr{z_{j} = \lnot z} = 1 - \pr{z_{j} = z}$.
 	So the probability $\pr{\mathbb{S}^{z}_{c}}$ of a single combination $\mathbb{S}^{z}_{c}$ is $\prod_{i \in \mathbb{S}^{z}_{c}} \pr{z_{i} = z} \prod_{j \notin \mathbb{S}^{z}_{c}} 1 - \pr{z_{j} = z}$.
 	Invoking Definition \ref{def:disjoint}, we know that $\pr{N_{z}} = \sum_{c}^{C} \pr{\mathbb{S}^{z}_{c}}$ for $C = \binom{N_{tot}}{N_{z}}$.
