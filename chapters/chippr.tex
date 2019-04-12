@@ -46,10 +46,10 @@ The \textit{redshift distribution function \Nz}, or, almost interchangably, its 
 The observed \Nz\ also been used to validate survey selection functions used in generation of realistic, multi-purpose mock catalogs \citep{Norberg2002}.  
 Additionally, \Nz\ has been the subject of inference using \pzpdf s before \citep{Sheldon2012, Hildebrandt2012, Kelly2014, Benjamin2013, Bonnett2015a, Viironen2015, Asorey2016, Leistedt2016}, so comparisons to the literature may easily be made. 
 
-The prevailing way to estimate \nz\ for a sample of $\ntot$ galaxies $i$ is to ``stack'' \pzpdf s according to \Eq{eqn:stack}.
+The prevailing way to estimate \nz\ for a sample of $\ntot$ galaxies $i$ is to ``stack'' \pzpdf s according to Equation~\ref{intro:eq:eqn:stack}.
 The stacked estimator of the redshift density function is effectively an average of the \pzpdf\ catalog and, as I will show in this \paper, not in general mathematically valid.
 Stacking is nonetheless considered the preferred method for obtaining \Nz\ from a \pzpdf\ catalog \citep{Sheldon2012, Kelly2014, Benjamin2013, Bonnett2015a, Viironen2015, Asorey2016}.  
-However, it must be noted here that \Eq{eqn:stack} is not in general mathematically valid.  
+However, it must be noted here that Equation~\ref{intro:eq:eqn:stack} is not in general mathematically valid.  
 (See \citet{Hogg2012} for a complete discussion.)  
 
 \aim{Motivate how well we need to know \Nz\ and why it matters.
@@ -413,7 +413,7 @@ These two approaches have been compared to one another by \citet{Hildebrandt2012
 
 Point estimation converts the interim photo-$z$ posteriors $\pr{z \gvn \data_{j}, \ndphi^{*}}$ into delta functions with all probability at a single estimated redshift.  
 Some variants of point estimation choose this single redshift to be that of maximum a posteriori probability $\mathrm{mode}[\pr{z \gvn \data_{j}, \ndphi^{*}}]$ or the expected value of redshift $\langle z \rangle = \integral{z \pr{z \gvn \data_{j}, \ndphi^{*}}}{z}$.
-\cite{tanaka_photometric_2018-1} directs attention to deriving an optimal point estimate reduction of a \pzpdf, but since the purpose of this \paper is to compare against the most established alternative estimators of \nz, its use will be postponed until a future study.
+\cite{tanaka_photometric_2018} directs attention to deriving an optimal point estimate reduction of a \pzpdf, but since the purpose of this \paper is to compare against the most established alternative estimators of \nz, its use will be postponed until a future study.
 Stacking these modified \pzpdf s leads to the marginalized maximum a posteriori (MMAP) estimator and the marginalized expected value (MExp) estimator, though only the former is included in this study since the latter has fallen out of favor in recent years.
 
 It is worth discussing the relationship between point estimation and stacking.  
@@ -447,12 +447,11 @@ Since MCMC samples of hyperparameters are Gaussian distributions, we can quantif
 In simulated cases where the true parameter values are known, we calculate the Kullback-Leibler divergence (KLD), given by 
 \begin{equation}
 \eqlabel{eqn:kl}
-KL_{\dagger,\ddagger} = \integral{\pr{z \gvn \ndphi^{\dagger}} \ln \left[ \frac{\pr{z \gvn \ndphi^{\dagger}}}{\pr{z \gvn \ndphi^{\ddagger}}} \right]}{z} ,
+KL_{',\ddagger} = \integral{\pr{z \gvn \ndphi'} \ln \left[ \frac{\pr{z \gvn \ndphi'}}{\pr{z \gvn \ndphi^{\dagger}}} \right]}{z} ,
 \end{equation}
-which measures a distance between from parameter values $\ndphi^{\ddagger}$ to parameter values $\ndphi^{\dagger}$, which is invariant under changes of variables.  
-We note that $KL_{\dagger,\ddagger} \neq KL_{\ddagger,\dagger}$ and is only interpretable when there is a notion that the former is closer to the truth than the latter.
-In simulated tests, $\ndphi^{\dagger}$ is the true value and $\ndphi^{\ddagger}$ is the value produced by one of the methods in question.  
-\aim{Triple check that this isn't backwards of what I did.}
+which measures a distance from parameter values $\ndphi'$ to true parameter values $\ndphi^{\dagger}$, which is invariant under changes of variables.  
+We note that $KL_{',\dagger} \neq KL_{\dagger,'}$ and is only interpretable when there is a notion that $\ndphi^{\dagger}$ is closer to the truth than $\ndphi'$.
+In simulated tests, $\ndphi^{\dagger}$ is the true value and $\ndphi'$ is that produced by one of the methods in question.
 
 \section{Validation}
 \sectlabel{sec:alldata}
@@ -479,7 +478,7 @@ with $c_{z} = 0.3$, because it has been used in forecasting studies for \des\ an
 \aim{I learned this from talking to people and don't know of a published source that talks about the nitty gritty of the internal validation tests performed before there was data.}
 
 The mock data emulates the three sources of error of highest concern to the \pz\ community: intrinsic scatter, catastrophic outliers, and systematic bias.
-Tests including all three effects at the tolerance levels of \lsst\ (see \tab{tab:lsstsrd}) are presented in \Sect{sec:results}, but \Fig{fig:mega_scatter} illustrates these three effects individually at twice the tolerance of \lsst\ for demonstrative purposes.
+Tests including all three effects at the tolerance levels of \lsst\ (see Table~\ref{intro:tab:tab:lsstsrd}) are presented in \Sect{sec:results}, but \Fig{fig:mega_scatter} illustrates these three effects individually at twice the tolerance of \lsst\ for demonstrative purposes.
 
 \begin{figure}
 	\begin{center}
@@ -490,8 +489,6 @@ Tests including all three effects at the tolerance levels of \lsst\ (see \tab{ta
 			The points indicate samples in the space of mock data and redshift, akin to the standard scatterplots of true and estimated redshift.
 			Colored lines indicate posterior probabilities evaluated at the given estimated redshift.
 			The insets show marginal histograms (gray) in each dimension, that can be compared with the true \nz\ used to make the figure (blue curve) to see the effect of the isolated systematic.
-			\aim{Make the labels bigger if there's time for it.
-			Also, fix the scaling on the insets.}
 		}
 		\figlabel{fig:mega_scatter}
 	\end{center}
@@ -504,14 +501,14 @@ The hyperprior distribution chosen here is a multivariate normal distribution wi
 \end{equation}
 inspired by one used in Gaussian processes, where $k$ and $k'$ are indices ranging from $1$ to $K$ and $q=1.0$, $e=100.0$, and $t=q\cdot10^{-5}$ are constants chosen to permit draws from this prior distribution to produce shapes similar to that of a true $\tilde{\ndphi}$.  
 We adapt the full log-posterior of \Eq{eqn:final} to the chosen binning of redshift space.
-An example of such samples from the prior are shown in \Fig{fig:prior}.
-
-\begin{figure}
-%	\includegraphics[width=0.5\textwidth]{figures/chippr/null_priorsamps.pdf}
-	\caption{\aim{I need to remake this one because it uses the wrong notation and I stopped making it automatically a while ago.}
-		Samples (colored lines) of $\pr{z \gvn \ndphi}$ where each $\ndphi$ is drawn from the hyperprior distribution $\pr{\ndphi}$ given in \Eq{eqn:priorcov}.}
-	\figlabel{fig:prior}
-\end{figure}
+%An example of such samples from the prior are shown in \Fig{fig:prior}.
+%
+%\begin{figure}
+%%	\includegraphics[width=0.5\textwidth]{figures/chippr/null_priorsamps.pdf}
+%	\caption{\aim{I need to remake this one because it uses the wrong notation and I stopped making it automatically a while ago.}
+%		Samples (colored lines) of $\pr{z \gvn \ndphi}$ where each $\ndphi$ is drawn from the hyperprior distribution $\pr{\ndphi}$ given in \Eq{eqn:priorcov}.}
+%	\figlabel{fig:prior}
+%\end{figure}
 
 The sampler is initialized with $W=100$ walkers each with a value chosen from a Gaussian distribution of identity covariance around a sample from the hyperprior distribution.  
 
