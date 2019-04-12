@@ -108,13 +108,13 @@ science-driven metrics.
 We demonstrate this approach on two sets of realistic mock data in the context 
 of LSST.
 
-In Section~\ref{sec:methods}, we outline how \qp\ can be used to optimize the 
+In \Sect{sec:methods}, we outline how \qp\ can be used to optimize the 
 choice of \pz\ parametrization.
-In Section~\ref{sec:data}, we describe the mock datasets on which we 
+In \Sect{sec:data}, we describe the mock datasets on which we 
 demonstrate such an analysis.
-We present the results of this procedure in Section~\ref{sec:results} and make 
+We present the results of this procedure in \Sect{sec:results} and make 
 recommendations for the use of \qp\ by the photo-$z$ community in 
-Section~\ref{sec:conclusions}.
+\Sect{sec:conclusions}.
 
 \section{Methods}
 \sectlabel{sec:methods}
@@ -130,13 +130,13 @@ Conversions between approximations are facilitated by the
 \texttt{scikit-learn}\footnote{\url{http://scikit-learn.org}} 
 \citep{pedregosa_scikit-learn:_2011} tools.
 The currently supported parametrizations are described in 
-Section~\ref{sec:approx}.
+\Sect{sec:approx}.
 
 The \qp\ package also provides a few built-in metrics for the accuracy of a 
 representation of a PDF relative to a given reference representation.
 Built-in plots are made using 
 \texttt{matplotlib}\footnote{\url{https://matplotlib.org/}}.
-A subset of the included metrics are described in Section~\ref{sec:metric}.
+A subset of the included metrics are described in \Sect{sec:metric}.
 
 Catalog-level manipulations are performed using the \texttt{qp.Ensemble} class 
 that serves as a wrapper for operations over collections of \texttt{qp.PDF} 
@@ -178,8 +178,8 @@ popular \texttt{scipy.interpolate} library.
 
 In this work we consider special cases of three of these formats as candidates 
 for large survey \pz\ catalog storage: regular binning 
-(Section~\ref{sec:bins}), random samples (Section~\ref{sec:samples}), and 
-regular quantiles (Section~\ref{sec:quantiles}).
+(\Sect{sec:bins}), random samples (\Sect{sec:samples}), and 
+regular quantiles (\Sect{sec:quantiles}).
 Step functions and samples have been used in published analyses, and we 
 introduce the quantile format because of its favorable statistical properties.
 We do not consider the function evaluation format because it is statistically 
@@ -628,10 +628,10 @@ this data.
 \section{Results \& Discussion}
 \sectlabel{sec:results}
 
-We evaluate the metrics of Section~\ref{sec:metric} on 10 random instantiations 
+We evaluate the metrics of \Sect{sec:metric} on 10 random instantiations 
 of catalogs of $N_{g}=100$ galaxies drawn randomly from each of the datasets 
-discussed in Section~\ref{sec:data} and with each of $N_{f}=3,\ 10,\ 30,\ 100$ 
-stored parameters for the three formats of Section~\ref{sec:approx}.
+discussed in \Sect{sec:data} and with each of $N_{f}=3,\ 10,\ 30,\ 100$ 
+stored parameters for the three formats of \Sect{sec:approx}.
 We then illustrate how our results could be used to choose an appropriate 
 parametrization for each dataset given constraints on the distribution of KLDs 
 or moment percent errors of individual \pz s, the KLD or moment percent error 
