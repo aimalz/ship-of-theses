@@ -1,7 +1,6 @@
 \renewcommand{\chapid}{chippr}
 
 % Chapter specific commands:
-\newcommand{\Chippr}{\textit{CHIPPR}}
 \newcommand{\cosmolike}{\repo{CosmoLike}}
 \newcommand{\emcee}{\repo{emcee}}
 \newcommand{\boss}{\project{BOSS}}
@@ -139,7 +138,7 @@ The likelihoods can be thought of as cuts through the joint probability space of
 		\caption{
 			\aim{Cite Jain+05, WebPlotDigitizer for inspiring this figure.}
 			A generic probability space of redshift (x-axis) and data (y-axis), projected into a single dimension, with vertical cuts and marginals (cyan) indicating the construction of likelihoods and horizontal cuts and marginals (magenta) indicating the construction of posteriors.
-			\aim{I need to fix the hideous font and possibly choose better colors.}
+			\aim{Choose better colors?}
 		}
 		\figlabel{fig:pedagogical_scatter}
 	\end{center}
@@ -556,81 +555,6 @@ An example of such samples from the prior are shown in \Fig{fig:prior}.
 
 The sampler is initialized with $W=100$ walkers each with a value chosen from a Gaussian distribution of identity covariance around a sample from the hyperprior distribution.  
 
-%\subsection{Forward model implementation}
-%\sectlabel{sec:null}
-%
-%\aim{Commented out but may add back in later.}
-
-%The following outlines the ``fiducial'' test case.  
-%We begin by choosing a physically-motivated $p^{*}(z)$ defining the general shape of $N(z)$ over the specified redshift range $[z_{min},z_{max}]$.  
-%Here we shall set it to a weighted sum of truncated Gaussians chosen to impose recognizably recoverable features on the true $N(z)$, shown in the top panel of \Fig{fig:physpz}.  
-%In the test case of \Sect{sec:fake} it shall be set to a narrow Gaussian shown in the bottom panel of \Fig{fig:physpz}.  
-%The true survey size $J$ is a Poisson random variable distributed about a target survey size of $J'$.
-%
-%\begin{figure}
-%	\includegraphics[width=0.5\textwidth]{figures/chippr/sig2_physPz.pdf}\\
-%	\includegraphics[width=0.5\textwidth]{figures/chippr/delt_physPz.pdf}
-%	\caption{The physically-motivated true redshift distribution used in the mock data tests is chosen to have recognizable features of different scales so the quality of recovery can be easily determined.  
-%		The top panel shows a physically motivated true $N(z)$ for the fiducial test, and the bottom panel shows a toy model of a highly featured true $N(z)$.}
-%	\figlabel{fig:physpz}
-%\end{figure}
-%
-%The catalog of $J$ photo-$z$ likelihoods $p(\vec{d}_{j}|z_{j})$ is chosen to be a set of Gaussian distributions, truncated to the redshift range over which $N(z)$ is defined, because it is the simplest extension of the standard redshift point estimates with reported error bars.  
-%To obtain the standard deviations $\sigma_{j}\sim\mathcal{N}(g\bar{\Delta},(g\bar{\Delta})^{2})$ associated with each surveyed galaxy $j$, we first sample a Gaussian 
-%distribution with mean and standard deviation equal to $g\bar{\Delta}$ for some factor $g$ (by default set to 2), truncated to enforce positive standard deviations.  
-%Each Gaussian is centered at an "observed" redshift $z'_{j}\sim\mathcal{N}(z^{*}_{j},\sigma_{j})$ separated from the true redshift $z^{*}_{j}$ by a Gaussian random variable $\epsilon_{j}\sim\mathcal{N}(0,\sigma^{2}_{j})$ selected from a distribution of mean of 0 and true standard deviation $\sigma_{j}$.   
-%This prescription may be understood as an exposition of the generative model of 
-%\begin{equation}
-%\eqlabel{eq:genmod}
-%z'_{j} = z^{*}_{j}+\epsilon_{j}
-%\end{equation}
-%for the physically-motivated process originating the data, which states that the MLE $z'_{j}$ of the redshift is equal to the true redshift $z^{*}_{j}$ plus a Gaussian random variable $\epsilon_{j}$.  
-%\Fig{fig:nullpzsgen} illustrates this procedure by showing the probability distribution $p(z'_{j}|z^{*}_{j})$ for a random galaxy $j$.
-%
-%\begin{figure}
-%	\includegraphics[width=0.5\textwidth]{figures/chippr/sig2_zobsvztru.pdf}
-%	\caption{Top panel: This plot depicts $p(z'_{j}|z^{*}_{j})$ for a randomly chosen galaxy $j$ with areas of high probability in darker grayscale shades.  
-%		The colored dots represent coordinates at which the function is evaluated to produce the horizontal slices shown in the bottom panel.  
-%		Bottom panel: In colors are plotted several examples of individual photo-$z$ posteriors in the fiducial case with their MLE redshifts (dashed lines) and true redshifts (solid lines); these represent horizontal slices through the top panel.}
-%	\figlabel{fig:nullpzsgen}
-%\end{figure}
-%
-%By default we choose a flat distribution as the interim prior, but others will be tested.  
-%(Such a comparison has been executed before by \citet{Viironen2015}.)
-%
-%To obtain the $J$ desired interim photo-$z$ posteriors $p(z_{j}|\vec{d}_{j})$ from the photo-$z$ likelihoods $p(\vec{d}_{j}|z_{j})$, we simply apply Bayes' rule as in 
-%\begin{equation}
-%\eqlabel{eq:likpost}
-%p(z_{j}|\vec{d}_{j}) \propto p(\vec{d}_{j}|z_{j})\ p(z_{j}|\vec{\theta}^{*}),
-%\end{equation}
-%A random sampling of such interim redshift posteriors is shown in \Fig{fig:nullpzs}.  
-%
-%\begin{figure}
-%	\includegraphics[width=0.5\textwidth]{figures/chippr/sig2_samplepzs.pdf}
-%	\caption{In colors are plotted several examples of individual photo-$z$ posteriors in the fiducial case with their MLE redshifts (dashed lines) and true redshifts (solid lines).}
-%	\figlabel{fig:nullpzs}
-%\end{figure}
-
-%\Fig{fig:null-samp} shows a selection of random samples from the posterior distribution of \Eq{eq:final} for the fiducial setup of \Sect{sec:mock}.  
-%\Fig{fig:null-comp} compares the mean of the sample values to alternative estimators as well as the truth.  
-%In the fiducial case, hierarchical inference preserves features in the redshift distribution function, whereas stacking tends to smear it out.  
-%
-%\begin{figure}
-%	\includegraphics[width=0.5\textwidth]{figures/chippr/null_samps.pdf}
-%	\caption{This test was conducted with a flat interim prior (gray line) and produced a mean of samples (thick, black line) that accurately reproduces the truth.  
-%		It can be seen that the samples (colored lines) are an excellent estimator of the true $N(z)$ (thin, black line) with the true values falling within the error bars ($1\sigma$ in dark gray, $2\sigma$ in light gray).}
-%	\label{fig:null-samp}
-%\end{figure}
-%
-%\begin{figure}
-%	\includegraphics[width=0.5\textwidth]{figures/chippr/null_comps.pdf}
-%	\caption{The mean of the samples (thick, solid line) and marginalized MLE (thick, dotted line) are the best estimators of the true distribution (thin, solid line), and the error bars ($1\sigma$ in dark gray, $2\sigma$ in light gray) appear to be accurate.  
-%		Stacking (thick, dashed line) overestimates $N(z)$ at the tails and underestimates $N(z)$ at the peaks.  
-%		The two point estimators considered here, marginalized MAP (thin, dashed line) and marginalized expected value (thin, dotted line) fall between these two 
-%		extremes.}
-%	\figlabel{fig:null-comp}
-%\end{figure}
-
 %\Sect{sec:fake-data} considers a delta function true redshift distribution, but the other sections consider only this physically motivated true \nz.
 %\aim{Discuss why it perhaps shouldn't be considered physically motivated -- might not have decided that's what the real thing looks like if we hadn't been stacking all along}
 
@@ -740,8 +664,8 @@ The \Chippr\ \mmle, however, appears unbiased and withstands these effects.
 	\includegraphics[width=0.5\textwidth]{figures/chippr/thesis_eout_log_estimators.png}
 	\includegraphics[width=0.5\textwidth]{figures/chippr/thesis_rout_log_estimators.png}
 	\caption{
-		The results of \Chippr\ (optimization in dark blue) and the alternative approaches (the stacked estimator in red, the histogram of modes in yellow) on \pzpdf s with catastrophic outliers like those seen in template-fitting \pzpdf\ codes (left) and machine learning \pzpdf\ codes (right) to the \lsst\ requirements, with the true redshift density (black curve) and implicit prior (gray curve).
-		\aim{Run the sampler on this for consistency.}
+		The results of \Chippr\ (samples in light blue and optimization in dark blue) and the alternative approaches (the stacked estimator in red, the histogram of modes in yellow) on \pzpdf s with catastrophic outliers like those seen in template-fitting \pzpdf\ codes (left) and machine learning \pzpdf\ codes (right) to the \lsst\ requirements, with the true redshift density (black curve) and implicit prior (gray curve).
+		Though the histogram of modes is most sensitive to a catastrophic outlier population, the stacked estimator also overestimates \nz\ under (machine learning-like outliers) and beyond (template fitting-like outliers).
 	}
 	\figlabel{fig:nonuniform-outliers-results}
 \end{figure}
@@ -791,9 +715,8 @@ The alternatives, however, are biased by the implicit prior except where it is f
 	\includegraphics[width=0.5\textwidth]{figures/chippr/results_trpr.png}
 	\includegraphics[width=0.5\textwidth]{figures/chippr/results_tmpr.png}
 	\caption{
-		The results of \Chippr\ (optimization in dark blue) and the alternative approaches (the stacked estimator in red and the histogram of modes in yellow) on \pzpdf s with an implicit prior like that of machine learning \pzpdf\ approaches (left) and an implicit prior like that of template-fitting \pzpdf\ codes (right), with the true redshift density (black curve) and implicit prior (gray curve).
+		The results of \Chippr\ (samples in light blue and optimization in dark blue) and the alternative approaches (the stacked estimator in red and the histogram of modes in yellow) on \pzpdf s with an implicit prior like that of machine learning \pzpdf\ approaches (left) and an implicit prior like that of template-fitting \pzpdf\ codes (right), with the true redshift density (black curve) and implicit prior (gray curve).
 		\Chippr\ is robust to a nontrivial implicit prior, but the alternatives are biased toward the implicit prior.
-		\aim{Run the sampler on this for consistency.}
 	}
 	\figlabel{fig:results-priors}
 \end{figure}
@@ -835,23 +758,23 @@ Using 35 evenly spaced tomographic bins $0.0101 < z < 3.4101$,
 	\end{center}
 \end{figure*}
 
-It is of interest to explore the impact of incorrectly estimated \nz\ on the inference of the cosmological parameters \textemdash how wrong will we be in our understanding of the universe if we don't perform a valid inference?
-To answer this question, I considered a set of tomographically binned \nz\ and cosmological parameter covariance matrices used for \desc\ forecasting.
-First, I binned them down to a piecewise constant parameterization with a manageable $15$ parameters for \chippr's sampling capabilities.
+It is of interest to explore the impact of incorrectly estimated \nz\ on the inference of the cosmological parameters to answer the question of how wrong we will be in our understanding of the universe if we don't perform a valid inference.
+To find an answer, I considered a set of tomographically binned \nz\ and cosmological parameter covariance matrices used for \desc\ forecasting, for which the true \nz\ in each pre-defined bin is already provided in the form of an evaluation of a function on a fine grid of $350$ redshifts $0.0101 < z < 3.5001$.
+First, I binned them down to a piecewise constant parameterization with a manageable $35$ parameters for \chippr's sampling capabilities.
 Next, I drew $10^{4}$ true redshifts from the binned true \nz\ for each tomographic bin.
 The original, binned, and drawn \nz\ are shown in \Fig{fig:tomobins}
 
 \begin{figure*}
 	\begin{center}
 		\includegraphics[width=0.99\textwidth]{figures/chippr/cosmolike_inputs.png}
-		\caption{The \lsst-like tomographic binning and true redshift distribution.}
+		\caption{The \lsst-like tomographic binning and true redshift distribution, where the truth (solid) is a PDF evaluated on a fine grid of $350$ redshifts $0.0101 < z < 3.5001$, and the binned (dashed) and drawn (dotted) \nz\ are piecewise constant functions evaluated in $35$ evenly spaced bins.
+		}
 		\figlabel{fig:tomobins}
 	\end{center}
 \end{figure*}
 
 Using the \lsst\ \pz\ requirements given in \Sect{sec:lsstdemo}, I emulated \pzpdf s corresponding to the $10^{4}$ true redshifts drawn from the true \nz\ in each bin using the procedure of \Fig{fig:flowchart}.
-I divided the galaxies into four tomographic bins using their true redshifts, as per the standard forecasting procedure.
-I then ran \chippr\ as well as two other \nz\ estimation methods on the \pzpdf\ catalog for each tomographic bin.
+I then ran \chippr\ as well as the two other \nz\ estimation methods on the \pzpdf\ catalog for each tomographic bin.
 The estimates are given in \Fig{fig:per-bin-ests}.
 One can see that the excessive breadth of the stacked estimator and the histogram of the modes of the \pzpdf s.
 
