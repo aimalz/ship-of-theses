@@ -11,14 +11,28 @@ Many more \pz s may be obtained in the time it would take to observe a smaller n
 Calculations of correlation functions of cosmic shears and galaxy positions require large numbers of high-confidence redshifts of surveyed galaxies.  
 
 However, \pz s are susceptible to inaccuracy and imprecision via a number of effects, particularly their inherent noisiness due to the coarseness of photometric filters, catastrophic errors in which galaxies of one type at one redshift are mistaken for galaxies of another type at a different redshift, and systematics introduced by observational techniques, data reduction processes, and training set limitations.  
-The projection of these effects into the space of true and estimated redshifts is discussed extensively in \Chap{chippr} and \Chap{pzdc1}.
+The projection of these effects into the space of true and estimated redshifts is discussed extensively in \Chap{pzdc1}, and their impact on cosmological parameter constraints is addressed in \Chap{chippr}, and \Fig{fig:pedagogical_scatter} in particular.
+Based on the goals of a photometric galaxy survey, requirements can be placed on the accuracy of \pz\ estimates.
+For example, the Large Synoptic Survey Telescope (\lsst) states requirements for the main cosmological sample in the \lsst\ Science Requirements Document (SRD)\footnote{\url{https://docushare.lsstcorp.org/docushare/dsweb/Get/LPM-17}} and reproduced in \Tab{tab:lsst-srd}.
+
+\begin{table}
+	\begin{tabular}{ll}
+		Number of galaxies & $\sim 10^{7}$\\
+		Root-mean-square error & $\sigma_z < 0.02 (1+z)$\\
+		$3 \sigma$ catastrophic outlier rate & $< 10\%$\\
+		bias & $< 0.003$
+	\end{tabular}
+\tablabel{tab:lsstsrd}
+\caption{\Pz\ requirements for \lsst\ cosmology.}
+\end{table}
+
 In addition to these limitations in accuracy, there is also the matter of uncertainty quantification; \pz s are often reported with presumed-Gaussian error bars derived without inclusion of all systematic errors, including the different selection effects between the photometric color- or magnitude-spaces of galaxies for which \pz s are desired and galaxies with \sz s are used to calibrate \pz\ estimators.
-An example of the impact of this selection bias in the context of \project{zCOSMOS} and \project{COSMOS} is shown in \Fig{fig:selection-bias}.
-\aim{Cite COSMOS and zCOSMOS.}
+An example of the impact of this selection bias in the context of \citep[\project{zCOSMOS}][]{lilly_zcosmos_2009} and \citep[\project{COSMOS}][]{laigle_cosmos2015_2016} is shown in \Fig{fig:selection-bias}.
+This lack of support can bias one-point statistics of the affected galaxy populations \citep{moresco_spot_2013}, and elaborate procedures for compensating for such bias have been developed in the context of two-point statistics of galaxy redshifts \citep{mandelbaum_precision_2008}.
 
 \begin{figure*}
 	\begin{center}
-		\includegraphics[width=\textwidth]{figures/intro/big_corner_coarse.png}
+		\includegraphics[width=0.99\textwidth]{figures/intro/big_corner_coarse.png}
 		\caption{
 			The distributions of magnitudes and the provided photometric redshift estimate for the galaxies with complete photometric data in \project{zCOSMOS} ($8,826$ galaxies; blue) and \project{COSMOS} ($395,019$ galaxies; red).
 			It is evident that the sample for which spectra were unavailable is not well-supported by the sample for which spectra were obtained, which was used to calibrate the spectroscopically unconfirmed set.
@@ -26,8 +40,6 @@ An example of the impact of this selection bias in the context of \project{zCOSM
 		\figlabel{fig:selection-bias}
 	\end{center}
 \end{figure*}
-
-\aim{Include equations and a figure pointing out the three canonical \pz\ errors and explain their causes: intrinsic scatter due to broadband filters, perpendicular features due to features passing between bands, bias due to model misspecification, physical and algorithmic causes of catastrophic outliers via missing template or incomplete training set.}
 
 %Several factors contribute to photometric redshifts' intrinsic scatter.  
 %Distant galaxies are dimmer compared to galaxies of identical luminosity that are closer, driving up photometric errors in flux-limited surveys.  
@@ -45,7 +57,7 @@ Sophisticated Bayesian techniques and cutting-edge machine learning methods have
 
 An alternative to point estimation of \pz s is redshift probability distribution function (PDF) estimation that reports the probability $p(z)$ over all possible redshifts for every galaxy rather than an MLE (with or without presumed Gaussian error bars) \citep{Koo1999}.  
 This option is favorable because it contains more potentially useful information about the uncertainty on each galaxy's redshift than a point estimate, incorporating notions of precision, accuracy, and systematic errors.
-However, denoting \pzpdf s as ``$\pr{z}$'' is an abuse of notation, as it does not adequately convey what information is being used to constrain the redshift $z$; \pzpdf s are \textit{posterior} PDFs, conditioned on the photometric data and prior knowledge.
+However, denoting \pzpdf s as ``$\pr{z}$'' is an abuse of notation, as it does not adequately convey what information is being used to constrain the redshift $z$; \pzpdf s are \textit{posterior} PDFs, conditioned on the photometric data and prior knowledge, as is covered in detail in \Chap{pedant}, as well as \Chap{chippr} and \Chap{pzdc1}.
 
 \aim{what interesting problems/opportunities are the context for my work?  (drawing conclusions about the universe from vast quantities of uncertainty-dominated, limitations of photometry lead to methodological challenges, what was tried so far and why isn't it good enough)}
 
@@ -59,17 +71,18 @@ The most common application of \pzpdf s is their use in estimating \Nz, the dist
 
 If the true redshifts $\{z_{j'}\}$ were known, the redshift probabilities would be delta functions $\{\delta(z, z'_{j})\}$ centered at the true redshift, and the redshift distribution could be approximated by a histogram or other interpolation of the delta functions $\{\delta(z, z'_{j})\}$.
 When \pzpdf s are available instead of true redshifts, the simplest approach reduces them to point estimates of redshift by using $\delta(z, \hat{z}_{j})$ in place of $\delta(z, z'_{j})$, where $\hat{z}_{j}$ may be the mode (maximum) of the \pzpdf, though there are other, more principled options \citep{tanaka_photometric_2018-1}.
-However, it is more common at this point to calculate the mathematically invalid but conceptually simple \textit{stacked estimator} of the redshift distribution \citep[\Eq{eqn:stack}][]{Lima2008}.
-%\begin{align}
-%\eqlabel{eqn:stacked}
-%\hat{N}(z) &\equiv \sum_{j=1}^{J}\ \pr{z_{j}} ,
-%\end{align}
+However, it is more common at this point to calculate the mathematically invalid but conceptually simple \textit{stacked estimator} of the redshift density function \citep{Lima2008}, 
+\begin{align}
+\eqlabel{eqn:stack}
+\hat{n}(z) &= \frac{1}{\ntot} \sum_{i = 0}^{\ntot} \pr{z_{i}}
+\end{align}
+for a sample of $\ntot$ galaxies $i$, or, equivalently, the redshift distribution function $\hat{N}(z) = \ntot \hat{n}(z)$.
 
 In \Chap{pedant}, I address the question of how a blatantly incorrect estimator of the redshift distribution could become widely accepted by otherwise clever astrophysicists.
 I approach the problem from a mathematically rigorous perspective to identify the assumptions necessary for the stacked estimator to approach the true \Nz and note that because those assumptions will not hold for future surveys, including \lsst, we must use an alternative estimator that self-consistently propagates redshift uncertainty.
 
 I go on to present one such an alternative to stacking, the Cosmological Hierarchical Inference with Probabilistic Photometric Redshifts (\Chippr), in \Chap{chippr}.
-\Chippr\ is a probabilistic graphical model (PGM) that encapsulates the causal relationships between the redshift distribution, samples of individual galaxy redshifts, and .
+\Chippr\ is a probabilistic graphical model (PGM) that encapsulates the causal relationships between the redshift distribution, samples of individual galaxy redshifts, and photometric data.
 I also present the \chippr\ code that implements the \Chippr\ model and includes a comprehensive suite of tools for testing arbitrarily realistic mock \pzpdf\ catalogs.
 
 \aim{Hogg says ``I think it would be good to talk a little quantitatively about where people need to know N(z) and other one-point statistics, and how much they will get various things wrong if they don't know these correctly. 
