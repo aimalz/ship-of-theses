@@ -14,7 +14,7 @@
 
 \chapter{ How to obtain the redshift distribution from probabilistic redshift estimates \chaplabel{chippr} }
 
-This \paper\ was incubated with David Hogg (NYU) during the summer and fall of 2015 and has been publicly available on \github\footnote{\url{https://github.com/aimalz/chippr}} since its inception.
+This \paper\ was incubated with David Hogg (NYU) during the spring and fall of 2015 and has been publicly available on \github\footnote{\url{https://github.com/aimalz/chippr}} since its inception.
 I further developed the code and refined the scope with Phil Marshall (SLAC) in the spring and fall of 2017.
 
 \section*{Chapter abstract}
@@ -45,11 +45,7 @@ The \textit{redshift distribution function \Nz}, or, almost interchangably, its 
 The observed \Nz\ also been used to validate survey selection functions used in generation of realistic, multi-purpose mock catalogs \citep{Norberg2002}.  
 Additionally, \Nz\ has been the subject of inference using \pzpdf s before \citep{Sheldon2012, Hildebrandt2012, Kelly2014, Benjamin2013, Bonnett2015a, Viironen2015, Asorey2016, Leistedt2016}, so comparisons to the literature may easily be made. 
 
-The prevailing way to estimate \nz\ for a sample of $N_{tot}$ galaxies $i$ is to ``stack'' \pzpdf s according to
-\begin{align}
-\eqlabel{eqn:stack}
-\hat{n}(z) &= \frac{1}{\ntot} \sum_{i = 0}^{\ntot} \pr{z_{i}} .
-\end{align}
+The prevailing way to estimate \nz\ for a sample of $\ntot$ galaxies $i$ is to ``stack'' \pzpdf s according to \Eq{eqn:stack}.
 The stacked estimator of the redshift density function is effectively an average of the \pzpdf\ catalog and, as I will show in this \paper, not in general mathematically valid.
 Stacking is considered the preferred method for obtaining \Nz\ from a dataset of interim photo-$z$ posteriors \citep{Sheldon2012, Kelly2014, Benjamin2013, Bonnett2015a, Viironen2015, Asorey2016}.  
 However, it must be noted here that \Eq{eqn:stack} is not in general mathematically valid.  
@@ -134,7 +130,7 @@ The likelihoods can be thought of as cuts through the joint probability space of
 
 \begin{figure*}
 	\begin{center}
-		\includegraphics[width=\textwidth]{figures/chippr/jain05.png}
+		\includegraphics[width=0.74\textwidth]{figures/chippr/jain05.png}
 		\caption{
 			\aim{Cite Jain+05, WebPlotDigitizer for inspiring this figure.}
 			A generic probability space of redshift (x-axis) and data (y-axis), projected into a single dimension, with vertical cuts and marginals (cyan) indicating the construction of likelihoods and horizontal cuts and marginals (magenta) indicating the construction of posteriors.
@@ -482,13 +478,14 @@ with $c_{z} = 0.3$, because it has been used in forecasting studies for \des\ an
 \aim{I learned this from talking to people and don't know of a published source that talks about the nitty gritty of the internal validation tests performed before there was data.}
 
 The mock data emulates the three sources of error of highest concern to the \pz\ community: intrinsic scatter, catastrophic outliers, and systematic bias.
-\Fig{fig:mega_scatter} illustrates these three effects individually at twice the tolerance of \lsst.
+Tests including all three effects at the tolerance levels of \lsst\ (see \tab{tab:lsstsrd}) are presented in \Sect{sec:results}, but \Fig{fig:mega_scatter} illustrates these three effects individually at twice the tolerance of \lsst\ for demonstrative purposes.
+
 \begin{figure}
 	\begin{center}
-		\includegraphics[width=0.3\textwidth]{figures/chippr/scatter_scatplot.png}
-		\includegraphics[width=0.3\textwidth]{figures/chippr/outlier_scatplot.png}
-		\includegraphics[width=0.3\textwidth]{figures/chippr/bias_scatplot.png}
-		\caption{The joint probability space of true and estimated redshift for the three concerning \pz\ systematics: intrinsic scatter (left), uniform outliers (center), bias (right).
+		\includegraphics[width=0.24\textwidth]{figures/chippr/scatter_scatplot.png}
+		\includegraphics[width=0.24\textwidth]{figures/chippr/outlier_scatplot.png}
+		\includegraphics[width=0.24\textwidth]{figures/chippr/bias_scatplot.png}
+		\caption{The joint probability space of true and estimated redshift for the three concerning \pz\ systematics: intrinsic scatter (left), uniform outliers (center), and bias (right).
 			The points indicate samples in the space of mock data and redshift, akin to the standard scatterplots of true and estimated redshift.
 			Colored lines indicate posterior probabilities evaluated at the given estimated redshift.
 			The insets show marginal histograms (gray) in each dimension, that can be compared with the true \nz\ used to make the figure (blue curve) to see the effect of the isolated systematic.
@@ -498,44 +495,6 @@ The mock data emulates the three sources of error of highest concern to the \pz\
 		\figlabel{fig:mega_scatter}
 	\end{center}
 \end{figure}
-Tests including all three effects at the tolerance levels of \lsst\ are presented in \Sect{sec:results}.
-%In \Sect{sec:alldata} I describe the method by which mock \pzpdf s $\{\ln[\pr{z \gvn \data_{j}}]\}$ are synthesized as well as the real datasets considered for comparison.  
-
-%The fiducial experiment of \Sect{sec:mock} is outlined first. 
-%Seven other cases in \Sect{sec:imprecision} and \Sect{sec:inaccuracy} vary the \pzpdf s via the space of redshift and projected photometry.
-%\Sect{sec:fake-data} considers unexpected true redshift density functions, and \Sect{sec:interim-data} considers nontrivial implicit priors.  
-%Two additional cases with \sdss-III BOSS DR10 data are also considered in \Sect{sec:data}.
-%The test cases included here are summarized in \Tab{tab:key}.
-%
-%\begin{table}
-%	\begin{tabular}{llll}
-%		\textul{Title} & \textul{True $n(z)$} & \textul{Implicit Prior} & 
-%		\textul{Probability space}\\
-%		Fiducial & Physically motivated, & Uniform & Single Gaussians\\
-%		& featured $N(z)$ &&\\
-%		Precise & Physically motivated, & Uniform & Single, Narrow Gaussians\\
-%		& featured $N(z)$ &&\\
-%		Imprecise & Physically motivated, & Uniform & Single, Broad Gaussians\\
-%		& featured $N(z)$ &&\\
-%		Trending & Physically motivated, & Uniform & Single Gaussians\\
-%		& featured $N(z)$ && with $\sigma_{j}\sim z^{*}_{j}$\\
-%		Multimodal & Physically motivated, & Uniform & Multiple Gaussians\\
-%		& featured $N(z)$ &&\\
-%		Sampled & Physically motivated, & Uniform & Sampled, Single Gaussian\\
-%		& featured $N(z)$ &&\\
-%		Featured & Single, Narrow Gaussian & Uniform & Single, Broad Gaussians\\
-%		Unimodal $\vec{\theta}_{0}$ & Physically motivated, & Low-$z$ Favoring & 
-%		Single, Broad Gaussians\\
-%		& featured $N(z)$ &&\\
-%		Bimodal $\vec{\theta}_{0}$& Physically motivated, & Mid-$z$ Disfavoring & 
-%		Single, Broad Gaussians\\
-%		& featured $N(z)$ &&\\
-%		Surveyed & Unknown & \citet{Sheldon2012} & pseudo-random sample of BOSS DR10\\
-%		Biased & Unknown & \citet{Sheldon2012} & brightest 50\% of BOSS test
-%	\end{tabular}
-%	\caption{Summary of the mock data validation tests using the shorthand names by which the tests are referenced.}
-%	\tablabel{tab:key}
-%\end{table}
 
 The hyperprior distribution chosen here is a multivariate normal distribution with mean $\vec{\mu}$ equal to the implicit prior $\ndphi^{*}$ and covariance
 \begin{equation}
@@ -734,19 +693,8 @@ The alternatives, however, are biased by the implicit prior except where it is f
 \subsection{LSST Requirements}
 \sectlabel{sec:lsstdemo}
 
-The \lsst\ Science Requirements Document (SRD)\footnote{\url{https://docushare.lsstcorp.org/docushare/dsweb/Get/LPM-17}} states that the main cosmological sample of $\sim 10^{7}$ galaxies must have \pz s satisfying root-mean-square error $\sigma_z < 0.02 (1+z)$, $3 \sigma$ catastrophic outlier rate $< 10\%$, and bias $< 0.003$.
 To test the impact of these uncertainties, we simulated mock data with all three effects and did a Fisher matrix forecast using \cosmolike.
 \aim{Cite CosmoLike.}
-
-Using 35 evenly spaced tomographic bins $0.0101 < z < 3.4101$,  
-
-\begin{figure*}
-	\begin{center}
-		\includegraphics[width=\textwidth]{figures/chippr/cosmolike_inputs.png}
-		\caption{The underlying, drawn, and binned, \nz\ for the four tomographic bins.}
-		\figlabel{fig:lsstdemo}
-	\end{center}
-\end{figure*}
 
 \begin{figure*}
 	\begin{center}
@@ -766,7 +714,7 @@ The original, binned, and drawn \nz\ are shown in \Fig{fig:tomobins}
 
 \begin{figure*}
 	\begin{center}
-		\includegraphics[width=0.99\textwidth]{figures/chippr/cosmolike_inputs.png}
+		\includegraphics[width=0.74\textwidth]{figures/chippr/cosmolike_inputs.png}
 		\caption{The \lsst-like tomographic binning and true redshift distribution, where the truth (solid) is a PDF evaluated on a fine grid of $350$ redshifts $0.0101 < z < 3.5001$, and the binned (dashed) and drawn (dotted) \nz\ are piecewise constant functions evaluated in $35$ evenly spaced bins.
 		}
 		\figlabel{fig:tomobins}
