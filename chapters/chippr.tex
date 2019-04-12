@@ -48,16 +48,16 @@ Additionally, \Nz\ has been the subject of inference using \pzpdf s before \cite
 
 The prevailing way to estimate \nz\ for a sample of $\ntot$ galaxies $i$ is to ``stack'' \pzpdf s according to \Eq{eqn:stack}.
 The stacked estimator of the redshift density function is effectively an average of the \pzpdf\ catalog and, as I will show in this \paper, not in general mathematically valid.
-Stacking is considered the preferred method for obtaining \Nz\ from a dataset of interim photo-$z$ posteriors \citep{Sheldon2012, Kelly2014, Benjamin2013, Bonnett2015a, Viironen2015, Asorey2016}.  
+Stacking is nonetheless considered the preferred method for obtaining \Nz\ from a \pzpdf\ catalog \citep{Sheldon2012, Kelly2014, Benjamin2013, Bonnett2015a, Viironen2015, Asorey2016}.  
 However, it must be noted here that \Eq{eqn:stack} is not in general mathematically valid.  
 (See \citet{Hogg2012} for a complete discussion.)  
-The estimator produced by stacking shall henceforth be referred to as the ``stacked'' estimator.
 
 \aim{Motivate how well we need to know \Nz\ and why it matters.
 	New paragraph here: Say what precision is needed for \Nz\ for future weak lensing surveys. 
 	Say what precision the mass function is needed (in, say cluster studies) for precision cosmology.}
 
 I aim to develop a clear methodology guiding the use of \pzpdf s in inference so they may be utilized effectively by the cosmology community.
+Though others have approached the problem before \citep{Leistedt2016}, the method presented here differs in that it makes use of any existing catalog of \pzpdf s, rather than requiring a simultaneous derivation of the \pzpdf s and the redshift distribution, making it preferable to ongoing surveys that may be resistant to restructuring their analysis pipelines.
 
 In \Sect{sec:meth}, I present the \Chippr\ model and \chippr\ implementation for characterizing the full posterior probability landscape of \Nz\ using \pzpdf s. 
 In \Sect{sec:alldata}, I describe the experimental design for testing the fully probabilistic approach to mock and real datasets, the results of which are found in \Sect{sec:results}.
@@ -134,7 +134,7 @@ The likelihoods can be thought of as cuts through the joint probability space of
 		\includegraphics[width=0.74\textwidth]{figures/chippr/jain05.png}
 		\caption{
 			A generic probability space of redshift (x-axis) and data (y-axis), projected into a single dimension, with vertical cuts and marginals (cyan) indicating the construction of likelihoods and horizontal cuts and marginals (magenta) indicating the construction of posteriors.
-			The data (black points) used to generate the contours were extracted from \citet{jain_whole_2015} using WebPlotDigitizer\footnote{https://automeris.io/WebPlotDigitizer/} \citep{rohatgi_webplotdigitizer_2019}, with the ideal redshift estimation provided for reference (red line).
+			The data (black points) used to generate the contours were extracted from \citet{jain_whole_2015} using WebPlotDigitizer \citep{rohatgi_webplotdigitizer_2019}, with the ideal redshift estimation provided for reference (red line).
 			\aim{Choose better colors?}
 		}
 		\figlabel{fig:pedagogical_scatter}
@@ -850,7 +850,7 @@ In these tests, the \pzip s are made to the \lsst\ requirements but the implicit
 
 \aim{I still need to update the language in this section for consistency with the rest of \Chap{chippr}.}
 
-This study derives and demonstrates a mathematically consistent implementation of inference of a one-point statistic based on implicit \pzpdf s.  
+This study derives and demonstrates a mathematically consistent implementation of inference of a one-point statistic based on any existing catalog of \pzpdf s.  
 The fully Bayesian method, based in the fundamental laws of probability, begins with a graphical model corresponding to equations for the full posterior.  
 The technique developed in this paper is applied to the example of the redshift density function \nz\ with promising results on mock data; not only is this the only mathematically correct approach to the problem, it also recovers the true parameter values better than popular alternatives.  
 
@@ -870,35 +870,12 @@ The following conclusions and recommendations can be made with confidence:
 	\item When the interim prior is known to be a poor approximation to the data, only the marginalized MLE and mean of sampled values are satisfactory estimators of the redshift distribution function because they are the only methods that can account for the bias introduced into the photo-$z$ posteriors; this is the most compelling case for the sampler because of the ubiquity of inappropriate interim priors.
 \end{enumerate}
 
-%\begin{table}
-%	\begin{tabular}{lccccc}
-%				& Mean of 		& Marginalized 	& Stacked 		& Marginalized 	& Marginalized\\
-%				& Samples 		& MLE 			& Estimator 	& MAP 			& Expected Value\\
-%	Fiducial 	&\textbf{0.0041}&0.0057			&0.0139			&0.0098			&0.0072\\
-%	Precise 	&\textbf{0.0035}&0.0065			&0.0176			&0.0112			&0.0102\\
-%	Imprecise 	&\textbf{0.0068}&0.0155			&0.1014			&0.1207			&0.1028\\
-%	Trending 	&\textbf{0.0199}&0.0262			&0.1057			&0.1288			&0.0813\\
-%	Multimodal 	&\textbf{0.0052}&0.0054			&0.0508			&0.0385			&0.0250\\
-%	Sampled 	&0.0189			&\textbf{0.0026}&0.0475			&0.0446			&0.0230\\
-%	Featured 	&0.0104			&\textbf{0.0060}&0.2902			&0.1721			&0.1720\\
-%	Unimodal 	&\textbf{0.0030}&0.0046			&0.0150			&0.0128			&0.0127\\
-%	Bimodal 	&\textbf{0.0037}&0.0056			&0.0143			&0.0122			&0.0141
-%	\end{tabular}
-%	\caption{The KLD values for all estimators in each simulated test are provided here.
-%		The best-fit estimator in each case is bolded.}
-%	\tablabel{tab:kld}
-%\end{table}
-
 By showing that this method is effective in recovering the true redshift distribution function and posterior distributions on its parameters from catalogs of \pzpdf s, this work supports the production of \pzpdf s by upcoming photometric surveys such as \lsst\ so that more accurate inference of physical parameters may be accessible to the scientific community.  
 We discourage researchers from co-adding \pzpdf s or converting them into point estimates of redshift and instead recommend the use of Bayesian probability to guide the usage of \pzpdf s in science.  
 We emphasize to those who produce \pzpdf s from data that it is essential to release the implicit prior used in generating this data product in order for proper inference to be conducted by consumers of this information.
 
 The technique herein developed is applicable with minimal modification to other one-point statistics of redshift to which we will apply this method in the future, such as the redshift-dependent luminosity function and weak lensing mean distance ratio.  
 Future work will also include the extension of this fully probabilistic approach to higher-order statistics of redshift such as the two-point correlation function.
-
-\aim{What else should I be putting here?  
-	Is this a good place to put the discussion of how different estimators of \Nz\ affect different estimators of the weak lensing power spectrum?  
-	That analysis is currently in \Sect{sec:lsstdemo}.}
 
 \section*{Chapter acknowledgements}
 
