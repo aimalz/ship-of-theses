@@ -815,8 +815,7 @@ The \lsst\ Science Requirements Document (SRD)\footnote{\url{https://docushare.l
 To test the impact of these uncertainties, we simulated mock data with all three effects and did a Fisher matrix forecast using \cosmolike.
 \aim{Cite CosmoLike.}
 
-Using 35 evenly spaced tomographic bins $0.0101 < z < 3.4101$, 
-\aim{Update figures for 35 rather than 15 bins.}
+Using 35 evenly spaced tomographic bins $0.0101 < z < 3.4101$,  
 
 \begin{figure*}
 	\begin{center}
@@ -851,16 +850,18 @@ The original, binned, and drawn \nz\ are shown in \Fig{fig:tomobins}
 \end{figure*}
 
 Using the \lsst\ \pz\ requirements given in \Sect{sec:lsstdemo}, I emulated \pzpdf s corresponding to the $10^{4}$ true redshifts drawn from the true \nz\ in each bin using the procedure of \Fig{fig:flowchart}.
+I divided the galaxies into four tomographic bins using their true redshifts, as per the standard forecasting procedure.
 I then ran \chippr\ as well as two other \nz\ estimation methods on the \pzpdf\ catalog for each tomographic bin.
 The estimates are given in \Fig{fig:per-bin-ests}.
 One can see that the excessive breadth of the stacked estimator and the histogram of the modes of the \pzpdf s.
-\Chippr, on the other hand, yields an estimate with error bars that include the truth in most bins and have a marginalized maximum likelihood solution far closer to the truth than the other estimators.
 
 \begin{figure*}
 	\begin{center}
-		\includegraphics[width=0.49\textwidth]{figures/chippr/0single_lsst_lin_estimators.png}\includegraphics[width=0.49\textwidth]{figures/chippr/1single_lsst_lin_estimators.png}\\
-		\includegraphics[width=0.49\textwidth]{figures/chippr/2single_lsst_lin_estimators.png}\includegraphics[width=0.49\textwidth]{figures/chippr/3single_lsst_lin_estimators.png}
-		\caption{The \chippr-derived and other estimators of \nz\ in each tomographic bin.}
+		\includegraphics[width=0.24\textwidth]{figures/chippr/0single_lsst_lin_estimators.png}
+		\includegraphics[width=0.24\textwidth]{figures/chippr/1single_lsst_lin_estimators.png}		\includegraphics[width=0.24\textwidth]{figures/chippr/2single_lsst_lin_estimators.png}
+		\includegraphics[width=0.24\textwidth]{figures/chippr/3single_lsst_lin_estimators.png}
+		\caption{The \chippr-derived and other estimators of \nz\ in each tomographic bin.
+		\aim{Make this one big plot instead of four little ones to eliminate repeated axis labels and legend.}}
 		\figlabel{fig:per-bin-ests}
 	\end{center}
 \end{figure*}
@@ -876,10 +877,13 @@ I then used the different estimators of \nz\ in a cosmological forecasting proce
 	\end{center}
 \end{figure*}
 
+
 \aim{Discuss these results here!}
 
 \aim{Hogg says ``I think it would be good to talk a little quantitatively about where people need to know N(z) and other one-point statistics, and how much they will get various things wrong if they don't know these correctly. 
 	And situate that discussion within the current context of cosmological parameter estimation and precision cosmology.''}
+
+\aim{Caveats: I don't believe in tomographic binning because it's non-physical, and we won't have the true redshifts so there will be additional errors if tomography is used.}
 
 \subsection{Violations of the model}
 \sectlabel{sec:violations}
