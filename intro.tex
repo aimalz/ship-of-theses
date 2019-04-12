@@ -41,6 +41,9 @@ This lack of support can bias one-point statistics of the affected galaxy popula
 	\end{center}
 \end{figure*}
 
+\aim{Hogg says ``I think it would be good to talk a little quantitatively about where people need to know N(z) and other one-point statistics, and how much they will get various things wrong if they don't know these correctly. 
+	And situate that discussion within the current context of cosmological parameter estimation and precision cosmology.''}
+
 %Several factors contribute to photometric redshifts' intrinsic scatter.  
 %Distant galaxies are dimmer compared to galaxies of identical luminosity that are closer, driving up photometric errors in flux-limited surveys.  
 %The nature of the galaxy sample at higher redshifts also changes, meaning the generation of the photometric redshift posterior based on an a locally-calibrated SED template library or spectroscopically-confirmed training set is more likely to be inappropriate, leading to broader features.  
@@ -48,7 +51,7 @@ This lack of support can bias one-point statistics of the affected galaxy popula
 %This effect may be stronger for high-redshift galaxies.  
 
 Once propagated through the calculations of correlation functions of cosmic shear and galaxy positions, these sources of \pz\ errors are not insignificant contributors to the total uncertainties reported on cosmological parameters.
-As other systematic errors have been resolved, the uncertainties associated with \pz s have come to dominate the uncertainties on estimates of cosmological parameters made by current surveys such as \des \citep{hoyle_dark_2017}.
+As other systematic errors have been resolved, the uncertainties associated with \pz s have come to dominate the uncertainties on estimates of cosmological parameters made by current surveys such as \citep[\des][]{hoyle_dark_2017}.
 
 Much effort has been dedicated to improving \pz s, though they are still most commonly obtained by a maximum likelihood estimator (MLE) based on libraries of galaxy SED templates, with conservative approaches to error estimation.  
 Recent advances have focused on identifying and removing catastrophic outliers when using \pz s for 
@@ -85,13 +88,11 @@ I go on to present one such an alternative to stacking, the Cosmological Hierarc
 \Chippr\ is a probabilistic graphical model (PGM) that encapsulates the causal relationships between the redshift distribution, samples of individual galaxy redshifts, and photometric data.
 I also present the \chippr\ code that implements the \Chippr\ model and includes a comprehensive suite of tools for testing arbitrarily realistic mock \pzpdf\ catalogs.
 
-\aim{Hogg says ``I think it would be good to talk a little quantitatively about where people need to know N(z) and other one-point statistics, and how much they will get various things wrong if they don't know these correctly. 
-	And situate that discussion within the current context of cosmological parameter estimation and precision cosmology.''}
-
 In order for the approach proposed in \Chap{chippr} to be applied, there must be a \pzpdf\ catalog, yet many techniques to obtain \pzpdf s have been proposed and tested in the literature without clear indications that one is superior to all others.  
 An extension of the Bayesian photometric redshift (BPZ) method of \citet{Benitez2000} that produces posterior probability distributions (as opposed to a selection of local maxima) from an SED template library has been employed \citep{Hildebrandt2012, Kelly2014, Lopez-Sanjuan2015}.  
 \Pzpdf s have also been obtained by a variety of trustworthy data-driven approaches in the literature: $k$-nearest neighbor algorithms with \citep{Ball2008} and without \citep{Sheldon2012} inclusion of photometric measurement errors, neural networks \citep{Bonnett2015a}, self-organizing maps \citep{CarrascoKind2014a}, and prediction tree and random forest classification techniques \citep{Carliles2010, CarrascoKind2013}.  
 (The approaches of fitting to a training set and fitting to a template library are related to one another by \citet{Budavari2009}.)  
+
 Hierarchical inference has also been applied to calculate \pzpdf s simultaneously with the overall redshift distribution function \citep{Leistedt2016}.  
 Of course, this brief review does not cover all ways to obtain \pzpdf s; many more may be found in the literature, along with comparisons thereof \citep{Hildebrandt2010, Dahlen2013, Sanchez2013, Bonnett2015}.
 Some current work aims to vet \pzpdf\ generation methods \citep{Wittman2016}.
@@ -108,16 +109,17 @@ This goal of storing multiple \pzpdf s, however, must be accomplished without ex
 \Chap{pzdc1} contains a comprehensive comparison of twelve approaches to probabilistic photometric redshift estimation, presenting novel discoveries of the impact of the assumptions implicit to the method by which the redshift probabilities are derived and the limitations of established performance metrics of such probabilistic data products in assessing the quality of the procedures for deriving them.
 I also address in \Chap{qp} a practical concern regarding how redshift probabilities are to actually be used, answering the question of how probabilistic data products should be stored and delivered to users in order to ensure that scientific progress can be made, as well as how to go about answering that question for a generic science application.
 
-\aim{did I produce anything of value? if there's a product, maybe cite it here?}
+\chapname~\chapalt{pedant} is original material developed initially as lecture notes and ultimately intended for submission to PRD.
+\chapname~\chapalt{chippr} has been presented at numerous conferences and was awarded finalist status in the 2018 Dance Your Ph.D. Competition but remains a public draft \citep{malz_cosmological_2018} accompanied by the \chippr\footnote{\url{https://github.com/aimalz/chippr}} public code not yet submitted for publication.
+\chapname~\chapalt{pzdc1} is currently under \desc\ internal review and publicly available online\footnote{\url{https://github.com/LSSTDESC/PZDC1paper}}, with intended submission to MNRAS.
+\chapname~\chapalt{qp} has been refereed and published in AJ \citep{malz_approximating_2018}, and the \qp\footnote{\url{https://github.com/aimalz/qp}} code produced for the study is published \citep{malz_qp_2017}.
 
-\chapname~\chapalt{chippr} has been presented at numerous conferences but remains an unpublished, public draft accompanied by a public code.
-\chapname~\chapalt{pzdc1} is currently under \desc\ internal review, with intended submission to MNRAS.
-\chapname~\chapalt{qp} has been refereed and published in AJ, with code published on Zenodo.
 Here, I describe my specific contributions to each \chapname and acknowledge the contributions of my co-authors:
 \begin{enumerate}
 
-{\item For \chap{chippr}, I led the development, implementation, and validation of CHIPPR initially under the supervision of David Hogg (NYU) and later continued to work on all three aspects of the project under the supervision of Phil Marshall (SLAC).
-	I developed the mathematical formalism in consultation with Phil Marshall (SLAC).}
+{\item For \chap{pedant}, I conducted the entire investigation, though Phil Marshall (SLAC) posed the initial question.}
+
+{\item For \chap{chippr}, I led the development, implementation, and validation of \Chippr\ initially under the supervision of David Hogg (NYU) and later continued to work on all three aspects of the project under the supervision of Phil Marshall (SLAC).}
 
 {\item For \chap{pzdc1}, I led the choice, evaluation, and interpretation of the comparison metrics, and I devised and implemented the \texttt{trainZ} technique of \pzpdf\ estimation.
 	I wrote the paper in collaboration with Sam Schmidt (UC Davis), John Soo (U. of Science Malaysia), and the \Pz\ Working Group of the \desc.  
