@@ -1,8 +1,6 @@
 \renewcommand{\chapid}{pedant}
 
 % Chapter specific commands:
-\newcommand{\ntot}{\ensuremath{N_{\mathrm{tot}}}}
-\newcommand{\ndphi}{\bvec{\phi}}
 
 % rules for my math notation, in case I get confused
 % galaxies i, redshifts j, combinations k
@@ -12,7 +10,7 @@
 
 \chapter{ If stacking is wrong, why does it feel so right? \chaplabel{pedant} }
 
-This \paper\ concerns the method by which one obtains the distribution of galaxy redshifts from catalogs of \pzpdf s by addressing why established methodologies appear correct despite being invalid, work inspired by conversations with Phil Marshall during the summer of 2017.
+This \paper\ concerns the method by which one obtains the distribution of galaxy redshifts from catalogs of \pzpdf s by addressing why established methodologies appear correct despite being invalid, work inspired by conversations with Phil Marshall and Daniel Gruen during the summer of 2017.
 
 \section*{Chapter abstract}
 
@@ -26,15 +24,12 @@ This letter aims to bridge that gap by addressing the contrapositive of the more
 \section{Introduction}
 \sectlabel{sec:intro}
 
-\aim{Add in some text here that was in \Chap{chippr} before the split.}
+Though it is at this point well known that estimating the redshift distribution \Nz\ via stacking, defined by \Eq{eqn:stack}, is incorrect \citep{leistedt_hierarchical_2016, malz_chippr_nodate}, even modern analyses still employ the stacked estimator rather than a principled approach \citep{hoyle_dark_2017}.
+In this instance, the resistance to change goes beyond simple inertia and the technical challenges associated with more sophisticated inference methods.
+Stacking is bolstered by pervasive misunderstandings about the causal structure of the problem and \pzpdf s as probabilistic objects overall \citep{jarvis_rmjarvis_nodate, malz_aimalz_nodate}.
 
-\begin{align}
-\eqlabel{eqn:stack}
-\hat{n}(z) &= \frac{1}{\ntot} \sum_{i = 0}^{\ntot} \pr{z_{i}} .
-\end{align}
-
-\aim{I might not be distinguishing definitions, propositions, lemmas, and theorems properly.}
-\aim{Also, the mathematical notation in here isn't self-consistent but I'm going to deal with it once all the content is there and I'm no longer changing my mind about what the notation ought to be.}
+\aim{I might not be distinguishing definitions, propositions, lemmas, and theorems properly and need to consult with someone more familiar with this formalism.}
+\aim{Also, the mathematical notation in here isn't self-consistent yet, sorry.}
 
 We first establish some basic definitions by considering the chance that a single galaxy $i$ has a given redshift $z'$.
 
@@ -77,11 +72,10 @@ We can consider the probability $\pr{N(z')}$ that $N(z)$ takes any particular va
 	The probability that either of two independent events occur is $\pr{z_{i} \cup z_{j}} = \pr{z_{i}} \pr{\lnot z_{j}} + \pr{\lnot z_{i}} \pr{z_{j}} + \pr{z_{i}} \pr{z_{j}} = \pr{z_{i}} (1 - \pr{z_{j}}) + (1 - \pr{z_{i}}) \pr{z_{j}} + \pr{z_{i}} \pr{z_{j}} = 1 - \pr{\lnot z_{i} \cap \lnot z_{j}}$.
 \end{proposition}
 \begin{proof}
-	by Definitions \ref{def:normalization} and \ref{def:independence}
-	\aim{Expand this stub.}
+	Combining Definitions \ref{def:normalization} and \ref{def:independence} yields the above expressions.
 \end{proof}
 
-\aim{Should I include the proof by induction that follows from Lemma \ref{prp:independence} or leave it as an exercise for the reader?}
+\aim{Should I include the proof by induction that follows from Definition \ref{def:independence} or leave it as an exercise for the reader?}
 
 %More generally, we can quantify \Nz\ with a summary statistic $\ndphi$, which under some function $N(z) = f(z; \ndphi)$ provides the number of galaxies \Nz\ at a redshift $z$.
 %The redshift distribution itself can be used to define a probability density $n(z) \equiv \pr{z \gvn \ndphi} = N(z) / N_{tot}$ of finding a galaxy at a given redshift under the parameter $\ndphi$.
