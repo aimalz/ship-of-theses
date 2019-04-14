@@ -10,7 +10,7 @@
 
 \chapter{ If stacking is wrong, why does it feel so right? \chaplabel{pedant} }
 
-This \paper\ concerns the method by which one obtains the distribution of galaxy redshifts from catalogs of \pzpdf s by addressing why established methodologies appear correct despite being invalid, work inspired by conversations with Phil Marshall and Daniel Gruen during the summer of 2017 that was refined by discussions with Boris Leistedt in early 2018.
+This \paper\ concerns the method by which one obtains the distribution of galaxy redshifts from catalogs of \pzpdf s by addressing why established methodologies appear correct despite being invalid, work inspired by conversations with Phil Marshall and Daniel Gruen during the summer of 2017 that was refined by discussions with Boris Leistedt in spring 2018.
 
 \section*{Chapter abstract}
 
@@ -45,7 +45,7 @@ We first establish some basic definitions by considering the chance that a singl
 	The \textit{probability density function (PDF)} $\pr{z} \geq 0$ is the chance that a galaxy has each possible redshift $z$.
 	It can be evaluated at any specific redshift $z'$ to give the chance $\pr{z'}$ that the galaxy has that particular redshift.
 	\aim{As @davidwhogg correctly points out, this is at best circular and at worst wrong.
-	I'll need to introduce the function $f_{z}(\ndphi)$ whose integral about $z'$ is understood as $\pr{z'}$, currently not mentioned until \Eq{eqn:fz}.}
+	I'll need to introduce the function $f_{z}(\ndphi)$ whose integral about $z'$ is understood as $\pr{z'}$, currently not mentioned until Equation~\ref{chippr:eq:eqn:fz}.}
 \end{definition}
 
 \begin{definition}\label{def:normalization}
@@ -89,7 +89,6 @@ Because the stacked estimator of the redshift distribution given in \Eq{eqn:stac
 
 \begin{lemma}\label{lem:expectednz}
 	As a discrete random variable, the expected value $\langle N_{z} \rangle$ of $N_{z}$ is $\sum_{N_{z} = 0}^{N_{tot}} N_{z}\pr{N_{z}}$.
-	%; note that $\hat{n}(z) = \langle p(z) \rangle$ assuming $p(p(z)) = \mathcal{U}(0, 1)$
 \end{lemma}
 
 However, all we have to work with are the members of the catalog of \pzpdf s, $\{\pr{z}\}$, not $\pr{N_{z}}$.

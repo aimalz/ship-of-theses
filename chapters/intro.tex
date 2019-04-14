@@ -9,7 +9,7 @@ Photometric redshift (\pz) estimation has been a staple of studies of galaxy evo
 An extremely coarse spectrum in the form of photometry in a handful of broadband filters can be an effective substitute for the time- and photon-intensive process of obtaining a spectroscopic redshift (\sz), a procedure that may only be applied to relatively bright galaxies.  
 Once the photometric colors are calibrated against either a library of spectral energy distribution (SED) templates or a data set of spectra for galaxies with known redshifts, a correspondence between photometric colors and redshifts may be constructed, forming a trustworthy basis for \pz\ estimation or testing.
 
-Calculations of correlation functions of cosmic shears and galaxy positions used to constrain the cosmological parameters require large numbers of high-confidence redshifts of surveyed galaxies.  
+Calculations of correlation functions of cosmic shears and galaxy positions that constrain the cosmological parameters require large numbers of high-confidence redshifts of surveyed galaxies.  
 Many more \pz s may be obtained in the time it would take to observe a smaller number of \sz s, and \pz s may be measured for galaxies too dim for accurate \sz\ confirmation, permitting the compilation of large catalogs of galaxy redshifts spanning a broad range of redshifts and luminosities.  
 \Pz s have thus enabled the era of precision cosmology, heralded by weak gravitational lensing tomography and baryon acoustic oscillation peak measurements.  
 
@@ -17,7 +17,7 @@ However, \pz s are susceptible to inaccuracy and imprecision via a number of eff
 The projection of these effects into the space of true and estimated redshifts is discussed extensively in \Chap{pzdc1}, and their impact on cosmological parameter constraints is addressed in \Chap{chippr}, and Figure~\ref{chippr:fig:fig:pedagogical_scatter} in particular.
 
 Based on the goals of a photometric galaxy survey, requirements can be placed on the accuracy of \pz\ estimates.
-For example, the Large Synoptic Survey Telescope (\lsst) states requirements for the main cosmological sample in the \lsst\ Science Requirements Document (SRD)\footnote{\url{https://docushare.lsstcorp.org/docushare/dsweb/Get/LPM-17}} and reproduced in \Tab{tab:lsstsrd}.
+For example, the Large Synoptic Survey Telescope (\lsst) states requirements for the main cosmological sample in the \lsst\ Science Requirements Document (SRD)\footnote{\url{https://docushare.lsstcorp.org/docushare/dsweb/Get/LPM-17}} \citep{the_lsst_dark_energy_science_collaboration_lsst_2018} and reproduced in \Tab{tab:lsstsrd}.
 
 \begin{table}
 	\begin{center}
@@ -71,12 +71,12 @@ The most important of these issues, however, is that use of them in the literatu
 The most common application of \pzpdf s is their use in estimating \Nz, the distribution of redshifts of a sample of galaxies, a quantity essential to the calculation of the power spectra of weak gravitational lensing and large-scale structure that are used to constrain the parameters of cosmological models.
 \aim{Provide equations/citations for the use of \Nz\ in cosmology from \citet{mandelbaum_precision_2008, sheldon_photometric_2012, bonnett_redshift_2016}.}
 
-If the true redshifts $\{z_{i'}\}$ were known, the redshift probabilities would be delta functions $\{\delta(z, z'_{i})\}$ centered at the true redshift, and the redshift distribution could be approximated by a histogram or other interpolation of the delta functions $\{\delta(z, z'_{i})\}$.
-When \pzpdf s are available instead of true redshifts, the simplest approach reduces them to point estimates of redshift by using $\delta(z, \hat{z}_{i})$ in place of $\delta(z, z'_{i})$, where $\hat{z}_{i}$ may be the mode (maximum) of the \pzpdf, though there are other, more principled options \citep{tanaka_photometric_2018}.
+If the true redshifts $\{z_{i}^{\dagger}\}$ were known, the redshift probabilities would be delta functions $\{\delta(z, z_{i}^{\dagger})\}$ centered at the true redshift, and the redshift distribution could be approximated by a histogram or other interpolation of the delta functions $\{\delta(z, z_{i}^{\dagger})\}$.
+When \pzpdf s are available instead of true redshifts, the simplest approach reduces them to point estimates of redshift by using $\delta(z, \hat{z}_{i})$ in place of $\delta(z, z_{i}^{\dagger})$, where $\hat{z}_{i}$ may be the mode (maximum) of the \pzpdf, though there are other, more principled options \citep{tanaka_photometric_2018}.
 However, it is more common at this point to calculate the mathematically invalid but conceptually simple \textit{stacked estimator} of the redshift density function \citep{Lima2008}, 
 \begin{align}
 \eqlabel{eqn:stack}
-\hat{n}(z) &= \frac{1}{\ntot} \sum_{i = 0}^{\ntot} \pr{z_{i}}
+\hat{n}(z) &= \frac{1}{\ntot} \sum_{i = 0}^{\ntot} \pr{z}_{i}
 \end{align}
 for a sample of $\ntot$ galaxies $i$, or, equivalently, the redshift distribution function $\hat{N}(z) = \ntot \hat{n}(z)$.
 
