@@ -1,7 +1,6 @@
 \renewcommand{\chapid}{chippr}
 
 % Chapter specific commands:
-\newcommand{\cosmolike}{\repo{CosmoLike}}
 \newcommand{\emcee}{\repo{emcee}}
 \newcommand{\boss}{\project{BOSS}}
 \newcommand{\mmle}{marginalized maximum likelihood estimate}% really marginalized maximum a posteriori estimate, may still change this
@@ -509,13 +508,18 @@ We adapt the full log-posterior of \Eq{eqn:final} to the chosen binning of redsh
 %		Samples (colored lines) of $\pr{z \gvn \ndphi}$ where each $\ndphi$ is drawn from the hyperprior distribution $\pr{\ndphi}$ given in \Eq{eqn:priorcov}.}
 %	\figlabel{fig:prior}
 %\end{figure}
-
 The sampler is initialized with $W=100$ walkers each with a value chosen from a Gaussian distribution of identity covariance around a sample from the hyperprior distribution.  
 
 % cut out the toy model of a delta function true redshift distribution
 
 \subsection{Intrinsic Scatter}
 \sectlabel{sec:scatter}
+
+%Several factors contribute to photometric redshifts' intrinsic scatter.  
+%Distant galaxies are dimmer compared to galaxies of identical luminosity that are closer, driving up photometric errors in flux-limited surveys.  
+%The nature of the galaxy sample at higher redshifts also changes, meaning the generation of the photometric redshift posterior based on an a locally-calibrated SED template library or spectroscopically-confirmed training set is more likely to be inappropriate, leading to broader features.  
+%In general, the galaxies that could not have been observed spectroscopically will have different and noisier photo-$z$ likelihoods than those that could fall into a spectroscopic training set (or spectroscopically derived template library).  
+%This effect may be stronger for high-redshift galaxies.  
 
 \Fig{fig:pzs-scatter} shows some examples of \pzpdf s generated with only the systematic of intrinsic scatter.
 One can see that the histogram of redshift estimates is broader than that of true redshifts, and that the effect is substantially more pronounced by just doubling the intrinsic scatter from the level of the \lsst\ requirements.
