@@ -463,7 +463,7 @@ We compare the results of \Chippr\ to those of stacking and the histogram of \pz
 	\begin{center}
 		\includegraphics[width=\textwidth]{figures/chippr/flowchart.png}
 		\caption{A flow chart illustrating the forward model used to generate mock data in the validation of \Chippr, as described in \Sect{sec:forward}.
-		Ovals indicate a quantity I choose in order to generate the data, rectangles indicate an operation I perform, and rounded rectangles indicate a quantity created by the forward model.
+		Ovals indicate a quantity that must be chosen in order to generate the data, rectangles indicate an operation I perform, and rounded rectangles indicate a quantity created by the forward model.
 		Arrows indicate the inputs and outputs of each operation performed to simulate mock \pzpdf\ catalogs.}
 		\figlabel{fig:flowchart}
 	\end{center}
@@ -512,29 +512,7 @@ We adapt the full log-posterior of \Eq{eqn:final} to the chosen binning of redsh
 
 The sampler is initialized with $W=100$ walkers each with a value chosen from a Gaussian distribution of identity covariance around a sample from the hyperprior distribution.  
 
-%\Sect{sec:fake-data} considers a delta function true redshift distribution, but the other sections consider only this physically motivated true \nz.
-%\aim{Discuss why it perhaps shouldn't be considered physically motivated -- might not have decided that's what the real thing looks like if we hadn't been stacking all along}
-
-%\subsection{Toy Model}
-%\sectlabel{sec:fake-data}
-%
-%\aim{Commented out but may add back in later.}
-
-%We test the sampler in a case of a highly unrealistic but strongly featured true $N(z)$, that of the lower panel of \Fig{fig:physpz}.  
-%This is done to show that the sampler works even in extreme and unanticipated conditions.  
-%Instead of sampling the physically motivated true distribution $p(z|\vec{\theta}')$ as in \Sect{sec:mock}, we as
-
-%\Fig{fig:toy-comp} compares the mean of the posterior samples to the results of stacking and marginalized likelihood maximization.  
-%It can be seen that the marginalized maximum likelihood estimator is best at recovering the true distribution approaching a delta function due to the nature of the optimizer, which considers each component of the hyperparameter vector to be independent of all others.  
-%Other estimators predict a broader distribution than the truth, with stacking broadening it the most and the mean of the samples broadening it the least.  
-%Though the sampler does not consider components of the hyperparameter vector to be independent, it is flexible enough to provide good constraints on the true $N(z)$.
-%
-%\begin{figure}
-%	\includegraphics[width=0.5\textwidth]{figures/chippr/delt_comps.pdf}
-%	\caption{In this case, the marginalized maximum likelihood estimator (thick, dotted line) recovers the true $N(z)$ (thin, solid line) better than the mean of posterior samples (thick, solid line), though the error bars ($1\sigma$ in dark gray, $2\sigma$ in light gray) do include the true values of the hyperparameters. 
-%		The stacked estimator (thick, dashed line) is the worst estimator of the true redshift distribution function, while the marginalized maximum a posteriori estimator (thin, dashed line) and marginalized expected value estimator (thin, dotted line) are not quite as broad.}
-%	\figlabel{fig:toy-comp}
-%\end{figure}
+% cut out the toy model of a delta function true redshift distribution
 
 \subsection{Intrinsic Scatter}
 \sectlabel{sec:scatter}
