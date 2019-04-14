@@ -669,29 +669,16 @@ The alternatives, however, are biased by the implicit prior except where it is f
 \aim{Q: How does the result of \chippr\ compare to established estimators in terms of the accuracy of $n(z)$?\\
 	A: \chippr\ yields the best possible $n(z)$, conditional on the accuracy of the photo-$z$ PDFs used.}
 
-\aim{Include quantitative results on KLD of \Nz\ and cosmological parameter space.}
-
 \subsection{LSST Requirements}
 \sectlabel{sec:lsstdemo}
 
-To test the impact of these uncertainties, we simulated mock data with all three effects and did a Fisher matrix forecast using \cosmolike.
-\aim{Cite CosmoLike.}
-
-\begin{figure*}
-	\begin{center}
-		\includegraphics[width=0.45\textwidth]{figures/chippr/lsst_scatter.png}
-		\includegraphics[width=0.45\textwidth]{figures/chippr/lsst_log_estimators.png}
-		\caption{T
-		\aim{Rerun this with 35 bins and sampling to match other figures.}}
-		\figlabel{fig:lsstdemo}
-	\end{center}
-\end{figure*}
-
 It is of interest to explore the impact of incorrectly estimated \nz\ on the inference of the cosmological parameters to answer the question of how wrong we will be in our understanding of the universe if we don't perform a valid inference.
-To find an answer, I considered a set of tomographically binned \nz\ and cosmological parameter covariance matrices used for \desc\ forecasting, for which the true \nz\ in each pre-defined bin is already provided in the form of an evaluation of a function on a fine grid of $350$ redshifts $0.0101 < z < 3.5001$.
+To test the impact of these uncertainties, I simulated mock data with all three effects and did a Fisher matrix forecast using \cosmolike\ \citep{krause_cosmolike_2017}, a publicly available cosmological forecasting code.
+
+I considered a set of tomographically binned \nz\ and cosmological parameter covariance matrices used for \desc\ forecasting, for which the true \nz\ in each pre-defined bin is already provided in the form of an evaluation of a function on a fine grid of $350$ redshifts $0.0101 < z < 3.5001$.
 First, I binned them down to a piecewise constant parameterization with a manageable $35$ parameters for \chippr's sampling capabilities.
 Next, I drew $10^{4}$ true redshifts from the binned true \nz\ for each tomographic bin.
-The original, binned, and drawn \nz\ are shown in \Fig{fig:tomobins}
+The original, binned, and drawn \nz\ are shown in \Fig{fig:tomobins}.
 
 \begin{figure*}
 	\begin{center}
@@ -702,10 +689,21 @@ The original, binned, and drawn \nz\ are shown in \Fig{fig:tomobins}
 	\end{center}
 \end{figure*}
 
-Using the \lsst\ \pz\ requirements given in \Sect{sec:lsstdemo}, I emulated \pzpdf s corresponding to the $10^{4}$ true redshifts drawn from the true \nz\ in each bin using the procedure of \Fig{fig:flowchart}.
-I then ran \chippr\ as well as the two other \nz\ estimation methods on the \pzpdf\ catalog for each tomographic bin.
-The estimates are given in \Fig{fig:per-bin-ests}.
-One can see that the excessive breadth of the stacked estimator and the histogram of the modes of the \pzpdf s.
+I emulated \pzpdf s for the $10^{4}$ true redshifts drawn from the true \nz\ in each bin using the procedure of \Fig{fig:flowchart} with all three effects of \Fig{fig:mega_scatter} at the levels of Table~\ref{intro:tab:tab:lsstsrd}.
+
+\begin{figure*}
+	\begin{center}
+		\includegraphics[width=0.24\textwidth]{figures/chippr/0single_lsst_mega_scatter.png}
+		\includegraphics[width=0.24\textwidth]{figures/chippr/1single_lsst_mega_scatter.png}		\includegraphics[width=0.24\textwidth]{figures/chippr/2single_lsst_mega_scatter.png}
+		\includegraphics[width=0.24\textwidth]{figures/chippr/3single_lsst_mega_scatter.png}
+		\caption{As in \Fig{fig:mega_scatter}, with a different tomographic bin in each panel and the three effects of intrinsic scatter, uniformly distributed catastrophic outliers, and bias at the levels of the \lsst\ SRD, given in Table~\ref{intro:tab:tab:lsstsrd}.
+		\aim{If this is redundant, I can take it out.}}
+		\figlabel{fig:per-bin-scatter}
+	\end{center}
+\end{figure*}
+
+I then ran \chippr\ as well as the two other \nz\ estimation methods on the \pzpdf\ catalog for each tomographic bin, yielding the estimates of \Fig{fig:per-bin-ests}.
+Because \cosmolike\ produces cosmology constraints from a single \nz\ result, rather than samples from the full posterior probability density of possible \nz, only the optimizer was run on the tomographic data.
 
 \begin{figure*}
 	\begin{center}
@@ -713,6 +711,7 @@ One can see that the excessive breadth of the stacked estimator and the histogra
 		\includegraphics[width=0.24\textwidth]{figures/chippr/1single_lsst_lin_estimators.png}		\includegraphics[width=0.24\textwidth]{figures/chippr/2single_lsst_lin_estimators.png}
 		\includegraphics[width=0.24\textwidth]{figures/chippr/3single_lsst_lin_estimators.png}
 		\caption{The \chippr-derived and other estimators of \nz\ in each tomographic bin.
+			The result of stacking is far too broad for \lsst-like \pzpdf s, even moreso than the simplistic histogram of modes.
 		\aim{Make this one big plot instead of four little ones to eliminate repeated axis labels and legend.}}
 		\figlabel{fig:per-bin-ests}
 	\end{center}
