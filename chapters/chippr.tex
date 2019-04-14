@@ -451,6 +451,7 @@ KL_{',\ddagger} = \integral{\pr{z \gvn \ndphi'} \ln \left[ \frac{\pr{z \gvn \ndp
 which measures a distance from parameter values $\ndphi'$ to true parameter values $\ndphi^{\dagger}$, which is invariant under changes of variables.  
 We note that $KL_{',\dagger} \neq KL_{\dagger,'}$ and is only interpretable when there is a notion that $\ndphi^{\dagger}$ is closer to the truth than $\ndphi'$.
 In simulated tests, $\ndphi^{\dagger}$ is the true value and $\ndphi'$ is that produced by one of the methods in question.
+\aim{I think I need to move the KLD to an actual out-of-chapter appendix because I go through the whole song and dance way better in \Chap{qp}.}
 
 \section{Validation}
 \sectlabel{sec:alldata}
@@ -750,88 +751,15 @@ In these tests, the \pzip s are made to the \lsst\ requirements but the implicit
 	\end{center}
 \end{figure*}
 
-%\subsection{Real Data}
-%\sectlabel{sec:boss}
-%
-%\aim{Commented out but may add back in later.}
-
-%We also test this method on subsets of the published \pzpdf s of \sdss\ III DR 10. 
-%A sampling of the provided interim photo-$z$ posteriors of dimension $K=35$ for $z_{min}=0.3$ and $z_{max}=1.4$ is shown in the top panel of \Fig{fig:datapzs}.  
-%
-%All tests in this paper will be conducted with $z_{0}=0.0$, $z_{K}=1.1$, and $K=35$, the endpoints and dimensionality of the published BOSS DR8 photo-$z$ interim posteriors \citet{Sheldon2012}.  
-%We also define $\bar{z}_{k}\equiv(z_{k}+z_{k-1})/2$.
-%The brightest half of this pseudo-random sampling are selected for another test, with photo-$z$ interim posterior samples shown in the bottom panel of \Fig{fig:datapzs}.  
-%The interim prior used for this set of interim photo-$z$ posteriors is the reweighted estimator of $N(z)$ of \citet{Sheldon2012}.  
-%In these cases the true $N(z)$ is not known, but the fully probabilistic method presented here may still be compared to what is obtained by alternative approaches.
-%
-%\begin{figure}
-%	\includegraphics[width=0.5\textwidth]{figures/chippr/boss_samplepzs.pdf}\\
-%	\includegraphics[width=0.5\textwidth]{figures/chippr/bias_samplepzs.pdf}
-%	\caption{Same as \Fig{fig:nullpzs} but for real data.  
-%		A pseudo-random sampling of BOSS DR 10 photo-$z$ posteriors produced by \citet{Sheldon2012} (top panel) are clearly much noisier than those of the fiducial case.  
-%		A random sampling of the brightest half of the pseudo-random BOSS DR10 sample (bottom panel) corresponds to much cleaner photo-$z$ posteriors.}
-%	\figlabel{fig:datapzs}
-%\end{figure}
-
-%The results of the inference of the redshift distribution function from a pseudo-random sample of BOSS DR10 data described in \Sect{sec:data} are shown in \Fig{fig:dataparam} and \Fig{fig:datacomp}.  
-%
-%The most striking feature of \Fig{fig:dataparam} aside from the stark difference between the mean of the samples and the interim prior is the major systematic in the samples from the posterior distribution is observed at high redshift.  
-%Because the data itself exhibits high uncertainty at high $z$ in the form of local maxima of the photo-$z$ interim posteriors, a reflection of the inherent degeneracies that give rise to catastrophic photo-$z$ errors, it is natural that there be large errors in that region.  
-%
-%\begin{figure}
-%	\includegraphics[width=0.5\textwidth]{figures/chippr/boss_samps.pdf}
-%	\caption{Samples from the full posterior (colored lines) of the subsample differ substantially from the interim prior (gray).  
-%		The mean of samples (thick, black line) and associated error bars ($1\sigma$ in dark gray, $2\sigma$ in light gray) are in line with the sampled values.}
-%	\figlabel{fig:dataparam}
-%\end{figure}
-%
-%\Fig{fig:datacomp} also shows the broader error bars in a small region of high redshift, but it has the additional information of how other estimators perform.  
-%The results of stacking and reduction of interim photo-$z$ posteriors to point estimators are strongly biased toward the interim prior, especially stacking.  
-%Given that stacking has been validated by the results' similarity to the interim prior, it is especially grave that it trivially reproduce it; if the interim prior is inappropriate, stacking is guaranteed to fail because it do not account for the effect of the interim prior on the interim photo-$z$ posteriors, permitting it to dominate over the underling likelihoods.  
-%The result of marginalized maximum likelihood estimation is also shown to be numerically unstable, a possible effect of the extreme multimodality of the data.  
-%
-%\begin{figure}
-%	\includegraphics[width=0.5\textwidth]{figures/chippr/boss_comps.pdf}
-%	\caption{It can be seen that the stacked estimator (thick, dashed line) almost perfectly reproduces the interim prior (gray line), while the marginalized maximum a posteriori estimator (thin, dashed line) and marginalized expected value estimator (thin, dotted line) do so with some instability.  
-%		The marginalized maximum likelihood estimator (thick, dotted line) is most unstable, while the mean of the posterior samples (thick, solid line) predicts a very different redshift distribution function than the interim prior, with a peculiar feature in the error bars ($1\sigma$ in dark gray, $2\sigma$ in light gray) at high redshift.}
-%	\figlabel{fig:datacomp}
-%\end{figure}
-%
-%The BOSS subsample is further subsampled by imposing a cut in $r$-band magnitude (at the median magnitude) to approximate the behavior of a heavily biased galaxy survey with a magnitude limit.  
-%This is motivated by the question of what data is behind the feature in the posterior distribution's error bars at high redshift.  
-%Recall that samples of photo-$z$ interim posteriors are shown in the lower panel of \Fig{fig:datapzs}.  
-%The results of the inference are shown in \Fig{fig:biasparam} and \Fig{fig:biascomp}.  
-%
-%\begin{figure}
-%	\includegraphics[width=0.5\textwidth]{figures/chippr/bias_samps.pdf}
-%	\caption{Samples from the full posterior (colored lines) of the biased subsample still differ substantially from the interim prior (gray).  
-%		The mean of samples (thick, black line) and associated error bars ($1\sigma$ in dark gray, $2\sigma$ in light gray) are in line with the sampled values.}
-%	\figlabel{fig:biasparam}
-%\end{figure}
-%
-%\begin{figure}
-%	\includegraphics[width=0.5\textwidth]{figures/chippr/bias_comps.pdf}
-%	\caption{The mean of posterior samples (thick, solid line) differs from the interim prior (gray line) more than the alternative estimators, exhibiting some features at low redshift.  
-%		It can be seen that the stacked estimator (thick, dashed line) is most biased towards the interim prior, though the effect is also seen in the marginalized maximum a posteriori estimator (thin, dashed line) and marginalized expectation value estimator (thin, dotted line).  
-%		The marginalized MLE (thick, dotted line) is still highly unstable.  
-%		The error bars ($1\sigma$ in dark gray, $2\sigma$ in light gray) do not exhibit the same behavior as in the unbiased subsample.}
-%	\figlabel{fig:biascomp}
-%\end{figure}
-%
-%There are two notable differences between the unbiased and biased subsamples of the BOSS DR10 pseudo-random subsample.  
-%First, the stacked and point estimators are less biased toward the interim prior.  
-%This may be due to the way the interim prior was chosen, such that it was influenced strongly by the dimmest galaxies.  
-%Second, the high-redshift feature in the error bars is not present once a magnitude cut is imposed.  
-%From this one can conclude that the signal and associated error bars in that region were caused by the sampler's assignment high redshifts to poorly constrained interim photo-$z$ posteriors corresponding to the dimmest galaxies. 
+% removed ancient investigation on real data, would be hard to redo with the new \chippr\ code on this timescale given that I haven't even looked at the data format in 4 years
 
 \section{Conclusion}
 \sectlabel{sec:con}
 
-\aim{I still need to update the language in this section for consistency with the rest of \Chap{chippr}.}
-
-This study derives and demonstrates a mathematically consistent implementation of inference of a one-point statistic based on any existing catalog of \pzpdf s.  
-The fully Bayesian method, based in the fundamental laws of probability, begins with a graphical model corresponding to equations for the full posterior.  
-The technique developed in this paper is applied to the example of the redshift density function \nz\ with promising results on mock data; not only is this the only mathematically correct approach to the problem, it also recovers the true parameter values better than popular alternatives.  
+This study derives and demonstrates a mathematically consistent inference of a one-point statistic, the redshift density function \nz, based on an arbitrary catalog of \pzpdf s.  
+The fully Bayesian method, based in the fundamental laws of probability, begins with a probabilistic graphical model corresponding to equations for the full posterior distribution over the parameters for \nz.  
+The method is validated on mock data and tested in the regime of \lsst\ with promising results, outperforming the traditional stacking estimator at the level of \nz\ as well as in terms of constraining power on the cosmological parameters.
+Not only is this the only mathematically correct approach to the problem, it also recovers the true parameter values better than popular alternatives.  
 
 In the tests on simulated data performed here, the full posterior distribution over the hyperparameters defining $N(z)$ derived by this method is consistent with the true redshift distribution function, making the mean of sampled values an excellent point estimator of $N(z)$.  
 The information contained in the full posterior distribution's shape convey the traditional error bar information without having to explicitly propagate any error estimates.  
