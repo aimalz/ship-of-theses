@@ -610,7 +610,7 @@ Regardless, for completeness, a test at ten times the bias of the \lsst\ require
 	\caption{
 		Left: Examples of \pzpdf s with ten times the bias of the \lsst\ requirements at the level of the \lsst\ requirements, including samples from the probability space of true and observed redshift (black points), \pzpdf s (colored curves), and the true redshifts of the example \pzpdf s (black vertical lines), with marginal histograms (gray) for each dimension with the true redshift distribution (blue curve) and implicit prior (red curve) in the insets.
 		Right: The results of \Chippr\ (samples in light blue, optimization in dark blue) and the alternative approaches (the stacked estimator in red, the histogram of modes in yellow) on \pzpdf s with uniformly distributed catastrophic outliers, with the true redshift density (black curve) and implicit prior (gray curve).
-		\aim{Update these after running the sampler \textemdash config file ``thesis\_neghivarbias''.}
+		The impact of bias at even ten times the level of the \lsst\ requirements is almost imperceptible on all estimators, though the \Chippr\ \mmle\ minimizes the information loss regardless.
 	}
 	\figlabel{fig:bias}
 \end{figure}
@@ -669,29 +669,29 @@ The main implication of the response of \nz\ estimates to a nontrivial implicit 
 \sectlabel{sec:results}
 
 The experiments of \Sect{sec:alldata} isolate the potential sources of error in \nz\ estimation one at a time.
-Now, we investigate two realistically complex cases, one in which the \nz\ estimates are made tomographically as in a modern cosmological analysis.
-Though redshift tomography is non-physical, as redshift is a continuous random variable, and binning in estimated redshift introduces poorly understood systematic error, I perform this analysis as an example of how it affects the current standard in how cosmological parameters are constrained by galaxy surveys, rather than how I think they ought to be constrained.
+Now, we stress-test \Chippr\ by investigating two realistically complex cases, one in which the \nz\ estimates are made tomographically as in a modern cosmological analysis (\Sect{sec:lsstdemo}) and one in which the \nz\ estimators are not provided with the same implicit prior used to generate the \pzpdf\ catalog (\Sect{sec:violations}).
 
 \subsection{LSST Requirements}
 \sectlabel{sec:lsstdemo}
 
 It is of interest to explore the impact of incorrectly estimated \nz\ on the cosmological inference to answer the question of how wrong we will be in our understanding of the universe if we incorrectly constrain \nz.
 To test the impact of these uncertainties, I simulated mock data with all three effects with which \lsst\ is concerned at the levels of Table~\ref{intro:tab:tab:lsstsrd} and propagated the results of \Chippr\ and the other estimators to a Fisher matrix forecast using \cosmolike\ \citep{krause_cosmolike_2017}, a publicly available cosmological forecasting code.
-
-I considered a set of tomographically binned \nz\ and cosmological parameter covariance matrices used for \desc\ forecasting, for which the true \nz\ in each pre-defined bin is already provided in the form of an evaluation of a function on a fine grid of $350$ redshifts $0.0101 < z < 3.5001$.
-First, I binned them down to a piecewise constant parameterization with a manageable $35$ parameters for \chippr's sampling capabilities.
-Next, I drew $10^{4}$ true redshifts from the binned true \nz\ for each tomographic bin.
-The original, binned, and drawn \nz\ are shown in \Fig{fig:tomobins}.
+Though redshift tomography is non-physical, as redshift is a continuous random variable, and binning in estimated redshift introduces poorly understood systematic error, I perform this analysis as an example of how it affects the current standard in how cosmological parameters are constrained by galaxy surveys, rather than how I think they ought to be constrained.
 
 \begin{figure*}
 	\begin{center}
 		\includegraphics[width=0.74\textwidth]{figures/chippr/cosmolike_inputs.png}
-		\caption{The \lsst-like tomographic binning and true redshift distribution, where the truth (solid) is a PDF evaluated on a fine grid of $350$ redshifts $0.0101 < z < 3.5001$, and the binned (dashed) and drawn (dotted) \nz\ are piecewise constant functions evaluated in $35$ evenly spaced bins.
+		\caption{
+			The \lsst-like tomographic binning and true redshift distribution, where the truth (solid) is a PDF evaluated on a fine grid of $350$ redshifts $0.0101 < z < 3.5001$, and the binned (dashed) and drawn (dotted) \nz\ are piecewise constant functions evaluated in $35$ evenly spaced bins, for four different tomographic bins (colors).
 		}
 		\figlabel{fig:tomobins}
 	\end{center}
 \end{figure*}
 
+I considered a set of tomographically binned \nz\ and cosmological parameter covariance matrices used for \desc\ forecasting, for which the true \nz\ in each pre-defined bin is already provided in the form of an evaluation of a function on a fine grid of $350$ redshifts $0.0101 < z < 3.5001$.
+First, I binned them down to a piecewise constant parameterization with a manageable $35$ parameters for \chippr's sampling capabilities.
+Next, I drew $10^{4}$ true redshifts from the binned true \nz\ for each tomographic bin.
+The original, binned, and drawn \nz\ are shown in \Fig{fig:tomobins}.
 I emulated \pzpdf s for the $10^{4}$ true redshifts drawn from the true \nz\ in each bin using the procedure of \Fig{fig:flowchart} with all three effects of Table~\ref{intro:tab:tab:lsstsrd} at their given levels.
 Illustrations of this process are provided in \Fig{fig:per-bin-scatter}.
 
@@ -718,7 +718,8 @@ The excessive breadth of the alternative estimators can be seen quite plainly.
 		\caption{
 			The \chippr-derived and other estimators of \nz\ in each tomographic bin, with the true \nz\ (black), the implicit prior (gray), stacked estimator (red), histogram of modes (yellow), and \Chippr\ \mmle\ (blue).
 			The result of stacking is far too broad for \lsst-like \pzpdf s, even moreso than the simplistic histogram of modes.
-			\aim{Make this one big plot instead of four little ones to eliminate repeated axis labels and legend, and make the legend text bigger.}}
+			\aim{Make this one big plot instead of four little ones to eliminate repeated axis labels and legend, and make the legend text bigger.}
+		}
 		\figlabel{fig:per-bin-ests}
 	\end{center}
 \end{figure*}
@@ -747,16 +748,22 @@ Though the true values of the parameters themselves were not accessible with the
 \subsection{Violations of the model}
 \sectlabel{sec:violations}
 
-In these tests, the \pzip s are made to the \lsst\ requirements but the implicit prior used for the inference is not the same as the implicit prior used for generating the data.
+In this test, without tomographic binning, the \pzip s are made to the \lsst\ requirements but the implicit prior used for the inference is not the same as the implicit prior used for generating the data.
+\Pzpdf\ codes do not generally provide their implicit prior, with the exception of some template-fitting techniques for which it is a known input.
+If we naively used the \pzpdf\ catalog produced by a generic machine learning code and assumed a flat implicit prior, we would observe the contents of \Fig{fig:mischaracterized}.
 
 \begin{figure*}
 	\begin{center}
-		\includegraphics[width=0.45\textwidth]{figures/chippr/wrong_scatter.png}
-		\includegraphics[width=0.45\textwidth]{figures/chippr/wrong_log_estimators.png}
-		\caption{\aim{Update the figures for this to use the same conditions as \Sect{sec:lsstdemo} but one of the implicit priors from \Sect{sec:interim} for generating the data and the other for the inference.}}
+		\includegraphics[width=0.49\textwidth]{figures/chippr/wrong_scatter.png}
+		\includegraphics[width=0.49\textwidth]{figures/chippr/wrong_log_estimators.png}
+		\caption{
+			\aim{Update this figure for 35 bins and consistent colors.}
+		}
 		\figlabel{fig:mischaracterized}
 	\end{center}
 \end{figure*}
+
+The results of using a mischaracterized implicit prior are disastrous, causing every estimator, including \Chippr, to be strongly biased.
 
 % removed ancient investigation on real data, would be hard to redo with the new \chippr\ code on this timescale given that I haven't even looked at the data format in 4 years
 
@@ -766,26 +773,25 @@ In these tests, the \pzip s are made to the \lsst\ requirements but the implicit
 This study derives and demonstrates a mathematically consistent inference of a one-point statistic, the redshift density function \nz, based on an arbitrary catalog of \pzpdf s.  
 The fully Bayesian method, based in the fundamental laws of probability, begins with a probabilistic graphical model corresponding to equations for the full posterior distribution over the parameters for \nz.  
 The method is validated on mock data and tested in the regime of \lsst\ with promising results, outperforming the traditional stacking estimator at the level of \nz\ as well as in terms of constraining power on the cosmological parameters.
-Not only is this the only mathematically correct approach to the problem, it also recovers the true parameter values better than popular alternatives.  
+Not only is this the only mathematically correct approach to the problem, it also recovers the true parameter values better than popular alternatives, as measured by the loss of information in \nz\ and the size of error ellipses in the space of cosmological parameters.
 
-In the tests on simulated data performed here, the full posterior distribution over the hyperparameters defining $N(z)$ derived by this method is consistent with the true redshift distribution function, making the mean of sampled values an excellent point estimator of $N(z)$.  
-The information contained in the full posterior distribution's shape convey the traditional error bar information without having to explicitly propagate any error estimates.  
-\aim{Refer to quantitative results on KLD of \Nz\ and cosmological parameter space.}
+%In the tests on simulated data performed here, the full posterior distribution over the hyperparameters defining $N(z)$ derived by this method is consistent with the true redshift distribution function, making the mean of sampled values an excellent point estimator of $N(z)$.  
+%The information contained in the full posterior distribution's shape convey the traditional error bar information without having to explicitly propagate any error estimates.  
+%\aim{Refer to quantitative results on KLD of \Nz\ and cosmological parameter space.}
 %The results of those tests is summarized below and in \Tab{tab:kld}, where lower values indicate a closer match between the true $N(z)$ and the estimator.  
 %Tests were also performed on subsets of BOSS DR10 data with results consistent with those of simulations.
 
 The following conclusions and recommendations can be made with confidence:
 
 \begin{enumerate}
-	\item Both the marginalized maximum likelihood estimator and the mean of the samples are good point estimators of the redshift distribution function; the error bars on the posterior distribution over hyperparameters are generally reliable and easier to derive than error bars from traditional point estimators of the redshift distribution function.
-	\item Even in the case of precise data, traditional methods fail, and they do even worse with imprecise data; the error bars of the mean of posterior samples, however, are accurate.  When data quality worsens with redshift, all estimators are affected, but the inaccuracy is quantified by the full distribution of the posterior samples whereas the alternative estimators require separate error propagation.  
-	\item When data suffers from inaccuracies, as in the case of multimodal interim photo-$z$ posteriors, the marginalized maximum likelihood estimator performs comparably to the mean of the posterior samples
-	\item The marginalized maximum likelihood estimator is an excellent estimator for strongly featured redshift distribution function with simple, clean photo-$z$ posteriors; stacking smooths features more than sampling and photo-$z$ point estimation.
-	\item When the interim prior is known to be a poor approximation to the data, only the marginalized MLE and mean of sampled values are satisfactory estimators of the redshift distribution function because they are the only methods that can account for the bias introduced into the photo-$z$ posteriors; this is the most compelling case for the sampler because of the ubiquity of inappropriate interim priors.
+	\item Both the \Chippr\ \mmle\ and the mean of \chippr\ samples are good point estimators of \nz, whereas the histogram of modes is very sensitive to outliers and the stacked estimator is always excessively broad.
+	\item The error bars on the posterior distribution over \nz\ hyperparameters are interpretable and arise naturally under \Chippr, unlike those that may be assumed for the conventional point estimators.
+%	\item The marginalized maximum likelihood estimator is an excellent estimator for strongly featured redshift distribution function with simple, clean photo-$z$ posteriors; stacking smooths features more than sampling and photo-$z$ point estimation.
+	\item When the implicit prior is known to be a poor match to the data, only the results of \Chippr\ are satisfactory estimators of the redshift distribution function because they are the only methods that can account for the bias induced on the \pzpdf\ catalog by the method that produces it; this is the most compelling case for the sampler because of the ubiquity of inappropriate interim priors.
 \end{enumerate}
 
-By showing that this method is effective in recovering the true redshift distribution function and posterior distributions on its parameters from catalogs of \pzpdf s, this work supports the production of \pzpdf s by upcoming photometric surveys such as \lsst\ so that more accurate inference of physical parameters may be accessible to the scientific community.  
-We discourage researchers from co-adding \pzpdf s or converting them into point estimates of redshift and instead recommend the use of Bayesian probability to guide the usage of \pzpdf s in science.  
+By showing that \Chippr\ is effective in recovering the true redshift distribution function and posterior distributions on its parameters from catalogs of \pzpdf s, this work supports the production of \pzpdf s by upcoming photometric surveys such as \lsst\ to enable more accurate inference of the cosmological parameters.  
+We discourage researchers from co-adding \pzpdf s or converting them into point estimates of redshift and instead recommend the use of Bayesian probability to guide the usage of \pzpdf s.  
 We emphasize to those who produce \pzpdf s from data that it is essential to release the implicit prior used in generating this data product in order for proper inference to be conducted by consumers of this information.
 
 The technique herein developed is applicable with minimal modification to other one-point statistics of redshift to which we will apply this method in the future, such as the redshift-dependent luminosity function and weak lensing mean distance ratio.  
