@@ -14,10 +14,29 @@ Many more \pz s may be obtained in the time it would take to observe a smaller n
 \Pz s have thus enabled the era of precision cosmology, heralded by weak gravitational lensing tomography and baryon acoustic oscillation peak measurements.  
 
 However, \pz s are susceptible to inaccuracy and imprecision via a number of effects, particularly their inherent noisiness due to the coarseness of photometric filters, catastrophic errors in which galaxies of one type at one redshift are mistaken for galaxies of another type at a different redshift, and systematics introduced by observational techniques, data reduction processes, and training or template set limitations.  
-The projection of these effects into the space of true and estimated redshifts is discussed extensively in \Chap{pzdc1}, and their impact on cosmological parameter constraints is addressed in \Chap{chippr}, and Figure~\ref{chippr:fig:fig:pedagogical_scatter} in particular.
+The projection of these effects into the space of true and estimated redshifts is discussed extensively in \Chap{pzdc1}, and their impact on cosmological parameter constraints is addressed in \Chap{chippr}, but some introductory material will motivate the following discussion.
 
-Based on the goals of a photometric galaxy survey, requirements can be placed on the accuracy of \pz\ estimates.
-For example, the Large Synoptic Survey Telescope (\lsst) states requirements for the main cosmological sample in the \lsst\ Science Requirements Document (SRD)\footnote{\url{https://docushare.lsstcorp.org/docushare/dsweb/Get/LPM-17}} \citep{the_lsst_dark_energy_science_collaboration_lsst_2018} and reproduced in \Tab{tab:lsstsrd}.
+\Fig{fig:pedagogical_scatter} illustrates the relationship between photometry and redshift generically by showing ``data'' in one dimension for visualization purposes, suggesting that a special nonlinear projection of the photometry could more-or-less yield a one-to-one relationship with true redshifts.
+This plot looks very much like the traditional $z_{\mathrm{spec}}$ versus $z_{\mathrm{phot}}$ plots of traditional \pz\ point estimates and was indeed adapted from one such plot in \citet{jain_whole_2015}, because \pz\ point estimates effectively are a special nonlinear projection of the data.
+
+\begin{figure*}
+	\begin{center}
+		\includegraphics[width=0.74\textwidth]{figures/intro/jain05.png}
+		\caption{
+			A generic probability space of redshift (x-axis) and data (y-axis), projected into a single dimension, with vertical cuts and marginals (cyan) indicating the construction of likelihoods and horizontal cuts and marginals (magenta) indicating the construction of posteriors.
+			The data (black points) used to generate the contours were extracted from \citet{jain_whole_2015} using WebPlotDigitizer \citep{rohatgi_webplotdigitizer_2019}, with the ideal redshift estimation provided for reference (red line).
+			\aim{Choose better colors?}
+		}
+		\figlabel{fig:pedagogical_scatter}
+	\end{center}
+\end{figure*}
+
+There are several types of non-Gaussian deviation from a perfect correspondence between redshift and data in \Fig{fig:pedagogical_scatter}.
+There is scatter about the diagonal due to the coarseness of the photometric filters, with larger scatter perpendicular to the diagonal where highly identifiable spectral features pass between the filters, as well as higher scatter at high redshifts due to galaxies being dimmer.
+There are populations of outliers, far from the diagonal, indicating galaxies for which the redshift estimate is very far from the true redshift, showing that outliers are not uniformly distributed.
+And, though hardly perceptible in the plot, there is a systematic bias, wherein the average of the points would not lie on the diagonal but would be offset by a small amount, suggested by the trend of points to lie below the diagonal at high redshift.
+Based on the goals of a photometric galaxy survey, requirements can be placed on the tolerance to these effects.
+For example, the Large Synoptic Survey Telescope (\lsst) states requirements for the main cosmological sample in the \lsst\ Science Requirements Document (SRD)\footnote{\url{https://docushare.lsstcorp.org/docushare/dsweb/Get/LPM-17}} \citep{the_lsst_dark_energy_science_collaboration_lsst_2018}, reproduced in \Tab{tab:lsstsrd}.
 
 \begin{table}
 	\begin{center}
@@ -25,9 +44,9 @@ For example, the Large Synoptic Survey Telescope (\lsst) states requirements for
 		\tablabel{tab:lsstsrd}
 	\begin{tabular}{ll}
 		Number of galaxies & $\sim 10^{7}$\\
-		Root-mean-square error & $\sigma_z < 0.02 (1+z)$\\
+		Root-mean-square error & $\sigma_z < 0.02 (1 + z)$\\
 		$3 \sigma$ catastrophic outlier rate & $< 10\%$\\
-		bias & $< 0.003$
+		bias & $< 0.003 (1 + z)$
 	\end{tabular}
 	\end{center}
 \end{table}
@@ -51,14 +70,17 @@ This mismatch can bias one-point statistics of the affected galaxy populations \
 Once propagated through the calculations of correlation functions of cosmic shear and galaxy positions, \pz\ errors are not insignificant contributors to the total uncertainties reported on cosmological parameters.
 As other systematics have been resolved, the uncertainties associated with \pz s have come to dominate the uncertainties on estimates of cosmological parameters made by current surveys such as \des \citep{hoyle_dark_2017}, \project{HSC} \citep{tanaka_photometric_2018}, and \project{KiDS} \citep{hildebrandt_kids-450:_2017}.
 
-Much effort has been dedicated to improving \pz s, though they are still most commonly obtained by a maximum likelihood estimator (MLE) based on libraries of galaxy SED templates, with conservative approaches to error estimation.  
+Much effort has been dedicated to improving \pz s, though they are still most commonly obtained by a maximum likelihood estimator (MLE) based on libraries of galaxy SED templates, with conservative approaches to error estimation.
+This approach tends to lead to catastrophic outliers like the horizontally oriented population of \Fig{fig:pedagogical_scatter}, due to the presence of galaxies whose SEDs are not represented by the template library.
+Sophisticated Bayesian techniques and cutting-edge machine learning methods have been employed to improve precision \citep{Carliles2010} and accuracy \citep{Sadeh2015}. 
+Data-driven approaches tend to result in catastrophic outliers like the vertically oriented population of \Fig{fig:pedagogical_scatter}, due to training sets that are incomplete in redshift coverage.
 Recent advances have focused on identifying and removing catastrophic outliers when using \pz s for 
 inference \citep{Gorecki2014}.  
-Sophisticated Bayesian techniques and cutting-edge machine learning methods have been employed to improve precision \citep{Carliles2010} and accuracy \citep{Sadeh2015}. 
 
 An alternative to point estimation of \pz s is redshift probability distribution function (PDF) estimation that reports the probability $\pr{z}$ over all possible redshifts for every galaxy rather than an MLE (with or without presumed Gaussian error bars) \citep{Koo1999}.  
 This option is favorable because it contains more potentially useful information about the uncertainty on each galaxy's redshift, incorporating notions of precision, accuracy, and systematic errors.
 However, denoting \pzpdf s as ``$\pr{z}$'' is an abuse of notation, as it does not adequately convey what information is being used to constrain the redshift $z$; \pzpdf s are \textit{posterior} PDFs, conditioned on the photometric data and prior knowledge, as is covered in detail in \Chap{pedant}, as well as \Chap{chippr} and \Chap{pzdc1}.
+In terms of \Fig{fig:pedagogical scatter}, \pzpdf s are horizontal cuts, probabilities of redshift conditioned on a specific value of data, i.e. posteriors, which constrain redshifts, whereas vertical cuts through this space are probabilities of data conditioned on a specific redshift, i.e. likelihoods, from which data is actually drawn.
 
 \aim{what interesting problems/opportunities are the context for my work?  (drawing conclusions about the universe from vast quantities of uncertainty-dominated, limitations of photometry lead to methodological challenges, what was tried so far and why isn't it good enough)}
 
