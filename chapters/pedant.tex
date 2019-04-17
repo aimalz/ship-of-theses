@@ -26,7 +26,7 @@ This letter aims to bridge that gap by addressing the contrapositive of the more
 
 Though it is at this point well known that estimating the redshift distribution \Nz\ via stacking, defined by Equation~\ref{intro:eq:eqn:stack}, is incorrect \citep{leistedt_hierarchical_2016, malz_chippr_nodate}, even modern analyses still employ the stacked estimator rather than a principled approach \citep{sheldon_photometric_2012, hoyle_dark_2017}.
 In this instance, the resistance to change goes beyond simple inertia and the technical challenges associated with more sophisticated inference methods.
-Stacking is bolstered by pervasive misunderstandings about the causal structure of the problem and \pzpdf s as probabilistic objects overall \citep{jarvis_rmjarvis_2018, malz_aimalz_2018}.
+Stacking is bolstered by pervasive misunderstandings about the causal structure of the problem and \pzpdf s as probabilistic objects overall \citep{gruen_sumzz_2017, jarvis_rmjarvis_2018, malz_aimalz_2018}.
 
 \aim{I might not be distinguishing definitions, propositions, lemmas, and theorems properly and need to consult with someone more familiar with this formalism.}
 \aim{Also, the mathematical notation in here isn't entirely self-consistent yet, sorry.}
@@ -201,6 +201,8 @@ From this point on, we'll use the full form of Equation~\ref{intro:eq:eqn:stack}
 \eqlabel{eqn:stackwithdata}
 \hat{N}(z) &= \sum_{i = 0}^{N} \pr{z \gvn \data_{i}} .
 \end{align}
+It is important to note here what is wrong with \Eq{eqn:stackwithdata}.
+While it may look like \Eq{eqn:normalize}, we can never integrate over the quantity on the right side of a conditional; there is only a mathematical framework for integrating over the quantity on the left side of a conditional \citep{hogg_data_2012}.
 
 If the data is perfectly informative, then $\pr{z \gvn \data_{i}} = \delta(z,\ z_{i}^{\dagger})$, where $z_{i}^{\dagger}$ is the true redshift of galaxy $i$.
 \Pzpdf s are not delta functions because the data are inherently noisy and because our model for the relationship between photometry and redshift is imperfect, as was covered in Figure~\ref{intro:fig:fig:pedagogical_scatter}.
