@@ -1,21 +1,21 @@
 \chapter*{Conclusion}\addcontentsline{toc}{chapter}{Conclusion}
 
-This dissertation concerns the use of probabilistic \pz\ estimates in inference (\Chap{chippr}) and more generically (\Chap{qp}), as well as the evaluation of the performance of \pzpdf s (\Chap{pzdc1}).
-\aim{Expand this into a one-paragraph outline of all the chapters.}
+This dissertation concerns \pzpdf s in the context of cosmology.
+In \Chap{pedant}, I explore the mathematical underpinnings of \pzpdf s and identify the special assumptions necessary for the naive estimator of the redshift distribution function \Nz\ to be valid, conditions that generally do not and will not hold for current and future galaxy surveys.
+In \Chap{chippr}, I propose and validate a Bayesian hierarchical model for the inference of the redshift density function \nz\ using \pzpdf s, presenting the \chippr\ public code.
+In \Chap{pzdc1}, I stress-test the performance metrics that can be used to compare the myriad methods for obtaining \pzpdf s and isolate the impact of implicit priors on \pzpdf\ catalogs.
+In \Chap{qp}, I investigate the optimal way to determine the storage parameterization of large \pzpdf\ catalogs under realistic computational resource constraints. 
 
 \aim{Add a one-paragraph synopsis of each chapter including conclusions and what to do next, emphasizing the context of the problem and the scope of the results in the chapter.}
 
+
 \aim{Summarize my overall research program, how this work fits into the field as a whole, what broadly remains to be done, and my vision for where the field is going.
 \begin{itemize}
-	\item use every part of the animal, don't throw away data
 	\item must be careful and correct, or we will only get out what we put in
 	\item how we make decisions about what's good and what's bad makes a difference, must \textit{design} metrics appropriate to our goals even when inconvenient
 \end{itemize}}
 
-
-
-
-
-
-
+My research program is a multi-pronged effort to facilitate mathematically correct inference in cosmology using probabilistic data products appropriate for uncertainty-dominated data like those anticipated of upcoming galaxy surveys.
+Beginning from a basic tenet of ``use every part of the animal,'' I have approached both problems that have been known to the cosmology community for years and those that had not yet been identified as such but nonetheless deserved solutions.
+In producing the \qp\ and \chippr\ public codes as well as pedagogical texts, it is my hope that others can build on this work to perform valid inferences throughout extragalactic astrophysics, beyond the scale of problems I can aspire to solve myself.
 

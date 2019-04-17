@@ -396,19 +396,19 @@ f^{stack}(z; \hat{\ndphi}) = \sum_{j=1}^{J}\ \pr{z \gvn \data_{j}, \ndphi^{*}}
 in terms of the implicit \pz\ posteriors we have.
 These two approaches have been compared to one another by \citet{Hildebrandt2012}, \citet{Benjamin2013}, and \citet{Asorey2016} in the past but not to \Chippr.
 
-Point estimation converts the interim photo-$z$ posteriors $\pr{z \gvn \data_{j}, \ndphi^{*}}$ into delta functions with all probability at a single estimated redshift.  
+Point estimation converts the implicit photo-$z$ posteriors $\pr{z \gvn \data_{j}, \ndphi^{*}}$ into delta functions with all probability at a single estimated redshift.  
 Some variants of point estimation choose this single redshift to be that of maximum a posteriori probability $\mathrm{mode}[\pr{z \gvn \data_{j}, \ndphi^{*}}]$ or the expected value of redshift $\langle z \rangle = \integral{z \pr{z \gvn \data_{j}, \ndphi^{*}}}{z}$.
 \cite{tanaka_photometric_2018} directs attention to deriving an optimal point estimate reduction of a \pzpdf, but since the purpose of this \paper is to compare against the most established alternative estimators of \nz, its use will be postponed until a future study.
-Stacking these modified \pzpdf s leads to the marginalized maximum a posteriori (MMAP) estimator and the marginalized expected value (MExp) estimator, though only the former is included in this study since the latter has fallen out of favor in recent years.
+Stacking these modified \pzpdf s leads to the marginalized maximum a posteriori (MMAP) estimator and the marginalized expected value (MExp) estimator, though only the former is included in this study since the latter has fallen out of favor in recent years\footnote{And for good reason!  Consider a bimodal \pzpdf; its expected value may very well fall in a region of very low probability, yielding a less probable point estimate than the point at which either peak achieves its maximum.}.
 
 It is worth discussing the relationship between point estimation and stacking.  
 When the point estimator of redshift is equal to the true redshift, stacking delta function \pzpdf s will indeed lead to an accurate recovery of the true redshift distribution function.  
 However, stacking is in general applied indiscriminately to broader \pzpdf s and imperfect point estimators of redshift.  
 It is for these reasons that alternatives are considered here.
 
-A final estimator of the hyperparameters is the maximum marginalized likelihood estimator (MMLE), the value of $\ndphi$ maximizing the log posterior given by \Eq{eqn:final} using any optimization code.  
+A final estimator of the hyperparameters is the maximum marginalized likelihood estimator (\mmle), the value of $\ndphi$ maximizing the log posterior given by \Eq{eqn:final} using any optimization code.  
 To compare with sampling, the MMLE also depends on the choice of the hyperprior distribution, and it does not produce a full posterior probability distribution over the parameters of interest, only point estimators.  
-It must be noted that computation of the MMLE may be unstable depending on the strengths and weaknesses of the optimizer.  
+It must be noted that computation of the \mmle\ may be unstable depending on the strengths and weaknesses of the optimizer.  
 In general, derivatives will not be available for the full posterior distribution, restricting optimization methods used.
 %\begin{equation}
 %\label{eq:mmle}
