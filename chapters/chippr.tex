@@ -608,7 +608,7 @@ Regardless, for completeness, a test at ten times the bias of the \lsst\ require
 	\includegraphics[width=0.49\textwidth]{figures/chippr/thesis_neghibias_mega_scatter.png}
 	\includegraphics[width=0.49\textwidth]{figures/chippr/thesis_neghibias_log_estimators.png}
 	\caption{
-		Left: Examples of \pzpdf s with ten times the bias of the \lsst\ requirements at the level of the \lsst\ requirements, including samples from the probability space of true and observed redshift (black points), \pzpdf s (colored curves), and the true redshifts of the example \pzpdf s (black vertical lines), with marginal histograms (gray) for each dimension with the true redshift distribution (blue curve) and implicit prior (red curve) in the insets.
+		Left: Examples of \pzpdf s with ten times the bias of the \lsst\ requirements, including samples from the probability space of true and observed redshift (black points), \pzpdf s (colored curves), and the true redshifts of the example \pzpdf s (black vertical lines), with marginal histograms (gray) for each dimension with the true redshift distribution (blue curve) and implicit prior (red curve) in the insets.
 		Right: The results of \Chippr\ (samples in light blue, optimization in dark blue) and the alternative approaches (the stacked estimator in red, the histogram of modes in yellow) on \pzpdf s with uniformly distributed catastrophic outliers, with the true redshift density (black curve) and implicit prior (gray curve).
 		The impact of bias at even ten times the level of the \lsst\ requirements is almost imperceptible on all estimators, though the \Chippr\ \mmle\ minimizes the information loss regardless.
 	}
@@ -621,7 +621,7 @@ As expected, \Chippr\ is completely resistant to bias, and the alternative estim
 \subsection{Implicit prior}
 \sectlabel{sec:interim}
 
-\chippr\ can handle any implicit prior with support over the redshift range where \nz is defined, but some archetypes of implicit prior are more likely to be encountered in the wilds of \pzpdf\ codes.
+\chippr\ can handle any implicit prior with support over the redshift range where \nz\ is defined, but some archetypes of implicit prior are more likely to be encountered in the wilds of \pzpdf\ codes.
 Ideally, an uninformative implicit prior would be used, although it may be complicated to compute from the covariances of the raw data.  
 Template-fitting codes have an explicit prior input formed by redshifting a small number of templates, leading to a highly nonuniform but physically-motivated interim prior.
 %Another potential method for selecting an interim prior with support over the entire redshift range expected of the photometric survey is to sum two or more $N(z)$ distributions obtained from reliable photometric surveys in the past.  
@@ -748,22 +748,28 @@ Though the true values of the parameters themselves were not accessible with the
 \subsection{Violations of the model}
 \sectlabel{sec:violations}
 
+\aim{Move \Sect{sec:interim} here?}
+
 In this test, without tomographic binning, the \pzip s are made to the \lsst\ requirements but the implicit prior used for the inference is not the same as the implicit prior used for generating the data.
 \Pzpdf\ codes do not generally provide their implicit prior, with the exception of some template-fitting techniques for which it is a known input.
 If we naively used the \pzpdf\ catalog produced by a generic machine learning code and assumed a flat implicit prior, we would observe the contents of \Fig{fig:mischaracterized}.
 
 \begin{figure*}
 	\begin{center}
-		\includegraphics[width=0.49\textwidth]{figures/chippr/wrong_scatter.png}
-		\includegraphics[width=0.49\textwidth]{figures/chippr/wrong_log_estimators.png}
+		\includegraphics[width=0.49\textwidth]{figures/chippr/misspecified_mega_scatter.png}
+		\includegraphics[width=0.49\textwidth]{figures/chippr/misspecified_log_estimators.png}
 		\caption{
-			\aim{Update this figure for 35 bins and consistent colors.}
+			Left: Examples of \pzpdf s with systematics at the level of the \lsst\ requirements with a machine learning-like implicit prior, including samples from the probability space of true and observed redshift (black points), \pzpdf s (colored curves), and the true redshifts of the example \pzpdf s (black vertical lines), with marginal histograms (gray) for each dimension with the true redshift distribution (blue curve) and implicit prior (red curve) in the insets.
+			Right: The results of \Chippr\ (samples in light blue, optimization in dark blue) and the alternative approaches (the stacked estimator in red, the histogram of modes in yellow) on \pzpdf s with uniformly distributed catastrophic outliers, with the true redshift density (black curve) and the uniform implicit prior given to \chippr\ (gray curve).
+			When the incorrect implicit prior is provided to \chippr, even Bayesian inference cannot recover the true \nz.
 		}
 		\figlabel{fig:mischaracterized}
 	\end{center}
 \end{figure*}
 
 The results of using a mischaracterized implicit prior are disastrous, causing every estimator, including \Chippr, to be strongly biased.
+The stacked estimator and histogram of modes don't make use of the implicit prior so do no worse than when the implicit prior is accurately provided, but \Chippr\ is sensitive to prior misspecification, which violates the model upon which it is based.
+It is thus crucial that \pzpdf\ methods always characterize and provide the implicit prior.
 
 % removed ancient investigation on real data, would be hard to redo with the new \chippr\ code on this timescale given that I haven't even looked at the data format in 4 years
 
