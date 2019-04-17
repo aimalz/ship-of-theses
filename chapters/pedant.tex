@@ -34,42 +34,36 @@ Stacking is bolstered by pervasive misunderstandings about the causal structure 
 We first establish some basic definitions by considering the chance that a single galaxy $i$ has a given redshift $z'$.
 
 \begin{definition}\label{def:binarystatespace}
-	The \textit{state space} of a particular galaxy's redshift can be broken down into two states, that of redshift equal to $z'$ and that of any other redshift $\lnot z'$.
+	The \textit{state space} $\Omega(z_{i}) = \{z_{i} = z', z_{i} = \lnot z'\}$ of a particular galaxy's redshift $z_{i}$ can be broken down into two states, that of redshift equal to $z'$ and that of any other redshift $\lnot z'$.
 \end{definition}
 
 \begin{definition}\label{def:disjoint}
-	The elements of the state space are \textit{disjoint} if one occurring means that all others do not occur; our single galaxy cannot have both redshift $z = z'$ and a redshift $z = \lnot z'$.
+	The elements of the state space are \textit{disjoint} if one occurring means that all others do not occur; our single galaxy cannot have both $z_{i} = z'$ and $z_{i} = \lnot z'$.
 \end{definition}
 
 \begin{definition}\label{def:pdens}
-	The \textit{probability density function (PDF)} $\pr{z} \geq 0$ is the chance that a galaxy has each possible redshift $z$.
-	It can be evaluated at any specific redshift $z'$ to give the chance $\pr{z'}$ that the galaxy has that particular redshift.
-	\aim{As @davidwhogg correctly points out, this is at best circular and at worst wrong.
-	I'll need to introduce the function $f_{z}(\ndphi)$ whose integral about $z'$ is understood as $\pr{z'}$, currently not mentioned until Equation~\ref{chippr:eq:eqn:fz}.}
+	The \textit{probability density function (PDF)} $\pr{z_{i}} \geq 0$ is the chance that a galaxy's redshift $z_{i}$ takes any possible value, and the PDF may be parameterized by some function $f(z_{i}; \theta)$ over redshifts $z_{i}$ with parameters $\theta$.
+	The PDF can be evaluated at any specific redshift $z'$ to give the chance $\pr{z'}$ that the galaxy has that particular redshift, which in terms of $f(z_{i}; \theta)$ is $\lim_{\varepsilon \to 0} \int_{z' - \varepsilon}^{z' + \varepsilon} f(z_{i}; \ndphi) \mathrm{d}z_{i}$.
 \end{definition}
 
 \begin{definition}\label{def:normalization}
-	A probability density must satisfy the \textit{normalization} condition $\integral{\pr{z}}{z} = 1$.
-	Combined with Definition \ref{def:disjoint}, the normalization condition is equivalent to $\pr{z'} + \pr{\lnot z'} = 1$ for our single galaxy and reference redshift $z'$.
+	A probability density must satisfy the \textit{normalization} condition $\integral{\pr{z_{i}}}{z_{i}} = 1$.
+	Combined with Definition \ref{def:disjoint}, the normalization condition is equivalent to $\pr{z_{i} = z'} + \pr{z_{i} = \lnot z'} = 1$ for our single galaxy $i$ and reference redshift $z'$.
 \end{definition}
 
-These definitions pertain to the redshift of a single galaxy, but this \paper concerns the distribution \Nz\ of redshifts of an ensemble of \ntot\ galaxies.
-Since galaxies have true redshifts in nature, there is a set $\mathbb{S}^{N}$ of $N$ galaxies that really do have redshift $z$, for every possible redshift $z$.
-The state space of $N$ is the set of non-negative integers $\{0, \dots, \ntot\}$, so $\ntot + 1$ possibilities.
-We can consider the probability $\pr{N(z')}$ that $N(z)$ takes any particular value at each fixed $z'$.
+These definitions pertain to the redshift of a single galaxy $i$, but this \paper concerns the distribution \Nz\ of redshifts of an ensemble of $N$ galaxies.
+For a single redshift $z'$, there may be $\Omega(K) = \{K = 0, \dots, K = N\}$ galaxies with that redshift, so the state space $\Omega(K)$ of $K$ has $N + 1$ elements.
 
 \begin{definition}\label{def:independence}
 	The probability of multiple \textit{statistically independent} events occurring is the product of the probabilities of the individual events.
-	For example, in a universe with $\ntot = 2$ galaxies $i = 1, 2$, the probability $\pr{N(z') = 2}$ that they both have redshift $z'$ is $\pr{z_{i} = z' \cap z_{j} = z'} = \pr{z_{i} = z'} \pr{z_{j} = z'}$ if the redshift of one is not causally dependent on the redshift of the other.
-	\aim{It might be nice to introduce the symbol for independence here.}
+	For example, in a universe with $N = 2$ galaxies $i = 1, 2$, the probability that each takes a specific redshift is $\pr{z_{1} = z_{1}' \cap z_{2} = z_{2}'} = \pr{z_{1} = z_{1}'} \pr{z_{2} = z_{2}'}$ if the redshift of one is not causally dependent on the redshift of the other, which is denoted as $z_{1} \perp z_{2}$.
+	If $z'_{1} = z'_{2} = z'$, then this probability is also equal to $\pr{K = 2}$.
 \end{definition}
 
-\aim{Questioning my new notation already -- unaltered past this point.}
-
-\Eq{eqn:stack} can only hold if $\pr{z_{i} = z \cap z_{j} = z} = \pr{z_{i} = z} + \pr{z_{j} = z}$, which does not directly follow from any combination of the above definitions.
+Equation~\ref{intro:eq:eqn:stack} can only hold if $\pr{z_{1} = z' \cap z_{2} = z'} = \pr{z_{1} = z'} + \pr{z_{2} = z'}$, which does not directly follow from any combination of the above definitions.
 
 \begin{proposition}\label{prp:union}
-	The probability that either of two independent events occur is $\pr{z_{i} \cup z_{j}} = \pr{z_{i}} \pr{\lnot z_{j}} + \pr{\lnot z_{i}} \pr{z_{j}} + \pr{z_{i}} \pr{z_{j}} = \pr{z_{i}} (1 - \pr{z_{j}}) + (1 - \pr{z_{i}}) \pr{z_{j}} + \pr{z_{i}} \pr{z_{j}} = 1 - \pr{\lnot z_{i} \cap \lnot z_{j}}$.
+	The probability that either of two independent events occur is $\pr{z_{1} = z_{1}' \cup z_{2} = z_{2}'} = \pr{z_{1} = z_{1}'} \pr{z_{2} = \lnot z_{2}'} + \pr{z_{1} = \lnot z_{1}'} \pr{z_{2} = z_{2}'} + \pr{z_{1} = z_{1}'} \pr{z_{2} = z_{2}'} = \pr{z_{1} = z_{1}} (1 - \pr{z_{2} = z_{2}'}) + (1 - \pr{z_{1} = z_{1}'}) \pr{z_{2} = z_{2}'} + \pr{z_{1} = z_{1}'} \pr{z_{2} = z_{2}'} = 1 - \pr{z_{1} = \lnot z_{1}' \cap z_{2} = \lnot z_{2}'}$.
 \end{proposition}
 \begin{proof}
 	Combining Definitions \ref{def:normalization} and \ref{def:independence} yields the above expressions.
@@ -82,68 +76,74 @@ We can consider the probability $\pr{N(z')}$ that $N(z)$ takes any particular va
 %Thus the state space of $\pr{\ndphi}$ depends on the function $f$, but the state space of $\pr{z \gvn \ndphi}$ must only satisfy Definitions \ref{def:pdens} and \ref{def:normalization}.
 
 \begin{definition}\label{def:expected}
-	The expected value $\langle X \rangle = \integral{X\pr{X}}{X}$ for a continuous random variable $X$.
+	The expected value $\langle z \rangle = \integral{z \pr{z}}{z}$ for a continuous random variable $z$.
 \end{definition}
 
-Because the stacked estimator of the redshift distribution given in \Eq{eqn:stack} yields a single value $\hat{N}_{z}$ for $N_{z}$ rather than the probability distribution $\pr{N_{z}}$, we'll work with the expected value so we can compare apples to apples.
+Because the stacked estimator of the redshift distribution given in Equation~\ref{intro:eq:eqn:stack} yields a single value $\hat{K}$ for $K$ rather than the probability distribution $\pr{K}$, we'll work with the expected value so we can compare apples to apples.
 
 \begin{lemma}\label{lem:expectednz}
-	As a discrete random variable, the expected value $\langle N_{z} \rangle$ of $N_{z}$ is $\sum_{N_{z} = 0}^{N_{tot}} N_{z}\pr{N_{z}}$.
+	As a discrete random variable, the expected value $\langle K \rangle$ of $K$ is $\sum_{K = 0}^{N} K \pr{K}$.
 \end{lemma}
 
-However, all we have to work with are the members of the catalog of \pzpdf s, $\{\pr{z}\}$, not $\pr{N_{z}}$.
-\Sect{sec:pedanticmath} connects our \pzpdf s to the distribution of possible \Nz s.
+However, all we have to work with are the members of the catalog of \pzpdf s, $\{\pr{z_{i}}\}$, not $\pr{K}$.
+\Sect{sec:pedanticmath} connects our \pzpdf s to the distribution of possible values $K$ for $N(z')$.
 
 \section{Derivation}
 \sectlabel{sec:pedanticmath}
 
-The following proofs establish the relationship between a catalog of individual galaxy redshift PDFs and the redshift distribution from a combinatorial perspective.
-Though it doesn't matter for our science, let's consider all possible orderings of the whole set of $N_{tot}$ galaxies.
+The following proofs establish the relationship between a catalog of individual \pzpdf s and the redshift distribution from a combinatorial perspective.
+Though it doesn't matter for our science, let's consider all possible orderings of the whole set of $N$ galaxies $i = 1, \dots, N$.
 
 \begin{definition}\label{def:permutations}
-	The number of possible orderings of the $N_{tot}$ galaxies in the set $\mathbb{S}$ of galaxies is $N_{tot}! = N_{tot} \cdot (N_{tot} - 1) \cdot (N_{tot} - 2) \cdot \dots \cdot 1$.
+	The number of possible orderings of the $N$ galaxies is $N! = N \cdot (N - 1) \cdot \dots \cdot 1$.
 \end{definition}
 
 \begin{lemma}\label{lem:combinations}
-	The number of possible unordered subsets of $N_{z}$ galaxies that can be selected from a set of $N_{tot} \geq N_{z}$ galaxies is $\binom{N_{tot}}{N_{z}} \equiv \frac{N_{tot}!}{N_{z}! (N_{tot} - N_{z})!}$.
+	The number of possible unordered subsets of $K$ galaxies that can be selected from a set of $N \geq K$ galaxies is $\binom{N}{K} \equiv \frac{N!}{K! (N - K)!}$.
+	\aim{Should I cut this basic proof out?}
 \end{lemma}
 \begin{proof}
-	If there are $N_{z}$ galaxies with redshift $z$, we can think of them as the first $N_{z}$ in an ordering of the full $N_{tot}$ galaxies.
-	We expect that many of the $N_{tot}!$ orderings can result in the same set $\mathbb{S}^{z}$ of $N_{z}$ at the beginning.
-	Not only do we not care about the ordering within the first $N_{z}$ galaxies, but we also don't care about the last $N_{tot} - N_{z}$ galaxies whatsoever.
-	Thus there are $C = \frac{N_{tot}!}{N_{z}! (N_{tot} - N_{z})!}$ combinations of the first $N_{z}$ galaxies, defining $C$ possible sets $\mathbb{S}^{z}_{c}$ of galaxies to consider.
+	If there are $K$ galaxies with redshift $z'$, we can think of them as the first $K$ in an ordering of the full $N$ galaxies.
+	We expect that many of the $N!$ orderings can result in the same ordered set of $K$ at the beginning of the ordered list.
+	Not only do we not care about the ordering within the first $K$ galaxies, but we also don't care about the ordering of the last $N - K$ galaxies.
+	Thus there are $C \equiv \frac{N!}{K! (N - K)!}$ combinations of the first $K$ galaxies, defining a set $[N]^{K} = \{S^{K}_{j}\}$ of $|[N]^{K}| = C$ possible sets $S^{K}_{j}$ of galaxies with $|S^{K}_{j}| = K$ to consider.
 \end{proof}
+
+Since galaxies have true redshifts in nature, there is one set $S^{K^{\dagger}}_{j^{\dagger}}$ out of the set $[N]^{K}$ of all sets $S^{K^{\dagger}}_{j}$ with $|S^{K^{\dagger}}_{j}| = K^{\dagger}$ galaxies that contains all galaxies that really do have redshift $z'$ and no galaxies that have redshift $\lnot z'$, for every possible redshift $z'$.
+There are of course also sets $S^{K^{\dagger}}_{j \neq j^{\dagger}}$ of $0 < K = K^{\dagger} < N$ galaxies that are not the exact set of galaxies that have true redshift $z'$, but in our two-redshift universe, we only need to recover from our \pzpdf\ catalog the number $K^{\dagger}$ of galaxies with redshift $z'$, not which galaxies are in $S^{K^{\dagger}}_{k^{\dagger}}$. 
+And there are even more sets $S^{K}_{j}$ of $|S^{K}_{j}| = K \neq K^{\dagger}$ galaxies that do not even have the same number of members as the true number $K^{\dagger}$ of galaxies with redshift $z'$.
+
+We are now prepared to consider the probability $\pr{K'}$ that $N(z')$ takes any particular value $K'$ at a fixed $z'$.
 
 %\begin{definition}
 %	\aim{define orderings above and turn this into a proposition?}
 %	The number of possible orderings of all $\comb{N_{tot}}{N}$ subsets of $N$ galaxies out of a set of $N_{tot} \geq N$ is $\perm{N_{tot}}{N} \equiv \frac{N_{tot}!}{(N_{tot}-N)!} = N!\comb{N_{tot}}{N}$.
 %\end{definition}
 
-\subsection{A two-redshift universe of identical galaxies}
+\subsection{A universe of identical galaxies}
 \sectlabel{sec:tworedshift}
 
-It is helpful to consider the special case in which all galaxies have the same \pzpdf\ $\pr{z}$.
-Further, we will make the simplifying assumption of a two-redshift universe to start with.
+It is helpful to consider the special case in which all galaxies have the same \pzpdf\ $\pr{z_{i}} = \pr{z}$.
 
 \begin{theorem}
-	In a two-redshift universe in which all galaxies have the same \pzpdf with probability $\phi_{b}$ of having redshift $z'$, the probability mass function over the redshift distribution is
+	In a two-redshift universe in which all galaxies have the same \pzpdf with probability $\pr{z'} = \phi$ of having redshift $z'$, the probability mass function over the redshift distribution is
 	\begin{equation}
 	\eqlabel{eqn:binomial}
-	\pr{N_{z'}} = \binom{N_{tot}}{N_{z'}} \phi_{b}^{N_{z'}} (1 - \phi_{b})^{N_{tot} - N_{z'}} .
+	\pr{K} = \binom{N}{K} \phi^{K} (1 - \phi)^{N - K} .
 	\end{equation}
 \end{theorem}
 
 \begin{proof}
-If there are only two possible redshifts, those of Definition \ref{def:binarystatespace}, then the problem is equivalent to that of counting $N_{z'}$ successes after flipping a single coin with $\pr{z'} = \phi_{b}$ a total of \ntot\ times.
-The \ntot\ coin flips build a set $\mathbb{S}^{N'; z'}$ of $N_{z'}$ galaxies with redshift $z'$ and $\mathbb{S}^{\ntot - N'; \lnot z}$ of $\ntot - N_{z'}$ galaxies with redshift $\lnot z$.
-If we want the probability of $N_{z'}$ successes, we sum over all combinations of galaxies that could define these sets.
-Bearing in mind that our galaxies have $\pr{\lnot z} = 1 - \phi_{b}$, due to Definitions \ref{def:binarystatespace} and \ref{def:disjoint}, the probability of $N_{z'}$ galaxies having redshift $z'$ is given by the binomial theorem, which is \Eq{eqn:binomial}.
+If there are only two possible redshifts, those of Definition \ref{def:binarystatespace}, then the problem is equivalent to that of counting $K$ successes after flipping a single coin with $\pr{\mathrm{success}} = \phi$ a total of $N$ times.
+The $N$ coin flips build a set $S^{K}_{j}$ of $K$ galaxies with redshift $z'$ and $S^{N-K}_{j}$ of $N - K$ galaxies with redshift $\lnot z$'.
+If we want the probability of $K$ successes, we sum over the set $[N]^{K}$ all combinations of galaxies that could define these sets.
+Bearing in mind that our galaxies have $\pr{\lnot z'} = 1 - \phi$, due to Definitions \ref{def:binarystatespace} and \ref{def:disjoint}, the probability of $K$ galaxies having redshift $z'$ is given by the binomial theorem, which is \Eq{eqn:binomial}.
 \end{proof}
 
-We may generalize the two-redshift universe to a many-redshift universe by considering the extension of the binomial theorem to the birthday problem, which asks for the probability that $N_{z}$ people in a room of $N_{tot}$ people share the same birthday $z$.
-We will, however, proceed by considering only one redshift at a time to maintain the simple phase space; the proof of the birthday problem case is left as an exercise for the reader.
+We may generalize the two-redshift universe to a many-redshift universe by considering the extension of the binomial theorem to the birthday problem, which asks for the probability that $K$ people in a room of $N$ people share the same birthday $z'$.
+We will, however, proceed by considering only one redshift $z'$ at a time to maintain the simple state space; the proof of the birthday problem case is left as an exercise for the reader.
 %the birthday problem is solved by $p(N_{z}) = 1 - p(z)^{N_{tot}} \times \perm{N_{tot}}{N_{z}}$
-%\aim{Am I allowed to leave a proof as an exercise for the reader?}
+\aim{Should I include the proof by induction or is it okay to assert that it works?}
 
 \subsection{A universe of unique galaxies}
 \sectlabel{sec:unique}
@@ -152,18 +152,18 @@ Of course galaxies do not share the same \pzpdf; the \pzpdf s differ because the
 %Now, each galaxy $i$ has $p(z \gvn \data_{i})$.
 %\aim{Figure: isolating one redshift slice of $N(z)$}
 \begin{lemma}\label{lem:unique}
-	The probability that $N(z)$ takes the value $N_{z}$ is 
+	The probability that $N(z')$ takes the value $K$ is 
 	\begin{align}
 	\eqlabel{eqn:general}
-	\pr{N_{z}} &= \sum_{combination\ c}^{N_{tot}! / N_{z}! (N_{tot} - N_{z})!} \left[ \prod_{i_{c} \in \mathbb{S}_{z}^{c}} \pr{z_{i_{c}}} \prod_{j_{c} \in \mathbb{S}_{\lnot z}^{c}} 1 - \pr{z_{j_{c}}} \right] .
+	\pr{K} &= \sum_{combination\ j}^{N! / K! (N - K)!} \left[ \prod_{i \in S^{K}_{j}}^{K} \pr{z_{i} = z'} \prod_{i \notin S^{K}_{j}}^{N - K} 1 - \pr{z_{i} = z'} \right] .
 	\end{align}
 \end{lemma}
 \begin{proof}
-	By Definition \ref{def:independence}, the probability of that set leading to $N_{z}$ is the product of the probability that all the galaxies in that set have redshift $z$ and the probability that all the galaxies outside that set have redshift $\lnot z$.
-	By Definition \ref{def:independence} again, the probability that all the galaxies in that set have redshift $z$ is the product of the $N_{z}$ probabilities $\{\pr{z_{i} = z}\}_{i \in \mathbb{S}^{z}_{c}}$ of the galaxies in $\mathbb{S}^{z}_{c}$, and the probability that all the galaxies outside that set have redshift $\lnot z$ is the product of the $N_{tot} - N_{z}$ probabilities $\{\pr{z_{j} \neq z}\}_{j \notin \mathbb{S}^{z}_{c}}$.
-	By Definition \ref{def:binarystatespace}, $\pr{z_{j} \neq z} = \pr{z_{j} = \lnot z} = 1 - \pr{z_{j} = z}$.
-	So the probability $\pr{\mathbb{S}^{z}_{c}}$ of a single combination $\mathbb{S}^{z}_{c}$ is $\prod_{i \in \mathbb{S}^{z}_{c}} \pr{z_{i} = z} \prod_{j \notin \mathbb{S}^{z}_{c}} 1 - \pr{z_{j} = z}$.
-	Invoking Definition \ref{def:disjoint}, we know that $\pr{N_{z}} = \sum_{c}^{C} \pr{\mathbb{S}^{z}_{c}}$ for $C = \binom{N_{tot}}{N_{z}}$.
+	By Definition \ref{def:independence}, the probability of obtaining set $S^{K}_{j}$ is the product of the probability that all the galaxies in that set have redshift $z'$ and the probability that all the galaxies outside that set have redshift $\lnot z'$.
+	By Definition \ref{def:independence} again, the probability that all the galaxies in that set have redshift $z'$ is the product of the $K$ probabilities $\{\pr{z_{i} = z'}\}_{i \in S^{K}_{j}}$ of the galaxies in $S^{K}_{j}$, and the probability that all the galaxies outside that set have redshift $\lnot z'$ is the product of the $N - K$ probabilities $\{\pr{z_{i} \neq z'}\}_{i \notin S^{K}_{j}}$.
+	By Definition \ref{def:binarystatespace}, $\pr{z_{i} \neq z'} = \pr{z_{i} = \lnot z'} = 1 - \pr{z_{i} = z'}$.
+	So the probability $\pr{S^{K}_{j}}$ of a single combination $S^{K}_{j}$ is $\prod_{i \in S^{K}_{j}} \pr{z_{i} = z'} \prod_{i \notin S^{K}_{j}} 1 - \pr{z_{i} = z'}$.
+	Invoking Definition \ref{def:disjoint}, we know that $\pr{K} = \sum_{j}^{N! / K! (N - K)!} \pr{S^{K}_{j}}$.
 \end{proof}
 %\aim{Figure: posterior samples of $N_{z}$ for that slice}
 
@@ -312,6 +312,28 @@ Note that if those conditions held, we would not need \lsst\ at all.
 Though the conditions of \Sect{sec:informative} and \Sect{sec:uninformative} may not have been strongly violated in the past, they will be nowhere near satisfied for ongoing and upcoming surveys.
 Thus, we must not stack!
 \aim{Maybe beef up this section to tie in to cosmology.}
+
+\section*{Notation}
+\sectlabel{sec:notation}
+
+\begin{table*}
+	\begin{center}
+		\begin{tabular}{ll}
+			$X'$ & a particular value of $X$\\
+			$\lnot X'$ & any value of $X$ other than $X'$\\
+			$X^{\dagger}$ & the true value of $X$\\
+			$\hat{X}$ & an estimated value of $X$\\ 
+			$\Omega(X)$ & the space of all possible values of $X$\\
+			$[N]^{K}$ & all possible sets of $K$ events chosen from $N$ possible events\\
+			$|S|$ & the number of elements of set $S$\\
+		\end{tabular}
+	\caption{
+		Glossary of important symbols used in this Chapter.
+		\aim{Did I miss anything?}
+		}
+	\tablabel{tab:glossary}
+	\end{center}
+\end{table*}
 
 \section*{Chapter acknowledgements}
 
