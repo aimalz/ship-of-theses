@@ -155,7 +155,7 @@ Of course galaxies do not share the same \pzpdf; the \pzpdf s differ because the
 	The probability that $N(z')$ takes the value $K$ is 
 	\begin{align}
 	\eqlabel{eqn:general}
-	\pr{K} &= \sum_{combination\ j}^{N! / K! (N - K)!} \left[ \prod_{i \in S^{K}_{j}}^{K} \pr{z_{i} = z'} \prod_{i \notin S^{K}_{j}}^{N - K} 1 - \pr{z_{i} = z'} \right] .
+	\pr{K} &= \sum_{j}^{N! / K! (N - K)!} \left[ \prod_{i \in S^{K}_{j}}^{K} \pr{z_{i} = z'} \prod_{i \notin S^{K}_{j}}^{N - K} 1 - \pr{z_{i} = z'} \right] .
 	\end{align}
 \end{lemma}
 \begin{proof}
@@ -171,70 +171,73 @@ Of course galaxies do not share the same \pzpdf; the \pzpdf s differ because the
 \sectlabel{sec:pedanticres}
 
 \begin{theorem}\label{thm:general}
-	The expected value of $N_{z}$ in the general case of a universe of unique galaxies is given by
+	The expected value of $K$ in the general case of a universe of unique galaxies is given by
 	\begin{align}
 	\eqlabel{eqn:complete}
-	\langle N_{z} \rangle &= \sum_{N_{z} = 0}^{N_{tot}} N_{z} \sum_{c}^{N_{tot}! / N_{z}! (N_{tot} - N_{z})!} \left[ \prod_{i_{c} \in \mathbb{S}^{c}_{z}} \pr{z_{i_{c}}} \prod_{j_{c} \in \mathbb{S}_{c}^{\lnot z}} 1 - \pr{z_{j_{k}}} \right].
+	\langle N_{z} \rangle &= \sum_{K = 0}^{N} K \sum_{j}^{N! / K! (N - K)!} \left[ \prod_{i \in S^{K}_{j}}^{K} \pr{z_{i} = z'} \prod_{i \in S^{K}_{j}}^{N - K} 1 - \pr{z_{i} = z'} \right].
 	\end{align}
 \end{theorem}
 \begin{proof}
 	Apply Definition \ref{def:expected} to Lemma \ref{lem:unique} to arrive at \Eq{eqn:complete}.
 \end{proof}
 
-Though mentioned before, we must reiterate the following caveats, because they will guide our investigation of the sleight of hand that enables the thoroughly unmotivated \Eq{eqn:stack} to masquerade as an acceptable approximation to the provably correct but computationally intractable \Eq{eqn:complete}.
-\begin{itemize}
-	\item \Pzpdf s are posteriors conditioned on data $\pr{z \gvn \data_{i}}$; referring to $\pr{z_{i}}$ is a gross abuse of notation that doesn't even make sense because the domain of $z$ is the same for any galaxy $i$.
-	\item \Pzpdf s are also conditioned on the prior information, $\tilde{N}$, used to derive them, such as a template library or training set, as well as the method used to combine this information with the data of each galaxy.
-%	\item There is also an implicit prior $I_{M}$ due to the method used to combine $I_{P}$ and $\data_{i}$ to yield an estimated posterior, $\pr{z \gvn \data_{i}, I_{P}, I_{M}}$.
-\end{itemize}
-These points will be expanded upon Here I explore what assumptions must hold for \Eq{eqn:complete} to be equivalent to \Eq{eqn:stack}.
+In \Sect{sec:informative} and \Sect{sec:uninformative}, we will correct the gross abuse of notation that is ``$\pr{z_{i}}$'' by revealing its true nature and propagating that through \Eq{eqn:complete}.
+By confronting what this ubiquitous notation sweeps under the rug, we will identify the only conditions under which Equation~\ref{intro:eq:eqn:stack} can yield a result consistent with \Eq{eqn:complete}.
+%\begin{itemize}
+%	\item \Pzpdf s are posteriors conditioned on data $\pr{z \gvn \data_{i}}$; referring to  is a gross abuse of notation that doesn't even make sense because the domain of $z$ is the same for any galaxy $i$.
+%	\item \Pzpdf s are also conditioned on the prior information, $\tilde{N}$, used to derive them, such as a template library or training set, as well as the method used to combine this information with the data of each galaxy.
+%%	\item There is also an implicit prior $I_{M}$ due to the method used to combine $I_{P}$ and $\data_{i}$ to yield an estimated posterior, $\pr{z \gvn \data_{i}, I_{P}, I_{M}}$.
+%\end{itemize}
+%These points will be expanded upon Here I explore what assumptions must hold for \Eq{eqn:complete} to be equivalent to Equation~\ref{intro:eq:eqn:stack}.
 
 \subsection{Perfectly informative data}
 \sectlabel{sec:informative}
 
-The simplistic notation of the above sections glosses over something important.
 Let's investigate what differentiates \pzpdf s for each galaxy.
 The redshifts are always defined over the same dimension, but what's different is the photometric data $\data_{i}$ for each galaxy.
-The way that enters into the \pzpdf\ is that $\pr{z_{i}}$ is really a horrible shorthand for $\pr{z \gvn \data_{i}}$, the probability that a galaxy is observed at each redshift conditional on the data  observed.
-From this point on, we'll use the full form of \Eq{eqn:stack},
+The way that enters into the \pzpdf\ is that $\pr{z_{i}}$ is really a horrible shorthand for $\pr{z \gvn \data_{i}}$, the probability that a galaxy has each redshift conditional on the data observed.
+From this point on, we'll use the full form of Equation~\ref{intro:eq:eqn:stack},
 \begin{align}
 \eqlabel{eqn:stackwithdata}
-\hat{N}(z) &= \sum_{i = 0}^{\ntot} \pr{z \gvn \data_{i}} .
+\hat{N}(z) &= \sum_{i = 0}^{N} \pr{z \gvn \data_{i}} .
 \end{align}
+
 If the data is perfectly informative, then $\pr{z \gvn \data_{i}} = \delta(z,\ z_{i}^{\dagger})$, where $z_{i}^{\dagger}$ is the true redshift of galaxy $i$.
-\Pzpdf s are not delta functions because the data are inherently noisy and because our model for the relationship between photometry and redshift is imperfect.
+\Pzpdf s are not delta functions because the data are inherently noisy and because our model for the relationship between photometry and redshift is imperfect, as was covered in Figure~\ref{intro:fig:fig:pedagogical_scatter}.
 However, if we wanted to write the PDF of a spectroscopic redshift, it could be considered a delta function like this.
-We know that \Eq{eqn:stack} works in this case and will answer whether \Eq{eqn:complete} yields an equivalent result in the idealized case of spectroscopic-quality observations.
+We know that \Eq{eqn:stackwithdata} works in this case and will now answer whether \Eq{eqn:complete} yields an equivalent result in the idealized case of spectroscopic-quality observations.
 
 \begin{theorem}
 	\label{thm:informative}
-	The mathematically valid $\langle N(z') \rangle$ asymptotically approaches the result of stacking and the true number $N^{\dagger}$ of galaxies with redshift $z'$ under perfectly informative photometry, i.e. $\pr{z' \gvn \data_{i}} = \delta(z',\ z^{\dagger}_{i})$.
+	The mathematically valid $\langle N(z') \rangle$ asymptotically approaches the result of stacking and the true number $NK^{\dagger}$ of galaxies with redshift $z'$ under perfectly informative photometry, i.e. $\pr{z' \gvn \data_{i}} = \delta(z',\ z^{\dagger}_{i})$.
 \end{theorem}
 \begin{proof}
 	First, we replace all instances of $\pr{z_{i}}$ in \Eq{eqn:complete} with $\pr{z \gvn \data_{i}}$, yielding
 	\begin{align}
 	\eqlabel{eqn:proofwithdata1}
-	\langle N(z') \rangle &= \sum_{N' = 0}^{\ntot} N' \sum_{combination\ k}^{\ntot! / N'! (\ntot - N')!} \left[ \prod_{i_{k} \in \mathbb{S}^{N'; z'}_{k}} \pr{z' \gvn \data_{i_{k}}} \prod_{i_{k} \in \mathbb{S}^{\ntot - N'; \lnot z'}_{k}} 1 - \pr{z' \gvn \data_{i_{k}}} \right]
+	\langle N(z') \rangle &= \sum_{K = 0}^{N} K \sum_{j}^{N! / K! (N - K)!} \left[ \prod_{i \in S^{K}_{j}} \pr{z' \gvn \data_{i}} \prod_{i \notin S^{K}_{j}} 1 - \pr{z' \gvn \data_{i}} \right]
 	\end{align}
 	For perfectly informative data, each of these $\pr{z \gvn \data_{i}}$ becomes $\delta(z,\ z^{\dagger}_{i})$, making \Eq{eqn:proofwithdata1} into
 	\begin{align}
 	\eqlabel{eqn:proofwithdata2}
-	\langle N(z') \rangle &= \sum_{N' = 0}^{\ntot} N' \sum_{combination\ k}^{\ntot! / N'! (\ntot - N')!} \left[ \prod_{i_{k} \in \mathbb{S}^{N'; z'}} \delta(z', z^{\dagger}_{i_{k}}) \prod_{i_{k} \in \mathbb{S}^{\ntot - N'; \lnot z'}} 1 - \delta(z', z^{\dagger}_{i_{k}}) \right]
+	\langle N(z') \rangle &= \sum_{K = 0}^{N} K \sum_{j}^{N! / K! (N - K)!} \left[ \prod_{i \in S^{K}_{j}} \delta(z', z^{\dagger}_{i}) \prod_{i \notin S^{K}_{j}} 1 - \delta(z', z^{\dagger}_{i}) \right]
 	\end{align}
-	Each of the delta function terms in \Eq{eqn:proofwithdata2} will be 1 when $z' = z^{\dagger}_{i_{k}}$ and 0 otherwise.
-	There is only one combination $k^{\dagger}$ that will result in a nonzero product, the one whose $\mathbb{S}^{N'; z'}_{k}$ contains all $N' = N^{\dagger}$ galaxies with $z^{\dagger}_{i_{k}} = z'$ and no interlopers with $z^{\dagger}_{i_{k}} \neq z'$.
+	Each of the delta function terms in \Eq{eqn:proofwithdata2} will be $1$ when $z' = z^{\dagger}_{i}$ and $0$ otherwise.
+	There is only one combination $j^{\dagger}$ that will result in a nonzero product, the one whose $S^{K}_{j}$ contains all $K = K^{\dagger}$ galaxies with $z^{\dagger}_{i} = z'$ and no interlopers with $z^{\dagger}_{i} \neq z'$.
 	Thus there is only one nonzero term in the entire sum, and it can only correspond to 
 	\begin{align}
 	\eqlabel{eqn:proofwithdata3}
-	\langle N(z') \rangle &= N^{\dagger} \left[ \prod_{i_{k} \in \mathbb{S}^{N^{\dagger}; z'}_{k^{\dagger}}} \delta(z', z^{\dagger}_{i_{k}}) \prod_{i_{k} \in S^{\ntot - N^{\dagger}; z'}_{k^{\dagger}}} 1 - \delta(z', z^{\dagger}_{i_{k}}) \right]
+	\langle N(z') \rangle &= K^{\dagger} \left[ \prod_{i \in S^{K}_{j^{\dagger}}} \delta(z', z^{\dagger}_{i}) \prod_{i \notin S^{K}_{j^{\dagger}}} 1 - \delta(z', z^{\dagger}_{i}) \right]
 	\end{align}
-	Since the entire bracketed quantity in \Eq{eqn:proofwithdata3} is $1$, we arrive at the desired $\langle N(z') \rangle = N^{\dagger}$, the same as what stacking yields.
+	Since the entire bracketed quantity in \Eq{eqn:proofwithdata3} is $1$, we arrive at the desired $\langle N(z') \rangle = K^{\dagger}$, the same as what stacking yields.
 \end{proof}
 
 \aim{Perhaps I should write out the result of stacking more formally as well?}
 
-To reiterate, a fully probabilistic treatment of \Nz\ is equivalent to stacking in the case of delta function \pzpdf s, like those that arise from spectroscopic redshifts, a case when both approaches recover the truth.
-\Sect{sec:alldata} constrains the response of the stacked estimator to deviations from delta function \pzpdf s and the sensitivity of its validity to realistic violations of the assumption of perfectly informative data.
+To reiterate, a fully probabilistic treatment of \Nz\ is equivalent to stacking in the case of accurate delta function \pzpdf s.
+A spectroscopic survey under ideal circumstances yields such \pzpdf s.
+However, photometric surveys are subject to imprecision and inaccuracy that ensure that ongoing and future missions will not have the kind of \pzpdf s that enable stacking to be valid.
+\Sect{chippr:sec:sec:alldata} constrains the response of the stacked estimator to deviations from delta function \pzpdf s and the sensitivity of its validity to realistic violations of the assumption of perfectly informative data.
 
 %\aim{what happens when we deviate away from this assumption of $p(z \mid d_{i}) = \delta(z, z_{i})$?\\
 %Figure:\\
@@ -245,65 +248,65 @@ To reiterate, a fully probabilistic treatment of \Nz\ is equivalent to stacking 
 \subsection{Perfectly uninformative data}
 \sectlabel{sec:uninformative}
 
-In \Sect{sec:informative}, we assumed that the \pzpdf s were completely informed by the photometry, but there the notation was also overly simplistic.
-If \pzpdf s were conditioned solely on data, there would be no disagreement about how to derive them from photometric catalogs, because every approach would yield the same result.
-Thus \pzpdf s must be conditioned not only on data unique to each galaxy but also on prior information $\tilde{N}$ which could be interpreted as an interim guess for $N^{\dagger}(z')$ that may come from a template library, a training set, and/or the method by which either of those is combined with the observations.
-So, \pzpdf s should be more completely written as $\pr{z \gvn \data_{i}, \tilde{N}}$ making \Eq{eqn:stackwithdata} into
+In \Sect{sec:informative}, we clarified the relationship between the redshift probability and the photometric data and assumed that the \pzpdf s were perfectly informed by the photometry, but that picture is still overly simplistic.
+If \pzpdf s were conditioned solely on data, there would be no disagreement about how to derive them from photometric catalogs, because every approach would yield the same result, for which ample counterevidence is presented in \Chap{pzdc1}.
+Thus \pzpdf s must be conditioned not only on data unique to each galaxy but also on prior information $\tilde{\theta}$ which corresponds to an interim guess $\tilde{K}$ for $N(z')$ that may come from a template library, a training set, and/or the method by which either of those is combined with the observations.
+So, \pzpdf s should be more completely written as $\pr{z \gvn \data_{i}, \tilde{K}}$ making \Eq{eqn:stackwithdata} into
 \begin{align}
 \eqlabel{eqn:stackwithprior}
-\hat{N}(z) &= \sum_{i = 0}^{\ntot} \pr{z \gvn \data_{i}, \tilde{N}_{z}} .
+\hat{N}(z) &= \sum_{i = 0}^{N} \pr{z \gvn \data_{i}, \tilde{K}} .
 \end{align}
-If the data were totally uninformative, each galaxy would have the same $\pr{z \gvn \data_{i}, \tilde{N}} = \pr{z \gvn \tilde{N}}$.
+If the data were totally uninformative, each galaxy would have the same $\pr{z \gvn \data_{i}, \tilde{K}} = \pr{z \gvn \tilde{K}}$.
 Now, we consider what happens to \Eq{eqn:complete} under perfectly uninformative data.
 
 \begin{theorem}
 	\label{thm:uninformative}
-	The mathematically valid $\langle N(z') \rangle$ asymptotically approaches the result of stacking and the true number $N^{\dagger}$ of galaxies with redshift $z'$ under a special case of perfectly uninformative photometry and perfect prior information.
+	The mathematically valid $\langle N(z') \rangle$ asymptotically approaches the result of stacking and the true number $K^{\dagger}$ of galaxies with redshift $z'$ under a special case of perfectly uninformative photometry and perfect prior information $\tilde{K} = K^{\dagger}$.
 \end{theorem}
 \begin{proof}
-	To start, let's update \Eq{eqn:complete} to reflect our new understanding of the role of the prior $\tilde{N}$ in \pzpdf s.
+	To start, let's update \Eq{eqn:complete} to reflect our new understanding of the role of the prior $\tilde{K}$ in \pzpdf s.
 	\begin{align}
 	\label{eqn:proofwithprior1}
-	\langle N(z') \rangle &= \sum_{N' = 0}^{\ntot} N' \sum_{combination\ k}^{\ntot! / N'! (\ntot - N')!} \left[ \prod_{i_{k} \in \mathbb{S}^{N'; z'}_{k}} \pr{z' \gvn \data_{i_{k}}, \tilde{N}} \prod_{i_{k} \in \mathbb{S}^{\ntot - N'; \lnot z'}_{k}} 1 - \pr{z' \gvn \data_{i_{k}}, \tilde{N}} \right]
+	\langle N(z') \rangle &= \sum_{K = 0}^{N} K \sum_{j}^{N! / K! (N - K)!} \left[ \prod_{i \in S^{K}_{j}} \pr{z' \gvn \tilde{K}} \prod_{i \in S^{K}_{j}} 1 - \pr{z' \gvn \tilde{K}} \right]
 	\end{align}
-	Perfectly uninformative data corresponds to $\pr{z \gvn \tilde{\data_{i}}, \tilde{N}} = \tilde{N} / \ntot$, so we make that substitution into \Eq{eqn:complete}.
+	If every galaxy has the same \pzpdf, then every galaxy also has the same probability $\pr{z' \gvn \tilde{K}} = \phi = \frac{\tilde{K}}{N}$ for some $\tilde{K}$.
+	Without having to worry about the true galaxy redshifts $z^{\dagger}_{i}$, we can very straightforwardly rewrite this in the form of \Eq{eqn:binomial} as
 	\begin{align}
 	\eqlabel{eqn:proofwithprior2}
-	\langle N(z') \rangle &= \sum_{N' = 0}^{\ntot} N' \sum_{combination\ k}^{\ntot! / N'! (\ntot - N')!} \left[ \prod_{i_{k} \in \mathbb{S}^{N'; z'}} \frac{\tilde{N}}{\ntot} \prod_{i_{k} \in \mathbb{S}^{\ntot - N'; \lnot z'}} 1 - \frac{\tilde{N}}{\ntot} \right]
+	\langle N(z') \rangle &= \sum_{K = 0}^{N} K \sum_{j}^{N! / K! (N - K)!} \left[ \left(\frac{\tilde{K}}{N}\right)^{K} \left(1 - \frac{\tilde{K}}{N}\right)^{N - K} \right] .
 	\end{align}
-	Without having to worry about $z^{\dagger}_{i_{k}}$, we can very straightforwardly rewrite this in the form of \Eq{eqn:binomial} as
+	Since the \pzpdf s are identical to one another, the bracketed terms are the same for a given $K$, meaning each term in the inner sum is the same, so we can eliminate it as 
 	\begin{align}
 	\eqlabel{eqn:proofwithprior3}
-	\langle N(z') \rangle &= \sum_{N' = 0}^{\ntot} N' \sum_{combination\ k}^{\ntot! / N'! (\ntot - N')!} \left[ \left(\frac{\tilde{N}}{\ntot}\right)^{N'} \left(1 - \frac{\tilde{N}}{\ntot}\right)^{\ntot - N'} \right] .
+	\langle N(z') \rangle &= \sum_{K = 0}^{N} K \frac{N!}{K! (N - K)!} \left(\frac{\tilde{K}}{N}\right)^{K} \left(1 - \frac{\tilde{K}}{N}\right)^{N - K} .
 	\end{align}
-	Since the \pzpdf s are identical to one another, the bracketed terms are the same for a given $N'$, meaning each term in the inner sum is the same, so we can eliminate it as 
+	Noting that the first term with $K = 0$ always vanishes, canceling factors of $K$, and factoring out a guess inspired by the coin-flipping analogy, we can rewrite \Eq{eqn:proofwithprior3} as
 	\begin{align}
 	\eqlabel{eqn:proofwithprior4}
-	\langle N(z') \rangle &= \sum_{N' = 0}^{\ntot} N' \frac{\ntot!}{N'! (\ntot - N')!} \left(\frac{\tilde{N}}{\ntot}\right)^{N'} \left(1 - \frac{\tilde{N}}{\ntot}\right)^{\ntot - N'} .
-	\end{align}
-	Noting that the first term with $N' = 0$ always vanishes, canceling factors of $N'$, and factoring out a guess inspired by the coin-flipping analogy, we can rewrite \Eq{eqn:proofwithprior4} as
-	\begin{align}
-	\eqlabel{eqn:proofwithprior5}
-	\langle N(z') \rangle &= \ntot \frac{\tilde{N}}{\ntot} \sum_{N' = 1}^{\ntot} \frac{(\ntot - 1)!}{(N' - 1)! ((\ntot - 1) - (N' - 1))!} \left(\frac{\tilde{N}}{\ntot}\right)^{N' - 1} \left(1 - \frac{\tilde{N}}{\ntot}\right)^{(\ntot - 1) - (N' - 1)} .
+	\langle N(z') \rangle &= N \frac{\tilde{K}}{N} \sum_{K = 1}^{N} \frac{(N - 1)!}{(K - 1)! ((N - 1) - (K - 1))!} \left(\frac{\tilde{K}}{N}\right)^{K - 1} \left(1 - \frac{\tilde{K}}{N}\right)^{(N - 1) - (K - 1)} .
 	\end{align}
 	From here, we can recursively apply \Eq{eqn:binomial} to yield
 	\begin{align}
-	\eqlabel{eqn:proofwithprior6}
-	\langle N(z') \rangle &= \tilde{N} \left(\frac{\tilde{N}}{\ntot} + 1 - \frac{\tilde{N}}{\ntot}\right)^{\ntot - 1} ,
+	\eqlabel{eqn:proofwithprior5}
+	\langle N(z') \rangle &= \tilde{K} \left(\frac{\tilde{K}}{N} + 1 - \frac{\tilde{K}}{N}\right)^{N - 1} ,
 	\end{align}
-	and since the term in parentheses is $1$, we arrive at $\langle N(z') \rangle = \tilde{N}$ for this case.
+	and since the term in parentheses is $1$, we arrive at $\langle N(z') \rangle = \tilde{K}$ for this case.
+	The only way for $\langle N(z') \rangle$ to be equal to $K^{\dagger}$ is if $\tilde{K} = K^{\dagger}$, i.e. if the prior were equal to the truth.
 \end{proof}
 
-If we stacked such a catalog, we would be taking the average of identical distributions, so $\hat{N}(z) = \ntot \pr{z \gvn \tilde{N}} = \tilde{N}$, the same as the result of Theorem \ref{thm:uninformative}.
-Everything thus far has not compared either of these to the true value $N^{\dagger}$ of the redshift distribution.
-Indeed, neither can approach the truth unless $\tilde{N} = N^{\dagger}$, i.e. the prior must be the truth in order for stacking to work.
-If we knew the truth sufficiently to use it as a prior, then we wouldn't need \lsst!
+If we stacked such a catalog, we would be taking the average of identical distributions, so $\hat{N}(z) = N \pr{z \gvn \tilde{K}} = \tilde{K}$, the same as the result of Theorem \ref{thm:uninformative}.
+Everything thus far has not compared either of these to the true value $K^{\dagger}$ of the redshift distribution.
+Indeed, neither can approach the truth unless $\tilde{K} = K^{\dagger}$, i.e. the prior must be the truth in order for stacking to work.
+Previous galaxy surveys covered the same limited redshift range and got a thorough sample over the sky to overcome cosmic variance, leading to the use of priors that were representative of the data in the regime where they were applied.
+However, at higher redshifts or in atypical galaxy environments, we will not be able to count on a lucky guess of $\tilde{K} \approx K^{\dagger}$.
+Without knowing truth sufficiently well to use it as a prior, we will instead have to rely on imperfect data.
 %\aim{Figure: sum of same $N_{z}$ building up to that times $N_{tot}$}
-The sensitivity of the stacked estimator of the redshift distribution to deviations from this assumption is explored in \Sect{sec:interim}.
+The sensitivity of the stacked estimator of the redshift distribution to deviations from this assumption is explored in \Sect{chippr:sect:sec:interim}.
 
 \section{Conclusion}
 \sectlabel{sec:disco}
 
+This \paper conducts an investigation of the sleight of hand that enables the thoroughly unmotivated Equation~\ref{intro:eq:eqn:stack} to masquerade as an acceptable approximation to the provably correct but computationally intractable \Eq{eqn:complete}.
 The preceding proofs show not only the most complete and correct way to frame the redshift distribution \Nz, but they also address the question of how stacking can fool even clever astrophysicists into thinking it works.
 \aim{Be explicit in \Sect{sec:pedanticres} about how these conditions weren't as far from true in the past.}
 The only cases in which stacking works are when the \pzpdf s are perfect or when the prior information is perfect.
@@ -313,27 +316,27 @@ Though the conditions of \Sect{sec:informative} and \Sect{sec:uninformative} may
 Thus, we must not stack!
 \aim{Maybe beef up this section to tie in to cosmology.}
 
-\section*{Notation}
-\sectlabel{sec:notation}
-
-\begin{table*}
-	\begin{center}
-		\begin{tabular}{ll}
-			$X'$ & a particular value of $X$\\
-			$\lnot X'$ & any value of $X$ other than $X'$\\
-			$X^{\dagger}$ & the true value of $X$\\
-			$\hat{X}$ & an estimated value of $X$\\ 
-			$\Omega(X)$ & the space of all possible values of $X$\\
-			$[N]^{K}$ & all possible sets of $K$ events chosen from $N$ possible events\\
-			$|S|$ & the number of elements of set $S$\\
-		\end{tabular}
-	\caption{
-		Glossary of important symbols used in this Chapter.
-		\aim{Did I miss anything?}
-		}
-	\tablabel{tab:glossary}
-	\end{center}
-\end{table*}
+%\section*{Notation}
+%\sectlabel{sec:notation}
+%
+%\begin{table*}
+%	\begin{center}
+%		\begin{tabular}{ll}
+%			$X'$ & a particular value of $X$\\
+%			$\lnot X'$ & any value of $X$ other than $X'$\\
+%			$X^{\dagger}$ & the true value of $X$\\
+%			$\hat{X}$ & an estimated value of $X$\\ 
+%			$\Omega(X)$ & the space of all possible values of $X$\\
+%			$[N]^{K}$ & all possible sets of $K$ events chosen from $N$ possible events\\
+%			$|S|$ & the number of elements of set $S$\\
+%		\end{tabular}
+%	\caption{
+%		Glossary of important symbols used in this Chapter.
+%		\aim{Did I miss anything?}
+%		}
+%	\tablabel{tab:glossary}
+%	\end{center}
+%\end{table*}
 
 \section*{Chapter acknowledgements}
 
