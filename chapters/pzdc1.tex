@@ -612,9 +612,8 @@ We reiterate that under our idealized experimental conditions, differences betwe
 %	\includegraphics[width=0.49\textwidth]{figures/pzdc1/pz_12codes_713178_noseaborn_crop.jpg}\includegraphics[width=0.49\textwidth]{figures/pzdc1/pz_12codes_982747_noseaborn_crop.jpg}
 	\includegraphics[width=\textwidth]{figures/pzdc1/EXAMPLE_pz_12codes_AIM.pdf}
 	\caption{The individual \pzpdf s of four exemplary galaxies (colored curves) produced by the twelve codes (panels) with different true redshifts (vertical lines).
-		The \pzpdf s of all codes share some features for the example galaxies due to physical color degeneracies and photometric errors: tight unimodal $p(z)$ (green), broad unimodal $p(z)$ (purple), bimodal $p(z)$ (pink), and complex/multimodal $p(z)$ (orange).
-		The diverse algorithms and implementations induce differences in small-scale structure and sensitivity to physical systematics.
-	\aim{I still need to polish this plot.}}
+		The \pzpdf s of all codes share some features for the example galaxies due to physical color degeneracies and photometric errors: tight unimodal $p(z)$ (blue), broad unimodal $p(z)$ (green), bimodal $p(z)$ (orange), and complex/multimodal $p(z)$ (yellow).
+		The diverse algorithms and implementations induce differences in small-scale structure and sensitivity to physical systematics.}
 	\figlabel{fig:pz_examples}
 \end{figure*}
 
@@ -641,7 +640,7 @@ The high QQ values (more high than low PIT values) of \bpz, \cmnn, \delight, \ea
 \begin{figure*}
 	\centering
 	\includegraphics[width=\textwidth]{figures/pzdc1/PITQQcombo_12codes_AIM.pdf}
-	\caption{The QQ plot (red) and PIT histogram (blue) of the \pzpdf\ codes (panels) along with the ideal QQ (black dashed diagonal) and ideal PIT (gray horizontal) curves.
+	\caption{The QQ plot (green) and PIT histogram (yellow) of the \pzpdf\ codes (panels) along with the ideal QQ (purple dashed diagonal) and ideal PIT (purple dashed horizontal) curves.
 		\aim{Add back the difference of the QQ from the ideal diagonal.}
 		The twelve codes exhibit varying degrees of four deviations from perfection: an overabundance of PIT values at the centre of the distribution indicate a catalogue of overly broad \pzpdf s, an excess of PIT values at the extrema indicates a catalogue of overly narrow \pzpdf s, catastrophic outliers manifest as overabundances at PIT values of 0 and 1, and asymmetry indicates systematic bias, a form of model misspecification.}
 	\figlabel{fig:pitqq}
@@ -686,10 +685,9 @@ As expected, \trainz\ achieves precisely the 0.0002 value expected of an ideal P
 
 \begin{figure*}
 	\centering
-	\includegraphics[width=0.74\textwidth]{figures/pzdc1/KSvsCvMvsAD_PIT_withnull_jpg.jpg}
-	\caption{A visualization of the Kolmogorov-Smirnoff (KS, blue diamond), Cramer-von Mises (CvM, black star), and Anderson-Darling (AD, red asterisk) statistics for the PIT distributions.
-		There is generally good agreement between these statistics, with differences corresponding to the codes with outstanding catastrophic outlier rates, a reflection in the differences in how each statistic weights the tails of the distribution.
-	\aim{Polish this for readability.}}
+	\includegraphics[width=0.74\textwidth]{figures/pzdc1/KSvsCvMvsAD_PIT.png}
+	\caption{A visualization of the Kolmogorov-Smirnoff (KS, blue $\dot$), Cramer-von Mises (CvM, yellow $\times$), and Anderson-Darling (AD, green $+$) statistics for the PIT distributions.
+		There is generally good agreement between these statistics, with differences corresponding to the codes with outstanding catastrophic outlier rates, a reflection in the differences in how each statistic weights the tails of the distribution.}
 	\figlabel{fig:pit_stats}
 \end{figure*}
 
@@ -753,7 +751,7 @@ In \Sect{sec:futureexperiments}, we outline the experiments we intend to build u
 In \Sect{sec:futuredata}, we discuss the enhancements of the mock data set that will be necessary to enable the future experiments.
 
 \subsection{Interpretation of metrics}
-\label{sec:caution}
+\sectlabel{sec:caution}
 %(Alex Malz, Sam Schmidt)
 
 We remind the reader that contributed codes were given a goal of obtaining accurate \pzpdf s, not an accurate stacked estimator of the redshift distribution, so we do not expect the same codes to necessarily perform well for both classes of metrics.
@@ -819,7 +817,7 @@ Performance on sharply peaked \pzpdf s may have been suppressed across all codes
 In light of the results of \citet[]{Malz:qp}, in future analyses we plan to switch from a fixed grid to the quantile parameterization or to permit each code to use its native storage format under a shared number of parameters.
 
 \subsection{Realistic mock data}
-\label{sec:futuredata}
+\sectlabel{sec:futuredata}
 
 To make optimal use of the \lsst\ data for cosmological and other astrophysical analyses of the Science Roadmap, future investigations that build upon this one will require a more sophisticated set of galaxy photometry and redshifts.
 %\item \red{inclusion of photometric errors, image based effects, blending, lensing, sky, mask, etc...}
@@ -903,8 +901,8 @@ Under the assumption that the stacked estimator is unbiased, a superior method m
 
 \begin{figure*}
 	\centering
-	\includegraphics[width=\textwidth]{figures/pzdc1/NZsumplot_12codes_scottsrule.jpg}
-	\caption{The smoothed stacked estimator $\hat{N}(z)$ of the redshift distribution (red) produced by each code (panels) compared to the true redshift distribution $\tilde{N}(z)$ (blue).
+	\includegraphics[width=\textwidth]{figures/pzdc1/NZsumplot_AIM.pdf}
+	\caption{The smoothed stacked estimator $\hat{N}(z)$ of the redshift distribution (orange) produced by each code (panels) compared to the true redshift distribution $\tilde{N}(z)$ (purple dashed).
 		Varying levels of agreement are seen among the codes, with the smallest deviations for \cmnn, \flexzboost, \tpz, and \trainz.}
 	\figlabel{fig:nz}
 	%\aim{Arguably this could also be clarified by showing the true $n'(z)$ once and then differences from it for each cod's stacked estimator\dots}\scc{what if we plot the difference between true and stacked rather than soverposing the two lines? Sam please do not hate me.}
@@ -928,11 +926,10 @@ It is unsurprising that \cmnn\ scores well, as with a near perfectly representat
 
 \begin{figure*}
 	\centering
-	\includegraphics[width=0.74\textwidth]{figures/pzdc1/KSvsCvMvsAD_NZ_withnull_jpg.jpg}
-	\caption{A visualization of the Kolmogorov-Smirnoff (KS, blue diamond), Cramer-von Mises (CvM, black star), and Anderson-Darling (AD, red asterisk) statistics for the $\hat{N}(z)$ distributions.
+	\includegraphics[width=0.74\textwidth]{figures/pzdc1/KSvsCvMvsAD_Nz.pdf}
+	\caption{A visualization of the Kolmogorov-Smirnoff (KS, blue $\dot$), Cramer-von Mises (CvM, yellow $\times$), and Anderson-Darling (AD, green $+$) statistics for the $\hat{N}(z)$ distributions.
 		We make the reassuring observation that these related statistics do not disagree significantly with one another.
-		\cmnn\ performs comparably well to \trainz, the control case, while \skynet\ scores poorly due to an overall bias in its redshift predictions.
-	\aim{Polish this for readability.}}
+		\cmnn\ performs comparably well to \trainz, the control case, while \skynet\ scores poorly due to an overall bias in its redshift predictions.}
 	\figlabel{fig:nz_stats}
 \end{figure*}
 
