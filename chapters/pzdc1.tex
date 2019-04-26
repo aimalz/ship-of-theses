@@ -38,7 +38,7 @@ The words of the paper were written by the entire \pzwg\ over the course of thre
 
 My role was to choose, implement, and interpret the metrics by which the \pzpdf\ codes would be evaluated, an important aspect of experimental design that had not been addressed already.
 I chose the metrics with input from Jeff Newman (Pitt) and Ann Lee (CMU), as well as discussions with the entire \pzwg\ from late 2016 through early 2018.
-In summer and fall 2017, I implemented the metrics in code and ran them on the results of the \pzpdf\ codes with the assistance of Rongpu Zhou (Pitt), Bryce Kalmbach (UW), Kartik Iyer (Rutgers), Sam Schmidt (UC Davis), and Chris Morrison (UW).
+In summer and fall 2017, I implemented the metrics in code and ran them on the results of the \pzpdf\ codes with the assistance of Rongpu Zhou (Pitt), Bryce Kalmbach (UW), Kartheik Iyer (Rutgers), Sam Schmidt (UC Davis), and Chris Morrison (UW).
 The interpretation of the metrics, culminating in both of the major discoveries of the paper, those of the isolation of the implicit prior and the flaws of traditional metrics, was mine alone, though the presentation of these points benefited from input from Sam Schmidt (UC Davis) and Chris Morrison (UW) througout 2018.
 I devised and implemented \trainz\ in the process of choosing and interpreting the metrics as a demonstration of the limitations of all metrics previously used for \pzpdf s
 
@@ -511,8 +511,8 @@ The distribution of PIT values is effectively the derivative of the QQ plot.
 A catalogue of accurate \pzpdf s should have a PIT distribution that is uniform $U(0,1)$, and deviations from flatness are interpretable: overly broad \pzpdf s induce underrepresentation of the lowest and highest PIT values, whereas overly narrow \pzpdf s induce overrepresentation of the lowest and highest PIT values.
 Catastrophic outliers with a true redshift outside the support of its \pzpdf\ have $\mathrm{PIT} \approx 0$ or $\mathrm{PIT} \approx 1$.
 
-The PIT distribution has been used to quantify the performance of \pzpdf\ methods in the past \citep[e.~g.~][]{Bordoloi:10,Polsterer:16,Tanaka:17}.
-\citet{Tanaka:17} use the histogram of PIT values as a diagnostic indicator of overall code performance, while \citet{Freeman:17} independently define the PIT and demonstrate how its individual values may be used both to perform hypothesis testing (via, e.g., the KS, CvM, and AD tests; see below) and to construct quantile-quantile plots.
+The PIT distribution has been used to quantify the performance of \pzpdf\ methods in the past \citep[e.~g.~][]{Bordoloi:10,Polsterer:16,tanaka_photometric_2018}.
+\citet{tanaka_photometric_2018} use the histogram of PIT values as a diagnostic indicator of overall code performance, while \citet{Freeman:17} independently define the PIT and demonstrate how its individual values may be used both to perform hypothesis testing (via, e.g., the KS, CvM, and AD tests; see below) and to construct quantile-quantile plots.
 %\red{We might want to divide this by redshift to get trends, as the overall PIT could be impacted by true n(z).
 %For example, a PIT with nontrivial shape could be due to that behavior being uniform as a function of redshift or significant inaccuracy only in a small range of redshifts where $n(z)$ is large and a flat PIT elsewhere.}
 Following Kodra \& Newman (in prep.) we define the PIT-based catastrophic outlier rate as the fraction of galaxies with $\rm{PIT} < 0.0001$ or $\rm{PIT} > 0.9999$, which should total 0.0002 for an ideal uniform distribution.
@@ -1066,3 +1066,8 @@ By late 2016, the data set had been distributed to the teams representing differ
 The final results of the codes became available to the \pzwg\ in late 2017.
 
 I also express gratitude for the helpful comments of the paper's \desc\ internal reviewers, Mike Troxel (Duke), Markus Michael Rau (CMU), and Daniel Gruen (Stanford).
+
+I chose the metrics to test with input from Jeff Newman (Pitt) and Ann Lee (CMU).
+I worked together with Rongpu Zhou (Pitt), Bryce Kalmbach (UW), Kartheik Iyer (Rutgers), Sam Schmidt (UC Davis), and Chris Morrison (UW) to implement the comparison metrics and run them on the results of different \pzpdf\ codes.
+The \pzpdf\ codes themselves were written and/or run by Ibrahim Almosallam (King Abdulaziz City for Science and Technology), Massimo Brescia (INAF-Capodimonte), Stefano Cavuoti (University Federico II), Johann Cohen-Tanugi (Universit\'e de Montpellier),  Andy Connolly (UW), Peter Freeman (CMU), Melissa Graham (UW), Rafael Izbicki (Federal University of Sao Carlos), Matt Jarvis (Oxford; University of the Western Cape), Ann Lee (CMU), Giuseppe Longo (University Federico II), Erfan Nourbakhsh (UC Davis), Eric Nuss (Universit\'e de Montpellier), Taylor Pospisil (CMU), Cecile Roucelle (U Clermont-Ferrand), and Hugo Tranin (Universit\'e de Montpellier).
+The paper is intended for submission to MNRAS but is still under internal review by \desc\ members Mike Troxel (Duke), Markus Michael Rau (CMU), and Daniel Gruen (Stanford).
