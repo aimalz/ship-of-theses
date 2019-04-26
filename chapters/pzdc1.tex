@@ -33,22 +33,14 @@
 
 \chapter{ Evaluation of probabilistic photometric redshift estimation approaches \chaplabel{pzdc1} }
 
-This \paper\ represents joint work with Sam Schmidt (UC Davis) and the entire Photo-Z Working Group (\pzwg) of the \desc, which is intended for submission to MNRAS and whose public draft\footnote{\url{{https://github.com/LSSTDESC/PZDC1paper}}} is currently in \desc\ internal review by Mike Troxel (Duke), Markus Michael Rau (CMU), and Daniel Gruen (Stanford).
-
-At the time I joined \desc\ in early 2016, the experimental design had already been set by Ofer Lahav (UCL), Jeff Newman (Pitt), Sam Schmidt (UC Davis), and Tony Tyson (UC Davis).
-The mock data set had been produced by Alex Abate (Dia\&Co), Sam Schmidt (UC Davis), Eve Kovacs (Argonne), Joe DeRose (Stanford), Risa Wechsler (Stanford).
-The data set was being validated by Sam Schmidt (UC Davis), Jeff Newman (Pitt), and Tina Peters (Toronto).
-
-By late 2016, the data set had been distributed to the teams representing different \pzpdf\ codes, including Ibrahim Almosallam (King Abdulaziz City for Science and Technology), Massimo Brescia (INAF-Capodimonte), Stefano Cavuoti (University Federico II), Johann Cohen-Tanugi (Universit\'e de Montpellier),  Andy Connolly (UW), Peter Freeman (CMU), Melissa Graham (UW), Rafael Izbicki (Federal University of Sao Carlos), Matt Jarvis (Oxford; University of the Western Cape), Ann Lee (CMU), Giuseppe Longo (University Federico II), Erfan Nourbakhsh (UC Davis), Eric Nuss (Universit\'e de Montpellier), Taylor Pospisil (CMU), Cecile Roucelle (U Clermont-Ferrand), and Hugo Tranin (Universit\'e de Montpellier).
-The final results of the codes became available to the \pzwg\ in late 2017.
+This \paper\ represents joint work with Sam Schmidt (UC Davis) and the entire Photo-Z Working Group (\pzwg) of the \desc, which is intended for submission to MNRAS and whose public draft\footnote{\url{{https://github.com/LSSTDESC/PZDC1paper}}} is currently in \desc\ internal review.
+The words of the paper were written by the entire \pzwg\ over the course of three years, though the bulk of the writing was executed by myself, Sam Schmidt (UC Davis), and John Soo (U. of Science Malaysia).
 
 My role was to choose, implement, and interpret the metrics by which the \pzpdf\ codes would be evaluated, an important aspect of experimental design that had not been addressed already.
 I chose the metrics with input from Jeff Newman (Pitt) and Ann Lee (CMU), as well as discussions with the entire \pzwg\ from late 2016 through early 2018.
 In summer and fall 2017, I implemented the metrics in code and ran them on the results of the \pzpdf\ codes with the assistance of Rongpu Zhou (Pitt), Bryce Kalmbach (UW), Kartik Iyer (Rutgers), Sam Schmidt (UC Davis), and Chris Morrison (UW).
 The interpretation of the metrics, culminating in both of the major discoveries of the paper, those of the isolation of the implicit prior and the flaws of traditional metrics, was mine alone, though the presentation of these points benefited from input from Sam Schmidt (UC Davis) and Chris Morrison (UW) througout 2018.
-I devised and implemented \trainz\ in the process of choosing and interpreting the metrics as a demonstration of the limitations of all metrics previously used for \pzpdf s.
-
-The words of the paper were written by the entire \pzwg\ over the course of three years, though the bulk of the writing was executed by myself, Sam Schmidt (UC Davis), and John Soo (U. of Science Malaysia).
+I devised and implemented \trainz\ in the process of choosing and interpreting the metrics as a demonstration of the limitations of all metrics previously used for \pzpdf s
 
 %\aim{Change the British spelling back to American for thesis.}
 
@@ -486,7 +478,7 @@ We will discuss the choice of \pzpdf\ parameterization further in \Sect{sec:disc
 This analysis is conducted using the \qp\footnote{\url{http://github.com/aimalz/qp/}}\ software package \citep{Malz:qp} for manipulating and calculating metrics of univariate PDFs.
 We present the metrics of \pzpdf s that address our goals in the sections below.
 \Sect{sec:qualmet} outlines aggregate metrics of a catalogue of \pzpdf s, and \Sect{sec:CDElossmetric} presents a metric of individual \pzpdf s in the absence of true \pzpdf s.
-Though the outmoded practices should not be encouraged, those seeking a connection to previous comparison studies will find metrics of redshift point estimate reductions of \pzpdf s in \Sect{sec:pointmetrics} and metrics of a science-specific summary statistics heuristically derived from \pzpdf s in \Sect{sec:moments}.
+Though the outmoded practices should not be encouraged, those seeking a connection to previous comparison studies will find metrics of redshift point estimate reductions of \pzpdf s in Appendix~\ref{pzdc1:sec:sec:allpointmetrics} and metrics of a science-specific summary statistics heuristically derived from \pzpdf s in Appendix~\ref{pzdc1:sec:sec:moments}.
 
 \subsection{Metrics of an ensemble of \pzpdf s}
 \sectlabel{sec:qualmet}
@@ -738,7 +730,7 @@ Thus the CDE loss is the most effective metric for generic science cases.
 This metric is the only one that can appropriately penalize \trainz\ and indicates strong performance for \cmnn\ and \flexzboost, the latter of which is optimized for this metric.
 %Empirically, we have found that PIT RMSE is not as closely correlated to CDE loss as it is to the $N(z)$ statistics.
 
-\section{Discussion and future work}
+\section{Discussion \& Future Directions}
 \sectlabel{sec:discussion}
 %(Sam Schmidt, Ofer Lahav, Jeff Newman, Alex Malz, Eve Kovacs, Tony Tyson, Tina Peters)
 
@@ -865,8 +857,12 @@ In appendices, we also present metrics of point estimates and a prevalent summar
 We observe that no one code dominates in all metrics, and that the standard metrics of \pzpdf s and the stacked estimator of the redshift distribution can be gamed by a vacuously wrong procedure that asserts the prior over the data.
 We emphasize to the \pz\ community that \textbf{metrics used to vet \pzpdf\ methods must be scrutinized to ensure they correspond to the quantities that matter to our science}.
 
-\section*{Evaluation of the redshift distribution}
-\sectlabel{sec:moments}
+\section*{Appendices}
+\addcontentsline{toc}{section}{Appendices}
+\renewcommand{\thesubsection}{\Alph{subsection}}
+
+\subsection{Evaluation of the redshift distribution}
+\label{sec:moments}
 %(Alex Malz)
 
 Perhaps the most popular application of \pzpdf s is the estimation of the overall redshift distribution $N(z)$, a quantity that enters some cosmological calculations and the true value of which is known for the DC1 data set and will be denoted as $\tilde{N}(z)$.
@@ -874,7 +870,7 @@ In terms of the prior information provided to each method, the true redshift dis
 In this ideal case of complete and representative prior information, the method that would give the best approximation to $\hat{N}(z)$ would be one that neglects all the information contained in the photometry $\{d_{i}\}_{N_{tot}}$ and gives every galaxy the same \pzpdf\ $\hat{p}_{i}(z) = \tilde{N}(z)$ for all $i$; the inclusion of any information from the photometry would only introduce noise to the optimal result of returning the prior.
 This is the exact estimator, \trainz, that we have described in \Sect{sec:trainz}, and which will serve as an experimental control.
 
-\subsection{Metrics of the stacked estimator of the redshift distribution}
+\subsubsection{Metrics of the stacked estimator of the redshift distribution}
 \label{sec:stackedmetrics}
 
 Though alternatives exist \citep{Malz:chippr}, ``stacking'' according to
@@ -894,8 +890,8 @@ We additionaly calculate the first three moments
 of the estimated redshift distribution $\hat{N}^{H}(z)$ for each code and compare them to the moments of the true redshift distribution $\tilde{N}(z)$.
 Under the assumption that the stacked estimator is unbiased, a superior method minimizes the difference between the true and estimated moments.
 
-\subsection{Performance on the stacked estimator of the redshift distribution}
-\sectlabel{sec:stackedmetrics_results}
+\subsubsection{Performance on the stacked estimator of the redshift distribution}
+\label{sec:stackedmetrics_results}
 
 \Fig{fig:nz} shows the stacked estimator $\hat{N}(z)$ of the redshift distribution for each code compared to the true redshift distribution $\tilde{N}(z)$, where the stacked estimator has been smoothed for each code in the plot using a kernel density estimate (KDE) with a bandwidth chosen by Scott's Rule \citep{Scott:1992} in order to minimize visual differences in small-scale features; the quantiative statistics, however, are calculated using the empirical CDF which is not smoothed.
 
@@ -975,38 +971,37 @@ Accuracy of the moments varies widely between codes, raising concerns about the 
 \skynet\ exhibits redshift bias in \Fig{fig:nz} and is a clear outlier in the first moment of $\hat{N}(z)$ in \Tab{tab:moments}.
 The \skynet\ algorithm employs a random subsampling of the training set without testing that the subset is representative of the full population, and the implementation used here does not upweight rarer low- and high-redshift galaxies, as in \citet{Bonnett:15}, suggesting a possible cause that may be addressed in future work.
 
-\section*{\Pz\ point estimation and metrics}
-\sectlabel{sec:allpointmetrics}
+\subsection{\Pz\ point estimation and metrics}
+\label{sec:allpointmetrics}
 
 While this work assumes that science applications value the information of the full \pzpdf, we present conventional metrics of \pz\ point estimates as a quick and dirty diagnostic tool and to facilitate direct comparisons to historical studies.
 
-\subsection{Reduction of \pzpdf s to point estimates}
-\sectlabel{sec:pointest}
+\subsubsection{Reduction of \pzpdf s to point estimates}
+\label{sec:pointest}
 
 Though we acknowledge that many of the codes can also return a native \pz\ point estimate, we put all codes on equal footing by considering two generic \pz\ point estimators, the mode $z_{PEAK}$ and main-peak-mean $z_{WEIGHT}$ \citep{Dahlen:13}, a weighted mean within the bounds of the main peak, as identified by the roots of $p(z) - 0.05 \times z_{PEAK}$.
 Though $z_{WEIGHT}$ neglects information in a secondary peak of a, say, bimodal distribution, it avoids the pitfall of reducing the \pzpdf\ to a redshift between peaks where there is low probability.
 
-\subsection{Metrics of \pz\ point estimates}
+\subsubsection{Metrics of \pz\ point estimates}
 \sectlabel{sec:pointmetrics}
 
 We calculate the commonly used point estimate metrics of the overall intrinsic scatter, bias, and catastrophic outlier rate, defined in terms of the standard error $e_{z} \equiv (z_{PEAK} - z_{\rm true}) / (1 + z_{\rm true})$.
 Because the standard deviation of the \pz\ residuals is sensitive to outliers, we define the scatter in terms of the Interquartile Range (IQR), the difference between the 75th and 25th percentiles of the distribution of $e_{z}$, imposing the scaling $\sigma_{\rm IQR} = \rm{IQR} / 1.349$ to ensure that the area within $\sigma_{\rm IQR}$ is the same as that within one standard deviation from a standard Normal distribution.
 We also resist the effect of catastrophic outliers by defining the bias $b_{z}$ as the median rather than mean value of $e_{z}$.
 The catastrophic outlier rate $f_{\rm out}$ is defined as the fraction of galaxies with $e_{z}$ greater than $\max(3 \sigma_{\rm IQR}, 0.06)$.
+For reference, Section 3.8 of the \lsst\ Science Book \citep{Abell:09} uses the standard definitions of these parameters, given in Table~\ref{intro:tab:tab:lsstsrd}.
+%\begin{itemize}
+%	\item RMS scatter $\sigma < 0.02 (1 + z_{\rm true})$
+%	%\scc{actually the SB reports in page 75 that the goal of 0.02 is for the RMS of $\frac{\sigma_{z}}{(1+z)}$ while we are using IQR}
+%	\item bias $b_{z} < 0.003$ %\scc{in page 518 of the SB is clearly reported that the mean is expected to be less than 0.003 in our case we have defined as bias the median and not the mean }
+%	\item catastrophic outlier rate $f_{\rm out} < 10\%$ %\scc{clearly the number of outliers since are defined above $3\sigma$ strictly depends on the sigma definition, in the science book it seems to refer to the RMS of the $e_z$ distribution even ef it could be the standard deviation, but again I don't think it refers to IQR, therefore we could not consider exactly this numbers as reference.}
+%	%\red{I am going off of conversations with Zeljko and how we {\it actually} computed the metrics in the Science Book (I have the scripts).  You are correct that several of these are slightly different than actually stated in the Science Book, or where the Science Book does not use very precise language as to what was done to compute the RMS or define the bias.  We can also cut out those specifics, or maybe say Ivezic private communication, maybe?  Also $\sigma_{z}$ defined in terms of IQR is exactly equivalent to the standard deviation when scaled by 1.349 for a Gaussian distribution, so the numbers are appropriate to cite in this context.  IQR is just a more robust way of calculating sigma for a distribution with outliers.--SJS }
+%	%\scc{I am very sorry I am not saying that IQR is not fine, I want to keep the IQR my concerns are related to the notation and the \textit{reader understanding}, if I wrote $\sigma$ somewhere in a table the reader will understand for sure that is the traditional standard deviation (a lot of people skips the indicators definition for the \textit{obvious} ones), I am suggesting to replace the notation $\sigma$ with the notation $\sigma_{IQR}$ (or something like this) to avoid any confusion, and also to change from $bias$ to $median$ for the same reason. I agree that say Ivezic private communication could be better.}
+%	.
+%\end{itemize}
 
-For reference, Section 3.8 of the \lsst\ Science Book \citep{Abell:09} uses the standard definitions of these parameters in requiring
-\begin{itemize}
-	\item RMS scatter $\sigma < 0.02 (1 + z_{\rm true})$
-	%\scc{actually the SB reports in page 75 that the goal of 0.02 is for the RMS of $\frac{\sigma_{z}}{(1+z)}$ while we are using IQR}
-	\item bias $b_{z} < 0.003$ %\scc{in page 518 of the SB is clearly reported that the mean is expected to be less than 0.003 in our case we have defined as bias the median and not the mean }
-	\item catastrophic outlier rate $f_{\rm out} < 10\%$ %\scc{clearly the number of outliers since are defined above $3\sigma$ strictly depends on the sigma definition, in the science book it seems to refer to the RMS of the $e_z$ distribution even ef it could be the standard deviation, but again I don't think it refers to IQR, therefore we could not consider exactly this numbers as reference.}
-	%\red{I am going off of conversations with Zeljko and how we {\it actually} computed the metrics in the Science Book (I have the scripts).  You are correct that several of these are slightly different than actually stated in the Science Book, or where the Science Book does not use very precise language as to what was done to compute the RMS or define the bias.  We can also cut out those specifics, or maybe say Ivezic private communication, maybe?  Also $\sigma_{z}$ defined in terms of IQR is exactly equivalent to the standard deviation when scaled by 1.349 for a Gaussian distribution, so the numbers are appropriate to cite in this context.  IQR is just a more robust way of calculating sigma for a distribution with outliers.--SJS }
-	%\scc{I am very sorry I am not saying that IQR is not fine, I want to keep the IQR my concerns are related to the notation and the \textit{reader understanding}, if I wrote $\sigma$ somewhere in a table the reader will understand for sure that is the traditional standard deviation (a lot of people skips the indicators definition for the \textit{obvious} ones), I am suggesting to replace the notation $\sigma$ with the notation $\sigma_{IQR}$ (or something like this) to avoid any confusion, and also to change from $bias$ to $median$ for the same reason. I agree that say Ivezic private communication could be better.}
-	.
-\end{itemize}
-
-\subsection{Comparison of \pz\ point estimate metrics}
-\sectlabel{sec:pointmetrics_results}
+\subsubsection{Comparison of \pz\ point estimate metrics}
+\label{sec:pointmetrics_results}
 
 \Fig{fig:pz_pointestimates} shows both point estimates forall codes  both $z_{PEAK}$ and $z_{WEIGHT}$.
 Point density is shown with mixed contours to emphasize that most of the galaxies do fall close to the $z_{phot} = z_{spec}$ line, while points trace the details of the catastrophic outlier populations.
@@ -1063,4 +1058,11 @@ All twelve codes perform at or near the goals of the \lsst\ Science Requirements
 
 \section*{Chapter acknowledgements}
 
-\aim{Write something here\dots}
+At the time I joined \desc\ in early 2016, the experimental design had already been set by Ofer Lahav (UCL), Jeff Newman (Pitt), Sam Schmidt (UC Davis), and Tony Tyson (UC Davis).
+The mock data set had been produced by Alex Abate (Dia\&Co), Sam Schmidt (UC Davis), Eve Kovacs (Argonne), Joe DeRose (Stanford), Risa Wechsler (Stanford).
+The data set was being validated by Sam Schmidt (UC Davis), Jeff Newman (Pitt), and Tina Peters (Toronto).
+
+By late 2016, the data set had been distributed to the teams representing different \pzpdf\ codes, including Ibrahim Almosallam (King Abdulaziz City for Science and Technology), Massimo Brescia (INAF-Capodimonte), Stefano Cavuoti (University Federico II), Johann Cohen-Tanugi (Universit\'e de Montpellier),  Andy Connolly (UW), Peter Freeman (CMU), Melissa Graham (UW), Rafael Izbicki (Federal University of Sao Carlos), Matt Jarvis (Oxford; University of the Western Cape), Ann Lee (CMU), Giuseppe Longo (University Federico II), Erfan Nourbakhsh (UC Davis), Eric Nuss (Universit\'e de Montpellier), Taylor Pospisil (CMU), Cecile Roucelle (U Clermont-Ferrand), and Hugo Tranin (Universit\'e de Montpellier).
+The final results of the codes became available to the \pzwg\ in late 2017.
+
+I also express gratitude for the helpful comments of the paper's \desc\ internal reviewers, Mike Troxel (Duke), Markus Michael Rau (CMU), and Daniel Gruen (Stanford).
