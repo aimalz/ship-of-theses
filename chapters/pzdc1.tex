@@ -50,7 +50,7 @@ I devised and implemented \trainz\ in the process of choosing and interpreting t
 
 The words of the paper were written by the entire \pzwg\ over the course of three years, though the bulk of the writing was executed by myself, Sam Schmidt (UC Davis), and John Soo (U. of Science Malaysia).
 
-\aim{Change the British spelling back to American for thesis.}
+%\aim{Change the British spelling back to American for thesis.}
 
 \section*{Chapter abstract}
 
@@ -607,7 +607,7 @@ We begin with a demonstrative visual inspection of the \pzpdf s produced by each
 We reiterate that under our idealized experimental conditions, differences between codes are the isolated signature of the implicit prior due to the method by which the \pzpdf s were derived.
 
 \begin{figure*}
-	%\centering
+	\centering
 %	\includegraphics[width=0.49\textwidth]{figures/pzdc1/pz_12codes_261931_noseaborn_crop.jpg}\includegraphics[width=0.49\textwidth]{figures/pzdc1/pz_12codes_471167_noseaborn_crop.jpg}\\
 %	\includegraphics[width=0.49\textwidth]{figures/pzdc1/pz_12codes_713178_noseaborn_crop.jpg}\includegraphics[width=0.49\textwidth]{figures/pzdc1/pz_12codes_982747_noseaborn_crop.jpg}
 	\includegraphics[width=\textwidth]{figures/pzdc1/EXAMPLE_pz_12codes_AIM.pdf}
@@ -640,8 +640,8 @@ The high QQ values (more high than low PIT values) of \bpz, \cmnn, \delight, \ea
 \begin{figure*}
 	\centering
 	\includegraphics[width=\textwidth]{figures/pzdc1/PITQQcombo_12codes_AIM.pdf}
-	\caption{The QQ plot (green) and PIT histogram (yellow) of the \pzpdf\ codes (panels) along with the ideal QQ (purple dashed diagonal) and ideal PIT (purple dashed horizontal) curves.
-		\aim{Add back the difference of the QQ from the ideal diagonal.}
+	\caption{The QQ plot (green curve) and PIT histogram (yellow bars) of the \pzpdf\ codes (panels) along with the ideal QQ (purple dashed diagonal) and ideal PIT (purple dashed horizontal) curves.
+%		\aim{Add back the difference of the QQ from the ideal diagonal.}
 		The twelve codes exhibit varying degrees of four deviations from perfection: an overabundance of PIT values at the centre of the distribution indicate a catalogue of overly broad \pzpdf s, an excess of PIT values at the extrema indicates a catalogue of overly narrow \pzpdf s, catastrophic outliers manifest as overabundances at PIT values of 0 and 1, and asymmetry indicates systematic bias, a form of model misspecification.}
 	\figlabel{fig:pitqq}
 \end{figure*}
@@ -675,7 +675,7 @@ On the other hand, the three purely template-based codes, \bpz, \eazy, and \leph
 		\skynet     & 0.0001\\
 		\tpz        & 0.0130\\
 		\hline
-		\trainz     & 0.0002\\
+		\trainz     & 0.0002
 	\end{tabular}
 \end{table}
 
@@ -685,8 +685,8 @@ As expected, \trainz\ achieves precisely the 0.0002 value expected of an ideal P
 
 \begin{figure*}
 	\centering
-	\includegraphics[width=0.74\textwidth]{figures/pzdc1/KSvsCvMvsAD_PIT.png}
-	\caption{A visualization of the Kolmogorov-Smirnoff (KS, blue $\dot$), Cramer-von Mises (CvM, yellow $\times$), and Anderson-Darling (AD, green $+$) statistics for the PIT distributions.
+	\includegraphics[width=0.74\textwidth]{figures/pzdc1/KSvsCvMvsAD_PIT.pdf}
+	\caption{A visualization of the Kolmogorov-Smirnoff (KS, blue $\bullet$), Cramer-von Mises (CvM, yellow $\times$), and Anderson-Darling (AD, green $+$) statistics for the PIT distributions.
 		There is generally good agreement between these statistics, with differences corresponding to the codes with outstanding catastrophic outlier rates, a reflection in the differences in how each statistic weights the tails of the distribution.}
 	\figlabel{fig:pit_stats}
 \end{figure*}
@@ -909,7 +909,7 @@ Under the assumption that the stacked estimator is unbiased, a superior method m
 \end{figure*}
 
 Many of the codes, including all the model-fitting approaches and \annz, \gpz, \metaphor, and \skynet\ from the data-driven camp, overestimate the redshift density at $z \sim 1.4$.
-This behavior is a consequence of the $4000\ {\rm \AA}$ break passing through the gap between the $z$ and $y$ filters, which induces a genuine discontinuity in the $z - y$ colour as a function of redshift that can sway the \pzpdf\ estimates in the absence of bluer spectral features.
+This behavior is a consequence of the $4000 \rm{\AA}$ break passing through the gap between the $z$ and $y$ filters, which induces a genuine discontinuity in the $z - y$ colour as a function of redshift that can sway the \pzpdf\ estimates in the absence of bluer spectral features.
 
 \annz, \gpz, and \metaphor\ show signs of overtraining, estimating enhanced peaks and diminished troughs relative to the training set, an obstacle that may be overcome with adjustment of the implementation.
 
@@ -927,7 +927,7 @@ It is unsurprising that \cmnn\ scores well, as with a near perfectly representat
 \begin{figure*}
 	\centering
 	\includegraphics[width=0.74\textwidth]{figures/pzdc1/KSvsCvMvsAD_Nz.pdf}
-	\caption{A visualization of the Kolmogorov-Smirnoff (KS, blue $\dot$), Cramer-von Mises (CvM, yellow $\times$), and Anderson-Darling (AD, green $+$) statistics for the $\hat{N}(z)$ distributions.
+	\caption{A visualization of the Kolmogorov-Smirnoff (KS, blue $\bullet$), Cramer-von Mises (CvM, yellow $\times$), and Anderson-Darling (AD, green $+$) statistics for the $\hat{N}(z)$ distributions.
 		We make the reassuring observation that these related statistics do not disagree significantly with one another.
 		\cmnn\ performs comparably well to \trainz, the control case, while \skynet\ scores poorly due to an overall bias in its redshift predictions.}
 	\figlabel{fig:nz_stats}
@@ -1063,6 +1063,4 @@ All twelve codes perform at or near the goals of the \lsst\ Science Requirements
 
 \section*{Chapter acknowledgements}
 
-I express gratitude to
-[helpful people here]
-for their contributions to this work.
+\aim{Write something here\dots}
