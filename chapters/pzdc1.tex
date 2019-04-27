@@ -198,7 +198,7 @@ Though not exhaustive, this sample represents codes for which there was sufficie
 			\cmnn~\citep{Graham:17}        & machine learning & N/A \\
 			\skynet~\citep{Graff:14}       & machine learning & \url{http://ccpforge.cse.rl.ac.uk/gf/project/skynet/} \\
 			\tpz~\citep{Carrasco_Kind:13}	 & machine learning	& \url{https://github.com/mgckind/MLZ} \\
-			\delight~\citep{Leistedt:17}   & hybrid           & \url{https://github.com/ixkael/Delight} \\
+			\delight~\citep{leistedt_data-driven_2017}   & hybrid           & \url{https://github.com/ixkael/Delight} \\
 			\hline
 			\trainz 	                             & machine learning	& See \Sect{sec:trainz} \\
 	\end{tabular}}
@@ -413,7 +413,7 @@ We partitioned our redshift space into 200 bins and smoothed each individual PDF
 \sectlabel{sec:delight}
 %(John Soo)
 
-\delight \footnote{\url{https://github.com/ixkael/Delight}} \citep{Leistedt:17} is a hybrid technique that infers \pz s with a data-driven model of latent SEDs and a physical model of photometric fluxes as a function of redshift.
+\delight \footnote{\url{https://github.com/ixkael/Delight}} \citep{leistedt_data-driven_2017} is a hybrid technique that infers \pz s with a data-driven model of latent SEDs and a physical model of photometric fluxes as a function of redshift.
 Generally, machine learning methods rely on representative training data with shared photometric filters, while template based methods rely on a complete library of templates based on physical models constructed.
 \delight\ aims to take the best aspects of both approaches by constructing a large collection of latent SED templates (or physical flux-redshift models) from training data, with a template SED library as a guide to the learning of the model, thereby circumventing the machine learning prerequisite of representative training data in the same photometric bands and the template fitting requirement of detailed galaxy SED models.
 It models noisy observed flux $\mathbf{\hat{F}} = \mathbf{F} + F_{b}$ as a sum of a noiseless flux plus a Gaussian processes $F_b \sim \mathcal{GP}\left(\mu^F, k^F \right)$ with zero mean function $\mu^{F}$ and a physically motivated kernel $k^{F}$ that induces realistic correlations in flux-redshift space.
@@ -423,7 +423,7 @@ As in traditional template fitting, each likelihood $p(\mathbf{\hat{F}} \vert \m
 
 The machine learning approach appears in the inclusion of a pairwise comparison term $p(\mathbf{F} \vert z, z_j, \mathbf{\hat{F}}_j)$ for the prediction of model flux $\mathbf{F}$ at a model redshift $z$ with respect to training set galaxy $j$ with redshift $z_j$ and observed flux $\mathbf{\hat{F}}_j$.
 Thus the \pz\ posterior $p(\mathbf{\hat{F}} \vert z, T_i) = \int p(\mathbf{\hat{F}} \vert \mathbf{F}) p(\mathbf{F} \vert z, z_j, \mathbf{\hat{F}}_j) d\mathbf{F}$ may be interpreted as the probability that the training and the target galaxies have the same SED at different redshifts.
-The flux prediction $p(\mathbf{F} \vert z, z_j, \mathbf{\hat{F}}_j)$ of the training galaxy at redshift $z$ is modeled via the Gaussian process described above; more detail is provided in \citet{Leistedt:17}.
+The flux prediction $p(\mathbf{F} \vert z, z_j, \mathbf{\hat{F}}_j)$ of the training galaxy at redshift $z$ is modeled via the Gaussian process described above; more detail is provided in \citet{leistedt_data-driven_2017}.
 
 In this study, the default settings of \delight\ were used, with the exception that the PDF bins were set to be linearly-spaced rather than logarithmic.
 The Gaussian process was trained using the full DC1 training set.
