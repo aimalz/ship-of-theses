@@ -469,13 +469,13 @@ These sets of prior information are carefully constructed to be representative a
 Under this assumption, a ratio of posteriors of codes is in effect a ratio of the implicit posteriors $p(z \vert d_{i}, I_{H'})$ since the external prior information $I_{D}$ is present in the numerator and denominator.
 Thus comparisons of $\hat{p}_{i}^{H}(z)$ isolate the effect of the method used to obtain the estimator, which should enable interpretation of the differences between estimated PDFs in terms of the specifics of the method implementations.
 
-The exact implementation of the metrics theoretically depends on the parametrization of the \pzpdf s, which may differ across codes and can affect the precision of the estimator \citep{Malz:qp}.
+The exact implementation of the metrics theoretically depends on the parametrization of the \pzpdf s, which may differ across codes and can affect the precision of the estimator \citep{malz_approximating_2018}.
 Even considering a single method under the same parametrization, such as the 200-bin $0 < z < 2$ piecewise constant function used here, the exact bin definitions will affect the result.
 %\red{Note: Let's address how the gridding (endpoints and spacing) affects the metrics, from the email correspondence Re: [LSST-DESC-MEMBERS] Summary of Nov 29 PZ Telecon. (AIM)}
 The piecewise constant format is chosen because of its established presence in the literature, and the choice of 200 bins was motivated by the approximate number of columns expected to be available for storage of \pzpdf s for the final \lsst\ Project tables.\footnote{See, e.~g.~the \lsst\ Data Products Definition Document, available at: \url{https://ls.st/dpdd}}
 We will discuss the choice of \pzpdf\ parameterization further in \Sect{sec:discussion}.
 
-This analysis is conducted using the \qp\footnote{\url{http://github.com/aimalz/qp/}}\ software package \citep{Malz:qp} for manipulating and calculating metrics of univariate PDFs.
+This analysis is conducted using the \qp\footnote{\url{http://github.com/aimalz/qp/}}\ software package \citep{malz_qp_2017} for manipulating and calculating metrics of univariate PDFs.
 We present the metrics of \pzpdf s that address our goals in the sections below.
 \Sect{sec:qualmet} outlines aggregate metrics of a catalogue of \pzpdf s, and \Sect{sec:CDElossmetric} presents a metric of individual \pzpdf s in the absence of true \pzpdf s.
 Though the outmoded practices should not be encouraged, those seeking a connection to previous comparison studies will find metrics of redshift point estimate reductions of \pzpdf s in Appendix~\ref{sec:allpointmetrics} and metrics of a science-specific summary statistics heuristically derived from \pzpdf s in Appendix~\ref{sec:moments}.
@@ -611,7 +611,7 @@ We reiterate that under our idealized experimental conditions, differences betwe
 
 The most striking differences between codes are due to small-scale features induced by the interaction between the shared piecewise constant parameterization of $200$ bins $0 < z < 2$ of \Sect{sec:metrics} and the smoothing conditions or lack thereof in each algorithm.
 The $\rm{d}z = 0.01$ redshift resolution is sufficient to capture the broad peaks of faint galaxies' \pzpdf s with large photometric errors but is too broad to resolve the narrow peaks for bright galaxies' \pzpdf s with small photometric errors.
-This observation is consistent with the findings of \citet[]{Malz:qp} that the piecewise constant parameterization underperforms in the presence of small-scale structures.
+This observation is consistent with the findings of \citet[]{malz_approximating_2018} that the piecewise constant parameterization underperforms in the presence of small-scale structures.
 
 However, the shared small-scale features of \annz, \metaphor, \cmnn, and \skynet\ are a result of various weighted sums of the limited number of training set galaxies with colors similar to those of the test set galaxy in question, with behavior closer to classification than regression in the case of \annz.
 The settings used on \gpz\ in this work forced broadening of the single Gaussian to cover the multimodal redshift solutions of the other codes.
@@ -806,7 +806,7 @@ The effects of tomographic binning scheme will be explored in a dedicated future
 Sequels to this study will also address some shortcomings of our experimental procedure.
 The fixed redshift grid shared between the codes may have unfairly penalized codes with a different native parameterization, as precision is lost when converting between formats.
 Performance on sharply peaked \pzpdf s may have been suppressed across all codes due to the insufficient resolution of the redshift grid.
-In light of the results of \citet[]{Malz:qp}, in future analyses we plan to switch from a fixed grid to the quantile parameterization or to permit each code to use its native storage format under a shared number of parameters.
+In light of the results of \citet[]{malz_approximating_2018}, in future analyses we plan to switch from a fixed grid to the quantile parameterization or to permit each code to use its native storage format under a shared number of parameters.
 
 \subsection{Realistic mock data}
 \sectlabel{sec:futuredata}
