@@ -13,7 +13,9 @@ thesis.pdf: *.tex chapters/*.tex *.bib
 	${LATEX} thesis
 	( grep Rerun thesis.log && ${LATEX} thesis ) || echo "Done."
 	( grep Rerun thesis.log && ${LATEX} thesis ) || echo "Done."
-
+	pdftotext thesis.pdf
+	grep -C1 '??' thesis.txt || true
+	echo Found `grep -c '??' thesis.txt` broken references
 abstractpage.pdf: abstract.tex abstractpage.tex
 	${LATEX} abstractpage
 	( grep Rerun abstractpage.log && ${LATEX} abstractpage ) || echo "Done."
