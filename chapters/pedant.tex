@@ -230,7 +230,7 @@ We know that \Eq{eqn:stackwithdata} works in this case and will now answer wheth
 	For perfectly informative data, each of these $\pr{z \gvn \data_{i}}$ becomes $\delta(z,\ z^{\dagger}_{i})$, making \Eq{eqn:proofwithdata1} into
 	\begin{align}
 	\eqlabel{eqn:proofwithdata2}
-	\langle N(z') \rangle &= \Perhaps I should wsum_{K = 0}^{N} K \sum_{j}^{N! / K! (N - K)!} \left[ \prod_{i \in S^{K}_{j}} \delta(z', z^{\dagger}_{i}) \prod_{i \notin S^{K}_{j}} 1 - \delta(z', z^{\dagger}_{i}) \right]
+	\langle N(z') \rangle &= \sum_{K = 0}^{N} K \sum_{j}^{N! / K! (N - K)!} \left[ \prod_{i \in S^{K}_{j}} \delta(z', z^{\dagger}_{i}) \prod_{i \notin S^{K}_{j}} 1 - \delta(z', z^{\dagger}_{i}) \right]
 	\end{align}
 	Each of the delta function terms in \Eq{eqn:proofwithdata2} will be $1$ when $z' = z^{\dagger}_{i}$ and $0$ otherwise.
 	There is only one combination $j^{\dagger}$ that will result in a nonzero product, the one whose $S^{K}_{j}$ contains all $K = K^{\dagger}$ galaxies with $z^{\dagger}_{i} = z'$ and no interlopers with $z^{\dagger}_{i} \neq z'$.
@@ -255,7 +255,7 @@ Section~\ref{chippr:sec:sec:alldata} constrains the response of the stacked esti
 \sectlabel{sec:uninformative}
 
 In \Sect{sec:informative}, we clarified the relationship between the redshift probability and the photometric data and assumed that the \pzpdf s were perfectly informed by the photometry, but that picture is still overly simplistic.
-If \pzpdf s were conditioned solely on data, there would be no disagreement about how to derive them from photometric catalogs, because every approach would yield the same result, for which ample counterevidence is presented in \Chap{pzdc1}.
+If \pzpdf s were conditioned solely on photometry, there would be no disagreement about how to derive them from photometric catalogs, because every approach would yield the same result, for which ample counterevidence is presented in \Chap{pzdc1}.
 Thus \pzpdf s must be conditioned not only on data unique to each galaxy but also on prior information $\tilde{\theta}$ which corresponds to an interim guess $\tilde{K}$ for $N(z')$ that may come from a template library, a training set, and/or the method by which either of those is combined with the observations.
 So, \pzpdf s should be more completely written as $\pr{z \gvn \data_{i}, \tilde{K}}$ making \Eq{eqn:stackwithdata} into
 \begin{align}
@@ -301,21 +301,23 @@ Now, we consider what happens to \Eq{eqn:complete} under perfectly uninformative
 \end{proof}
 
 If we stacked such a catalog, we would be taking the average of identical distributions, so $\hat{N}(z) = N \pr{z \gvn \tilde{K}} = \tilde{K}$, the same as the result of Theorem \ref{thm:uninformative}.
+% \aim{really should write out stacking result here}
 Everything thus far has not compared either of these to the true value $K^{\dagger}$ of the redshift distribution.
 Indeed, neither can approach the truth unless $\tilde{K} = K^{\dagger}$, i.e. the prior must be the truth in order for stacking to work.
+
 Previous galaxy surveys covered the same limited redshift range and got a thorough sample over the sky to overcome cosmic variance, leading to the use of priors that were representative of the data in the regime where they were applied.
 However, at higher redshifts or in atypical galaxy environments, we will not be able to count on a lucky guess of $\tilde{K} \approx K^{\dagger}$.
 Without knowing truth sufficiently well to use it as a prior, we will instead have to rely on imperfect data.
 %\aim{Figure: sum of same $N_{z}$ building up to that times $N_{tot}$}
-The sensitivity of the stacked estimator of the redshift distribution to deviations from this assumption is explored in \Sect{chippr:sect:sec:interim}.
+The sensitivity of the stacked estimator of the redshift distribution to deviations from this assumption is explored in Section~{chippr:sect:sec:interim}.
 
 \section{Conclusion}
 \sectlabel{sec:disco}
 
-\aim{Discuss the limit of $N\to\infty$.
-Doesn't the binomial stuff become Poisson, so I can write it differently?}
+%\aim{Discuss the limit of $N\to\infty$.
+%Doesn't the binomial stuff become Poisson, so I can write it differently?}
 
-This \paper conducts an investigation of the sleight of hand that enables the thoroughly unmotivated Equation~\ref{intro:eq:eqn:stack} to masquerade as an acceptable approximation to the provably correct but computationally intractable \Eq{eqn:complete}.
+This \paper\ conducts an investigation of the sleight of hand that enables the thoroughly unmotivated Equation~\ref{intro:eq:eqn:stack} to masquerade as an acceptable approximation to the provably correct but computationally intractable \Eq{eqn:complete}.
 The preceding proofs show not only the most complete and correct way to frame the redshift distribution \Nz, but they also address the question of how stacking can fool even clever astrophysicists into thinking it works.
 
 The only cases in which stacking works are when the \pzpdf s are perfect or when the prior information is perfect.
@@ -325,29 +327,7 @@ While it is possible to imagine some conspiracy between informative and uninform
 Though the conditions of \Sect{sec:informative} and \Sect{sec:uninformative} may not have been strongly violated in the past, they will be nowhere near satisfied for ongoing and upcoming surveys.
 Note that if those conditions held, we would not need \lsst\ at all.
 Thus, we must not stack!
-\aim{Maybe beef up this section to tie in to cosmology.}
-
-%\section*{Notation}
-%\sectlabel{sec:notation}
-%
-%\begin{table*}
-%	\begin{center}
-%		\begin{tabular}{ll}
-%			$X'$ & a particular value of $X$\\
-%			$\lnot X'$ & any value of $X$ other than $X'$\\
-%			$X^{\dagger}$ & the true value of $X$\\
-%			$\hat{X}$ & an estimated value of $X$\\ 
-%			$\Omega(X)$ & the space of all possible values of $X$\\
-%			$[N]^{K}$ & all possible sets of $K$ events chosen from $N$ possible events\\
-%			$|S|$ & the number of elements of set $S$\\
-%		\end{tabular}
-%	\caption{
-%		Glossary of important symbols used in this Chapter.
-%		\aim{Did I miss anything?}
-%		}
-%	\tablabel{tab:glossary}
-%	\end{center}
-%\end{table*}
+%\aim{Maybe beef up this section to tie in to cosmology.}
 
 \section*{Chapter acknowledgements}
 
