@@ -190,7 +190,7 @@ Though not exhaustive, this sample represents codes for which there was sufficie
 			\lephare~\citep{Arnouts:99}	   & template fitting	& \url{http://www.cfht.hawaii.edu/~arnouts/lephare.html} \\
 			\bpz~\citep{benitez_bayesian_2000} 		   & template fitting	& \url{http://www.stsci.edu/~dcoe/BPZ/} \\
 			\eazy~\citep{Brammer:08}		   & template fitting & \url{https://github.com/gbrammer/eazy-photoz} \\
-			\annz~\citep{Sadeh:16}		     & machine learning	& \url{https://github.com/IftachSadeh/ANNZ} \\
+			\annz~\citep{sadeh_annz2:_2016}		     & machine learning	& \url{https://github.com/IftachSadeh/ANNZ} \\
 			\flexzboost~\citep{Izbicki:17} & machine learning & \url{https://github.com/tpospisi/flexcode}; \url{https://github.com/rizbicki/FlexCoDE}\\
 			%\textsc{Frankenz} 	& ML 	& \citet{Speagle:frankenz}	& \url{https://github.com/joshspeagle/frankenz} \\
 			\gpz~\citep{Almosallam:15b}	   & machine learning	& \url{https://github.com/OxfordML/GPz} \\
@@ -290,7 +290,7 @@ Because the algorithms differ more from one another and the techniques are relat
 \sectlabel{sec:annz2}
 %(John Soo)
 
-\annz \footnote{\url{https://github.com/IftachSadeh/ANNZ}} \citep{Sadeh:16} employs several machine learning algorithms, including artificial neural networks (ANN), boosted decision tree, and k-nearest neighbour (KNN) regression.
+\annz \footnote{\url{https://github.com/IftachSadeh/ANNZ}} \citep{sadeh_annz2:_2016} employs several machine learning algorithms, including artificial neural networks (ANN), boosted decision tree, and k-nearest neighbour (KNN) regression.
 In addition to accounting for errors on the input photometry, \annz\ uses the KNN-uncertainty estimate of \citet{Oyaizu:08} to quantify uncertainty in the choice of method over multiple runs.
 Using the Toolkit for Multivariate Data Analysis with ROOT\footnote{\url{http://tmva.sourceforge.net/}}, it can return the results of running a single machine learning algorithm, a ``best'' choice of the results from simultaneously running multiple algorithms, or a combination of the results of multiple algorithms weighted by their method uncertainties averaged over multiple runs.
 %\textsc{ANNz2} is capable of producing both photo-$z$ point estimates and redshift posterior probability distributions $p(z)$.
