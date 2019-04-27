@@ -42,12 +42,12 @@ For simplicity, we consider only one-point statistics, though future work will e
 
 The \textit{redshift distribution function \Nz}, or, almost interchangably, its normalized cousin the \textit{redshift density function \nz}, serves as an ideal statistic upon which to demonstrate this novel approach.  
 \Nz\ is necessary for calculations of two-point correlation functions of weak gravitational lensing and counting statistics that are used to probe dark energy \citep{Masters2015}.  
-The observed \Nz\ also been used to validate survey selection functions used in generation of realistic, multi-purpose mock catalogs \citep{Norberg2002}.  
-Additionally, \Nz\ has been the subject of inference using \pzpdf s before \citep{Sheldon2012, Hildebrandt2012, Kelly2014, Benjamin2013, bonnett_using_2015, Viironen2015, Asorey2016, Leistedt2016}, so comparisons to the literature may easily be made. 
+The observed \Nz\ also been used to validate survey selection functions usnfenjed in generation of realistic, multi-purpose mock catalogs \citep{Norberg2002}.  
+Additionally, \Nz\ has been the subject of inference using \pzpdf s before \citep{sheldon_photometric_2012, Hildebrandt2012, Kelly2014, Benjamin2013, bonnett_using_2015, Viironen2015, Asorey2016, Leistedt2016}, so comparisons to the literature may easily be made. 
 
 The prevailing way to estimate \nz\ for a sample of $\ntot$ galaxies $i$ is to ``stack'' \pzpdf s according to Equation~\ref{intro:eq:eqn:stack}.
 The stacked estimator of the redshift density function is effectively an average of the \pzpdf\ catalog and, as I will show in this \paper, not in general mathematically valid.
-Stacking is nonetheless considered the preferred method for obtaining \Nz\ from a \pzpdf\ catalog \citep{Sheldon2012, Kelly2014, Benjamin2013, bonnett_using_2015, Viironen2015, Asorey2016}.  
+Stacking is nonetheless considered the preferred method for obtaining \Nz\ from a \pzpdf\ catalog \citep{sheldon_photometric_2012, Kelly2014, Benjamin2013, bonnett_using_2015, Viironen2015, Asorey2016}.  
 However, it must be noted here that Equation~\ref{intro:eq:eqn:stack} is not in general mathematically valid.  
 (See \citet{Hogg2012} for a complete discussion.)  
 
@@ -279,7 +279,7 @@ The argument of the integral in the log-posterior of \Eq{eqn:final} depends sole
 \pr{z \gvn \ndphi} = \frac{f(z; \ndphi)}{\integral{f(z; \ndphi)}{z}}.
 \end{equation}
 Since we cannot know constant of proportionality, we sample the desired full log-posterior $\ln[\pr{\ndphi \gvn \{\data_{j}\}}]$ using Monte Carlo-Markov chain (MCMC) methods.  
-The method outlined here is valid regardless of how the implicit \pz\ log-posteriors are obtained so the many approaches to producing \pzpdf s will not be rehashed; though the matter is outside the scope of this \paper, reviews of various methods have been presented in the literature \citep{Sheldon2012, Ball2008, CarrascoKind2013, CarrascoKind2014a}, and will be briefly reviewed in \Chap{pzdc1}.
+The method outlined here is valid regardless of how the implicit \pz\ log-posteriors are obtained so the many approaches to producing \pzpdf s will not be rehashed; though the matter is outside the scope of this \paper, reviews of various methods have been presented in the literature \citep{sheldon_photometric_2012, Ball2008, CarrascoKind2013, CarrascoKind2014a}, and will be briefly reviewed in \Chap{pzdc1}.
 %
 %\begin{align}
 %\begin{split}
@@ -622,7 +622,7 @@ Template-fitting codes have an explicit prior input formed by redshifting a smal
 %This is just as problematic as using a biased spectroscopically derived $N(z)$ as the interim prior because the sum of redshift distributions for two or more surveys does not reflect our beliefs about the true distribution for a single survey even though it provides support over the same redshift range.  
 %To simulate this case, we choose an interim prior with more weight at high and low redshifts than for mid-range redshifts.  
 Machine learning approaches tend to be trained on previously observed data sets that are biased towards low redshift, which biases the implicit prior towards low redshift.
-Some efforts have been made to modify an observationally informed implicit prior so that it is more representative of the photometric data for which redshifts are desired \citep{Sheldon2012}, but, unless it is equal to the true \nz, it will propagate to the results of traditional \nz\ estimation methods.  
+Some efforts have been made to modify an observationally informed implicit prior so that it is more representative of the photometric data for which redshifts are desired \citep{sheldon_photometric_2012}, but, unless it is equal to the true \nz, it will propagate to the results of traditional \nz\ estimation methods.  
 %Because low-redshift galaxies are more likely to be bright enough to be observed by such a survey, $N(z)$ determined from that sample may be heavily biased to low redshift galaxies.  
 %By contrast, the galaxies that were unobserved in such a survey are more likely be dimmer, making them more likely to be at higher redshifts.  
 %Since the interim prior is not compatible with our beliefs about the true redshift distribution, the resulting interim redshift posteriors will be inappropriate.  
