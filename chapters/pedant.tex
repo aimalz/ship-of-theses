@@ -52,20 +52,31 @@ To identify and expose the roots of these common errors of logic we consider the
 These definitions pertain to the redshift of a single galaxy, but this \paper\ concerns the distribution \Nz\ of redshifts of an ensemble of $N$ galaxies.
 For a single redshift $z'$, which is the true redshift of some whole number $0 \leq K \leq N$ of those galaxies.
 The state space $\Omega(K) = \{K = 0, \dots, K = N\}$ of $K$ thus has $N + 1$ elements.
-To address how probable each value of $K$ is, we need to use information from the ensemble of redshift PDFs.
+To address how probable each value of $K$ is, i.e. $\pr{N(z) = K}$, we need to use information from the ensemble of redshift PDFs in a mathematically correct way.
 
 \begin{definition}\label{def:independence}
-	The probability of multiple \textit{statistically independent} events occurring is the product of the probabilities of the individual events.
+	Multiple events are \textit{statistically independent} if the probability of each occurring does not affect the probability that the others occur, in terms of conditional probability.
 \end{definition}
+% \aim{Ooh, I really should introduce conditional probability up here instead of later in \Sect{sec:pedanticres}\dots}
 
-\begin{example}\label{exe:intersection}
-	In a universe with $N = 2$ galaxies $i = 1, 2$, the probability that each takes a specific redshift is $\pr{z_{1} = z_{1}' \cap z_{2} = z_{2}'} = \pr{z_{1} = z_{1}'} \pr{z_{2} = z_{2}'}$ if the redshift of one is not causally dependent on the redshift of the other, which is denoted as $z_{1} \perp z_{2}$.
+\begin{claim}\label{cla:intersection}
+	Consider a universe with $N = 2$ galaxies $i = 1, 2$ whose redshifts are statistically independent, denoted as $z_{1} \perp z_{2}$.
+	The probability that each galaxy takes a specific redshift is $\pr{z_{1}' \cap z_{2}'} = \pr{z_{1}'} \pr{z_{2}'}$.
 	If $z'_{1} = z'_{2} = z'$, then this probability is also equal to $\pr{K = 2}$.
-\end{example}
+	The proof of this claim depends on the notion of conditional probability that will be explored in \Sect{sec:pedanticres}.
+\end{claim}
 
-Given Example~\ref{exe:intersection} as the base case, one can in fact write the general form of Definition~\ref{def:independence} via a proof by induction.
 %\aim{Should I include the proof by induction that follows from Definition \ref{def:independence} or leave it as an exercise for the reader?}
-To relate the infinite case to the problem at hand, we note that the stacked estimator of Equation~\ref{intro:eq:eqn:stack} can only hold if $\pr{z_{1} = z' \cap z_{2} = z'} = \pr{z_{1} = z'} + \pr{z_{2} = z'}$, which does not directly follow from any combination of the above definitions.
+
+\begin{claim}\label{lem:independence}
+	The probability of an ensemble of statistically independent events occurring is the product of the probabilities of the individual events.
+	Given Claim~\ref{cla:intersection} as the base case, one can in fact write the general form of Definition~\ref{def:independence} via a proof by induction that similarly relies on conditional probability.
+\end{claim}
+%\begin{proof}
+%	Claim~\ref{cla:intersection} serves as a base case for an inductive proof, meaning we next assume $\pr{z_{1} \cap z_{2} \cap \dots z_{N - 1}} = \prod_{i=1}^{N-1} \pr{z_{i}}$ if $z_{i} \perp z_{\lnot i}$ for every galaxy $i$.
+%	For notational simplicity, consider an event $z_{N} \perp z_{i}$ for all $i = 1, 2, \dots, N-1$.
+%	If this is true, 
+%\end{proof}
 
 %\begin{example}\label{exe:union}
 %	The probability that either of two independent events occur is $\pr{z_{1} = z_{1}' \cup z_{2} = z_{2}'} = \pr{z_{1} = z_{1}'} \pr{z_{2} = \lnot z_{2}'} + \pr{z_{1} = \lnot z_{1}'} \pr{z_{2} = z_{2}'} + \pr{z_{1} = z_{1}'} \pr{z_{2} = z_{2}'} = \pr{z_{1} = z_{1}} (1 - \pr{z_{2} = z_{2}'}) + (1 - \pr{z_{1} = z_{1}'}) \pr{z_{2} = z_{2}'} + \pr{z_{1} = z_{1}'} \pr{z_{2} = z_{2}'} = 1 - \pr{z_{1} = \lnot z_{1}' \cap z_{2} = \lnot z_{2}'}$, by Definition~\ref{def:normalization} and Definition~\ref{def:independence}.
@@ -75,15 +86,16 @@ To relate the infinite case to the problem at hand, we note that the stacked est
 %The redshift distribution itself can be used to define a probability density $n(z) \equiv \pr{z \gvn \ndphi} = N(z) / N_{tot}$ of finding a galaxy at a given redshift under the parameter $\ndphi$.
 %Thus the state space of $\pr{\ndphi}$ depends on the function $f$, but the state space of $\pr{z \gvn \ndphi}$ must only satisfy Definitions \ref{def:pdens} and \ref{def:normalization}.
 
+To relate the infinite case to the problem at hand, we note that the stacked estimator of Equation~\ref{intro:eq:eqn:stack} can only hold if $\pr{z_{1} = z' \cap z_{2} = z'} = \pr{z_{1} = z'} + \pr{z_{2} = z'}$, which does not directly follow from any combination of the above definitions.
+Because the stacked estimator of the redshift distribution given in Equation~\ref{intro:eq:eqn:stack} yields a single value $\hat{K}$ for $K$ rather than the probability distribution $\pr{K}$, we'll work with the expected value so we can compare apples to apples.
+
 \begin{definition}\label{def:expected}
 	The expected value $\langle z \rangle = \integral{z \pr{z}}{z}$, for a continuous random variable $z$.
 \end{definition}
 
-Because the stacked estimator of the redshift distribution given in Equation~\ref{intro:eq:eqn:stack} yields a single value $\hat{K}$ for $K$ rather than the probability distribution $\pr{K}$, we'll work with the expected value so we can compare apples to apples.
-
-\begin{lemma}\label{lem:expectednz}
+\begin{example}\label{exe:expectednz}
 	As a discrete random variable, the expected value $\langle K \rangle$ of $K$ is $\sum_{K = 0}^{N} K \pr{K}$.
-\end{lemma}
+\end{example}
 
 However, all we have to work with are the members of the catalog of \pzpdf s, $\{\pr{z_{i}}\}$, not $\pr{K}$.
 \Sect{sec:pedanticmath} connects our \pzpdf s to the distribution of possible values $K$ for $N(z')$.
@@ -92,15 +104,19 @@ However, all we have to work with are the members of the catalog of \pzpdf s, $\
 \sectlabel{sec:pedanticmath}
 
 The following proofs establish the relationship between a catalog of individual \pzpdf s and the redshift distribution from a combinatorial perspective.
-Though it doesn't matter for our science, let's consider all possible orderings of the whole set of $N$ galaxies $i = 1, \dots, N$.
+Though it doesn't matter for our science on its own, we build up to the goal by first considering all possible orderings of the whole set of $N$ galaxies $i = 1, \dots, N$.
 
-\begin{definition}\label{def:permutations}
+\begin{lemma}\label{lem:permutations}
 	The number of possible orderings of the $N$ galaxies is $N! = N \cdot (N - 1) \cdot \dots \cdot 1$.
-\end{definition}
+\end{lemma}
+\begin{proof}
+	The first few cases are trivial: there is only one possible ordering of a single galaxy, and two galaxies may only be ordered in two ways, $(1, 2)$ and $(2, 1)$.
+	For induction, we assume that $N - 1$ galaxies can be ordered $(N - 1)!$ ways.
+	If we include one more galaxy, there are $N$ possible spots in which to place it in an arbitrary ordering of $N - 1$ galaxies, so there must be $N \cdot (N - 1)! = N!$ possible orderings.
+\end{proof}
 
 \begin{lemma}\label{lem:combinations}
 	The number of possible unordered subsets of $K$ galaxies that can be selected from a set of $N \geq K$ galaxies is $\binom{N}{K} \equiv \frac{N!}{K! (N - K)!}$.
-	\aim{Should I cut this basic proof out?}
 \end{lemma}
 \begin{proof}
 	If there are $K$ galaxies with redshift $z'$, we can think of them as the first $K$ in an ordering of the full $N$ galaxies.
@@ -126,7 +142,7 @@ We are now prepared to consider the probability $\pr{K'}$ that $N(z')$ takes any
 It is helpful to consider the special case in which all galaxies have the same \pzpdf\ $\pr{z_{i}} = \pr{z}$.
 
 \begin{theorem}
-	In a two-redshift universe in which all galaxies have the same \pzpdf with probability $\pr{z'} = \phi$ of having redshift $z'$, the probability mass function over the redshift distribution is
+	In a two-redshift universe in which all galaxies have the same \pzpdf\ with probability $\pr{z'} = \phi$ of having redshift $z'$, the probability mass function over the redshift distribution is
 	\begin{equation}
 	\eqlabel{eqn:binomial}
 	\pr{K} = \binom{N}{K} \phi^{K} (1 - \phi)^{N - K} .
