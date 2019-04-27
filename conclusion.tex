@@ -1,6 +1,6 @@
 \chapter*{Conclusion}\addcontentsline{toc}{chapter}{Conclusion}
 
-This dissertation concerns \pzpdf s in the context of cosmology.
+This dissertation concerns the use of \pzpdf s in the context of cosmology.
 In \Chap{pedant}, I explore the mathematical underpinnings of \pzpdf s and identify the special assumptions necessary for the naive estimator of the redshift distribution function \Nz\ to be valid, conditions that generally do not and will not hold for current and future galaxy surveys.
 In \Chap{chippr}, I propose and validate a Bayesian hierarchical model for the inference of the redshift density function \nz\ using \pzpdf s, presenting the \chippr\ public code.
 In \Chap{pzdc1}, I stress-test the performance metrics that can be used to compare the myriad methods for obtaining \pzpdf s and isolate the impact of implicit priors on \pzpdf\ catalogs.
@@ -10,7 +10,7 @@ In \Chap{qp}, I investigate the optimal way to determine the storage parameteriz
 Using only the most basic mathematical concepts, I address the question of how stacking could appear to derive a correct redshift distribution function \Nz\ when it is unsupported by the facts.
 I then use a mathematically valid expression for the expected value of the redshift distribution function \Nz\ to identify the only circumstances under which stacking can recover the truth.
 By showing that the assumptions required for stacking to be valid will not be satisfied by upcoming galaxy surveys like \lsst, I hope to put the archaic practice to rest, for good.
-Though work remains to be done to change the way the average astronomer thinks about probability, \Chap{pedant} is at least a starting point for spreading knowledge.
+Though work remains to be done to change the way the average astronomer thinks about probability, \Chap{pedant} is at least a starting point for spreading that knowledge.
 
 \Chap{chippr} presents a method for using an arbitrary existing \pzpdf\ catalog for cosmological inference.
 Though similar approaches have been used in the recent past, none both are applicable to catalogs that have already been produced by methods trusted by the \pz\ community and account explicitly for the role of priors in \pzpdf\ production.
@@ -18,7 +18,7 @@ The main challenge in using \chippr\ as the basis for a real cosmological analys
 These obstacles may be overcome by using a different sampler and/or utilizing parallel processing, paths we will pursue in the coming years.
 
 \Chap{pzdc1} is the culmination of three years of work by a team of over twenty researchers.
-Though it began as a search for the ``best'' \pzpdf\ method, for inclusion in the \lsst\ pipeline, my contributions were the discovery that existing metrics of \pzpdf\ performance are inadequate for identifying techniques that serve the needs of the extragalactic astrophysics community and the isolation of the implict prior of each code due to the method and implementation rather than the training or template set \textemdash in short, the original plan could not be accomplished for deep, almost philosophical shortcomings in how cosmologists think about probability.
+Though it began as a search for the ``best'' \pzpdf\ method, for inclusion in the \lsst\ pipeline, my contributions were the discovery that existing metrics of \pzpdf\ performance are inadequate for identifying techniques that serve the needs of the extragalactic astrophysics community and the isolation of the implict prior of each code due to the method and implementation rather than the training or template set \textemdash\ in short, the original plan could not be accomplished for deep, almost philosophical shortcomings in how cosmologists think about probability.
 Plans for future work within \desc\ center around testing realistic incompleteness and inaccuracy of training and template sets, important goals for constraining the sensitivity of each method to realistic limitations on knowledge we will feed into the \desc\ pipeline.
 However, I have also advocated for the creation of mock catalogs using a self-consistent forward model, facilitating access to true \pzpdf s that open the door to evaluation of \pzpdf\ techniques under more mathematically principled metrics.
 In doing so, we may be able to obtain the implicit prior due to the method itself so that the \Chippr\ method may be applied to real data.
