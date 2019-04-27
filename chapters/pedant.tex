@@ -51,8 +51,8 @@ To identify and expose the roots of these common errors of logic we consider the
 
 These definitions pertain to the redshift of a single galaxy, but this \paper\ concerns the distribution \Nz\ of redshifts of an ensemble of $N$ galaxies.
 For a single redshift $z'$, which is the true redshift of some whole number $0 \leq K \leq N$ of those galaxies.
-The state space $\Omega(K) = \{K = 0, \dots, K = N\}$ of $K$ thus has $N + 1$ elements.
-To address how probable each value of $K$ is, i.e. $\pr{N(z) = K}$, we need to use information from the ensemble of redshift PDFs in a mathematically correct way.
+The state space $\Omega(K) = \{K = 0, \dots, K = N\}$ of $K$ thus has $N + 1$ elements, and there is a \textit{probability mass function} (PMF) over the discrete-valued $\Omega(K)$ defining the probability of each value of $K$ is, i.e. $\pr{N(z) = K}$, we need to use information from the ensemble of redshift PDFs in a mathematically correct way.
+% \aim{Upgrade PMF to a definition.}
 
 \begin{definition}\label{def:independence}
 	Multiple events are \textit{statistically independent} if the probability of each occurring does not affect the probability that the others occur, in terms of conditional probability.
@@ -148,7 +148,6 @@ It is helpful to consider the special case in which all galaxies have the same \
 	\pr{K} = \binom{N}{K} \phi^{K} (1 - \phi)^{N - K} .
 	\end{equation}
 \end{theorem}
-
 \begin{proof}
 If there are only two possible redshifts, those of Definition \ref{def:binarystatespace}, then the problem is equivalent to that of counting $K$ successes after flipping a single coin with $\pr{\mathrm{success}} = \phi$ a total of $N$ times.
 The $N$ coin flips build a set $S^{K}_{j}$ of $K$ galaxies with redshift $z'$ and $S^{N-K}_{j}$ of $N - K$ galaxies with redshift $\lnot z$'.
@@ -157,9 +156,9 @@ Bearing in mind that our galaxies have $\pr{\lnot z'} = 1 - \phi$, due to Defini
 \end{proof}
 
 We may generalize the two-redshift universe to a many-redshift universe by considering the extension of the binomial theorem to the birthday problem, which asks for the probability that $K$ people in a room of $N$ people share the same birthday $z'$.
-We will, however, proceed by considering only one redshift $z'$ at a time to maintain the simple state space; the proof of the birthday problem case is left as an exercise for the reader.
 %the birthday problem is solved by $p(N_{z}) = 1 - p(z)^{N_{tot}} \times \perm{N_{tot}}{N_{z}}$
-\aim{Should I include the proof by induction or is it okay to assert that it works?}
+%\aim{Should I include the proof by induction or is it okay to assert that it works?}
+We will, however, proceed by considering only one redshift $z'$ at a time to maintain the simple state space; the proof of the birthday problem case is left as an exercise for the reader.
 
 \subsection{A universe of unique galaxies}
 \sectlabel{sec:unique}
@@ -168,18 +167,18 @@ Of course galaxies do not share the same \pzpdf; the \pzpdf s differ because the
 %Now, each galaxy $i$ has $p(z \gvn \data_{i})$.
 %\aim{Figure: isolating one redshift slice of $N(z)$}
 \begin{lemma}\label{lem:unique}
-	The probability that $N(z')$ takes the value $K$ is 
+	The probability that $N(z')$ takes the value $K'$ is 
 	\begin{align}
 	\eqlabel{eqn:general}
-	\pr{K} &= \sum_{j}^{N! / K! (N - K)!} \left[ \prod_{i \in S^{K}_{j}}^{K} \pr{z_{i} = z'} \prod_{i \notin S^{K}_{j}}^{N - K} 1 - \pr{z_{i} = z'} \right] .
+	\pr{K'} &= \sum_{j}^{N! / K'! (N - K')!} \left[ \prod_{i \in S^{K'}_{j}}^{K'} \pr{z'}_{i} \prod_{i \notin S^{K'}_{j}}^{N - K'} 1 - \pr{z'}_{i} \right] .
 	\end{align}
 \end{lemma}
 \begin{proof}
-	By Definition \ref{def:independence}, the probability of obtaining set $S^{K}_{j}$ is the product of the probability that all the galaxies in that set have redshift $z'$ and the probability that all the galaxies outside that set have redshift $\lnot z'$.
-	By Definition \ref{def:independence} again, the probability that all the galaxies in that set have redshift $z'$ is the product of the $K$ probabilities $\{\pr{z_{i} = z'}\}_{i \in S^{K}_{j}}$ of the galaxies in $S^{K}_{j}$, and the probability that all the galaxies outside that set have redshift $\lnot z'$ is the product of the $N - K$ probabilities $\{\pr{z_{i} \neq z'}\}_{i \notin S^{K}_{j}}$.
-	By Definition \ref{def:binarystatespace}, $\pr{z_{i} \neq z'} = \pr{z_{i} = \lnot z'} = 1 - \pr{z_{i} = z'}$.
-	So the probability $\pr{S^{K}_{j}}$ of a single combination $S^{K}_{j}$ is $\prod_{i \in S^{K}_{j}} \pr{z_{i} = z'} \prod_{i \notin S^{K}_{j}} 1 - \pr{z_{i} = z'}$.
-	Invoking Definition \ref{def:disjoint}, we know that $\pr{K} = \sum_{j}^{N! / K! (N - K)!} \pr{S^{K}_{j}}$.
+	By Definition \ref{def:independence}, the probability of obtaining set $S^{K'}_{j}$ is the product of the probability that all the galaxies in that set have redshift $z'$ and the probability that all the galaxies outside that set have redshift $\lnot z'$.
+	By Definition \ref{def:independence} again, the probability that all the galaxies in that set have redshift $z'$ is the product of the $K'$ probabilities $\{\pr{z'}_{i}\}_{i \in S^{K'}_{j}}$ of the galaxies in $S^{K'}_{j}$, and the probability that all the galaxies outside that set have redshift $\lnot z'$ is the product of the $N - K'$ probabilities $\{\pr{\lnot z'}_{i}\}_{i \notin S^{K'}_{j}}$.
+	By Definition \ref{def:binarystatespace}, $\pr{\lnot z'}_{i} = 1 - \pr{z'}_{i}$.
+	So the probability $\pr{S^{K'}_{j}}$ of a single combination $S^{K'}_{j}$ is $\prod_{i \in S^{K'}_{j}} \pr{z'}_{i} \prod_{i \notin S^{K'}_{j}} 1 - \pr{z'}_{i}$.
+	Invoking Definition \ref{def:disjoint}, we know that $\pr{K'} = \sum_{j}^{N! / K'! (N - K')!} \pr{S^{K'}_{j}}$.
 \end{proof}
 %\aim{Figure: posterior samples of $N_{z}$ for that slice}
 
