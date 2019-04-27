@@ -43,7 +43,7 @@ For simplicity, we consider only one-point statistics, though future work will e
 The \textit{redshift distribution function \Nz}, or, almost interchangably, its normalized cousin the \textit{redshift density function \nz}, serves as an ideal statistic upon which to demonstrate this novel approach.  
 \Nz\ is necessary for calculations of two-point correlation functions of weak gravitational lensing and counting statistics that are used to probe dark energy \citep{Masters2015}.  
 The observed \Nz\ also been used to validate survey selection functions usnfenjed in generation of realistic, multi-purpose mock catalogs \citep{Norberg2002}.  
-Additionally, \Nz\ has been the subject of inference using \pzpdf s before \citep{sheldon_photometric_2012, Hildebrandt2012, Kelly2014, Benjamin2013, bonnett_using_2015, Viironen2015, Asorey2016, Leistedt2016}, so comparisons to the literature may easily be made. 
+Additionally, \Nz\ has been the subject of inference using \pzpdf s before \citep{sheldon_photometric_2012, Hildebrandt2012, Kelly2014, Benjamin2013, bonnett_using_2015, Viironen2015, Asorey2016, leistedt_hierarchical_2016}, so comparisons to the literature may easily be made. 
 
 The prevailing way to estimate \nz\ for a sample of $\ntot$ galaxies $i$ is to ``stack'' \pzpdf s according to Equation~\ref{intro:eq:eqn:stack}.
 The stacked estimator of the redshift density function is effectively an average of the \pzpdf\ catalog and, as I will show in this \paper, not in general mathematically valid.
@@ -56,7 +56,7 @@ However, it must be noted here that Equation~\ref{intro:eq:eqn:stack} is not in 
 %	Say what precision the mass function is needed (in, say cluster studies) for precision cosmology.}
 
 I aim to develop a clear methodology guiding the use of \pzpdf s in inference so they may be utilized effectively by the cosmology community.
-Though others have approached the problem before \citep{Leistedt2016}, the method presented here differs in that it makes use of any existing catalog of \pzpdf s, rather than requiring a simultaneous derivation of the \pzpdf s and the redshift distribution, making it preferable to ongoing surveys that may be resistant to restructuring their analysis pipelines.
+Though others have approached the problem before \citep{leistedt_hierarchical_2016}, the method presented here differs in that it makes use of any existing catalog of \pzpdf s, rather than requiring a simultaneous derivation of the \pzpdf s and the redshift distribution, making it preferable to ongoing surveys that may be resistant to restructuring their analysis pipelines.
 
 In \Sect{sec:meth}, I present the \Chippr\ model and \chippr\ implementation for characterizing the full posterior probability landscape of \Nz\ using \pzpdf s. 
 In \Sect{sec:alldata}, I describe the experimental design for testing the fully probabilistic approach to mock and real datasets, the results of which are found in \Sect{sec:results}.
@@ -84,7 +84,7 @@ Here we define a redshift density \nz\ as the normalized probability density
 \int_{-\infty}^{\infty}\ n(z)\ dz\ \equiv\ \frac{1}{J}\ \int_{-\infty}^{\infty}\ \sum_{j=1}^{J}\ \delta(z_{j},\ z)\ dz = 1
 \end{equation}
 of finding a galaxy $j$ in a catalog of $J$ galaxies having a redshift $z$.
-We believe that galaxy redshifts are indeed drawn from \nz, making it a probability density over redshift; this fact can also be confirmed by dimensional analysis of \Eq{eqn:nz}, as suggested in \citet{hogg_data_2012}.
+We believe that galaxy redshifts are indeed drawn from \nz, making it a probability density over redshift; this fact can also be confirmed by dimensional analysis of \Eq{eqn:nz}, as suggested in \citet{Hogg2012}.
 
 We may without loss of generality impose a parameterization
 \begin{equation}
