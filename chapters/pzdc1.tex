@@ -3,7 +3,6 @@
 % Chapter specific commands:
 
 % Math:
- Add your own macros here:
 
 % projects
 \newcommand{\kids}{\project{KiDS}}
@@ -35,12 +34,13 @@
 
 This \paper\ represents joint work with Sam Schmidt (UC Davis) and the entire Photo-Z Working Group (\pzwg) of the \desc, which is intended for submission to MNRAS and whose public draft\footnote{\url{{https://github.com/LSSTDESC/PZDC1paper}}} is currently in \desc\ internal review.
 The words of the paper were written by the entire \pzwg\ over the course of three years, though the bulk of the writing was executed by myself, Sam Schmidt (UC Davis), and John Soo (U. of Science Malaysia).
+The detailed contributions of over twenty co-authors are provided at the end of this \paper\ but I describe the work for which I was responsible and acknowledge those who helped directly with those aspects of the \paper\ here.
 
 My role was to choose, implement, and interpret the metrics by which the \pzpdf\ codes would be evaluated, an important aspect of experimental design that had not been addressed already.
 I chose the metrics with input from Jeff Newman (Pitt) and Ann Lee (CMU), as well as discussions with the entire \pzwg\ from late 2016 through early 2018.
 In summer and fall 2017, I implemented the metrics in code and ran them on the results of the \pzpdf\ codes with the assistance of Rongpu Zhou (Pitt), Bryce Kalmbach (UW), Kartheik Iyer (Rutgers), Sam Schmidt (UC Davis), and Chris Morrison (UW).
 The interpretation of the metrics, culminating in both of the major discoveries of the paper, those of the isolation of the implicit prior and the flaws of traditional metrics, was mine alone, though the presentation of these points benefited from input from Sam Schmidt (UC Davis) and Chris Morrison (UW) througout 2018.
-I devised and implemented \trainz\ in the process of choosing and interpreting the metrics as a demonstration of the limitations of all metrics previously used for \pzpdf s
+I devised and implemented \trainz\ in the process of choosing and interpreting the metrics as a demonstration of the limitations of all metrics previously used for \pzpdf s.
 
 %\aim{Change the British spelling back to American for thesis.}
 
@@ -478,7 +478,7 @@ We will discuss the choice of \pzpdf\ parameterization further in \Sect{sec:disc
 This analysis is conducted using the \qp\footnote{\url{http://github.com/aimalz/qp/}}\ software package \citep{Malz:qp} for manipulating and calculating metrics of univariate PDFs.
 We present the metrics of \pzpdf s that address our goals in the sections below.
 \Sect{sec:qualmet} outlines aggregate metrics of a catalogue of \pzpdf s, and \Sect{sec:CDElossmetric} presents a metric of individual \pzpdf s in the absence of true \pzpdf s.
-Though the outmoded practices should not be encouraged, those seeking a connection to previous comparison studies will find metrics of redshift point estimate reductions of \pzpdf s in Appendix~\ref{pzdc1:sec:sec:allpointmetrics} and metrics of a science-specific summary statistics heuristically derived from \pzpdf s in Appendix~\ref{pzdc1:sec:sec:moments}.
+Though the outmoded practices should not be encouraged, those seeking a connection to previous comparison studies will find metrics of redshift point estimate reductions of \pzpdf s in Appendix~\ref{sec:allpointmetrics} and metrics of a science-specific summary statistics heuristically derived from \pzpdf s in Appendix~\ref{sec:moments}.
 
 \subsection{Metrics of an ensemble of \pzpdf s}
 \sectlabel{sec:qualmet}
