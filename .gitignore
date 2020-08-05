@@ -6,6 +6,10 @@
 *.lof
 *.lot
 *.toc
+*.texe
+*.snm
+*.nav
+*.gz
 
 thesis.pdf
 abstractpage.pdf

@@ -1,80 +1,149 @@
 \renewcommand{\chapid}{pedant}
+\renewcommand{\paper}{Chapter}
+\newcommand{\dwh}[1]{{#1}}
 
 % Chapter specific commands:
 
 \chapter{ If stacking is wrong, why does it feel so right? \chaplabel{pedant} }
 
-This \paper\ concerns the method by which one obtains the distribution of galaxy redshifts from catalogs of \pzpdf s by addressing why the widely accepted yet incorrect methodology has managed to evade criticism among otherwise astute astrophysicists.
-This study was initiated after an illuminating conversation with Phil Marshall (SLAC) in response to \citet{gruen_sumzz_2017} during the summer of 2017.
+This \paper\ concerns the method by which one obtains the distribution of galaxy redshifts from catalogs of \pzpdf s.
+Specifically, this work addresses how the invalid methodology known as ``stacking'' has managed to evade criticism and become well established among otherwise astute astrophysicists.
+This study was initiated after an illuminating conversation with Phil Marshall (SLAC) in response to \citet{gruen_combining_2017} during the summer of 2017.
 The material was later refined by discussions with Boris Leistedt (NYU) at the Statistical challenges for large-scale structure in the era of \lsst\ workshop\footnote{\url{https://statlssoxford.web.ox.ac.uk/}} at Oxford University in the spring of 2018.
-Some adaptation of this \paper\ is intended for future submission to PRD.
+After incorporating feedback from David W. Hogg and others, an adaptation of this \paper\ was submitted to PRD.
 
 \section*{Chapter abstract}
 
 The constraining power of current and upcoming telescope missions is contingent on our ability to obtain redshift estimates for large numbers of faint galaxies.
 In the absence of spectroscopic redshifts, unreliable photometric redshift point estimates (photo-$z$s) have been superceded by photo-$z$ probability density functions (PDFs) that encapsulate their nontrivial uncertainties.
-Initial applications of photo-$z$ PDFs in weak gravitational lensing studies of cosmology have employed naive methodologies for obtaining the redshift distribution function $N(z)$.
-Though computationally straightforward, such techniques violate the laws of probability, triggering a proliferation of mathematically self-consistent models of varying complexity answering the question, ``What is the right way to obtain the redshift distribution function $N(z)$ from a catalog of photometric redshift PDFs?''
-However, adoption of these principled models has been slow, perhaps due to a gap in understanding between those developing the methods and those applying them to real data.
-This \paper\ aims to bridge that gap by addressing the contrapositive of the more common presentation of such models, answering the question, ``Under what conditions do traditional stacking methods successfully recover the true redshift distribution function $N(z)$?''
+Initial applications of photo-$z$ PDFs in weak gravitational lensing studies of cosmology have employed computationally straightforward stacking methodologies for obtaining the redshift distribution function $\mathcal{N}(z)$ that violate the laws of probability and have thus been countered by the publication of numerous mathematically self-consistent models of varying complexity answering the question, ``What is the right way to obtain the redshift distribution function $\mathcal{N}(z)$ from a catalog of photo-$z$ PDFs?''
+Adoption of these principled models has been slow, perhaps due to a gap in understanding between those developing these alternatives and those who have applied their predecessors to real data.
+This \paper\ aims to bridge that gap by addressing the contrapositive of the more common presentation of such models, answering the question, ``Under what conditions do traditional stacking methods successfully recover the true redshift distribution function $\mathcal{N}(z)$?''
+By placing stacking in a rigorous mathematical environment, we identify two such conditions, those of perfectly informative data and perfectly informative prior information; 
+stacking has maintained its foothold in the astronomical community for so long because the conditions in question were only weakly violated in the past.
+Because these conditions will be strongly violated by future galaxy surveys, however, we conclude that stacking must be abandoned in favor of mathematically principled methods in order to advance observational cosmology.
 
-\section{Background}
+\section{Motivation}
+%\label{sec:intro}
+% \section{Background}
 \sectlabel{sec:intro}
+
+Knowledge of the redshift\dwh{s} $z$ of galaxies is essential for understanding their evolutionary processes and for utilizing them as tracers of cosmology-sensitive large-scale structure.
+Costly \dwh{spectral observations} of absorption and emission lines enable the high-confidence measurement of spectroscopic redshifts (\sz s) that preclude large samples of high-redshift galaxies.
+When high-resolution spectra are unavailable, broad-band photometry \dwh{sensitive to} the spectral continuum can be used to estimate galaxy redshifts \citep{baum_photoelectric_1962}.
+Though inherently noisy, the relationship between redshift and photometry can be established from a library of spectral energy distribution (SED) templates or a representative sample of galaxies with known redshifts.
+By boosting the cosmological sample size, \pz s have enlarged galaxy sample sizes, especially at high redshift, ushering in the era of precision cosmology \dwh{derived} by weak gravitational lensing tomography and baryon acoustic oscillation peak measurements.  
+
+However, \pz s are by their very nature \dwh{imprecise and inaccurate compared to \sz s}.
+Per-galaxy \pz\ probability density functions (PDFs), defined over all possible redshifts $z$ and usually denoted as \dwh{$\mathrm{P}(z)$}, better encapsulate the nontrivial uncertainty landscape \citep{koo_photometric_1999}.
+% \Pzpdf s have been produced by completed surveys \citep{hildebrandt_cfhtlens:_2012, sheldon_photometric_2012} and will be produced by ongoing and upcoming surveys \citep{lsst_science_collaboration_lsst_2009, carrasco_kind_exhausting_2014, bonnett_redshift_2016, masters_mapping_2015}, but the use thereof in the literature is inconsistent at best and incorrect at worst.  
+The most common application of \pz\ PDFs is their use in estimating the distribution \Nz\ of redshifts of a sample of galaxies, a quantity essential to cosmological parameter constraints via the power spectra of weak gravitational lensing and large-scale structure \citep{mandelbaum_precision_2008, sheldon_photometric_2012, bonnett_redshift_2016}.
+
+%\diff
+% If the true redshifts $\{z_{i}^{\dagger}\}$ of galaxies $i$ were known, then the redshift PDFs would be delta functions $\{\delta(z, z_{i}^{\dagger})\}$ centered at the true redshift, and the redshift distribution could be effectively approximated by a histogram or other interpolation of the delta functions $\{\delta(z, z_{i}^{\dagger})\}$.
+When \pz\ PDFs are available instead of true redshifts $z^{\dagger}$, the simplest approach reduces each $\pr{z}$ to a point estimate $\hat{z}$ of redshift by using $\delta(z, \hat{z})$ \dwh{as a substitute for the unknown (and unknowable)} $\delta(z, z^{\dagger})$, where $\delta(z, \hat{z}) \equiv 
+\begin{cases}
+1, & z^{\dagger} = z\\
+0, & \mathrm{else}
+\end{cases}$.
+% Though it is most common for $\hat{z}_{i}$ to be the mode (maximum) of the \pzpdf, there are other, more principled point estimate reduction procedures \citep{tanaka_photometric_2018}.
+The \textit{stacked estimator} of the redshift distribution function \citep{lima_estimating_2008}, 
+    \begin{align}
+    \eqlabel{eqn:stack}
+    \hat{\mathcal{N}}(z) &\equiv \sum_{i = 0}^{N} \dwh{\mathrm{P}(z_{i})} ,
+    \end{align}
+of a sample of $N$ galaxies $i$ is \dwh{the average of their \pz\ PDFs, an} intuitive approach to circumventing the loss of valuable knowledge of redshift uncertainty resulting from reduction of \pz PDFs to point estimates.
+% or, equivalently, the redshift density function $\hat{n}(z) = \hat{\mathcal{N}}(z) / N$.
+This \letter\ concerns the problems with this logically invalid yet pervasive quantity.
+
+Though the stacked estimator \dwh{$\hat{\mathcal{N}}(z)$} of the redshift distribution is mathematically incorrect \citep{hogg_data_2012} and has been superceded by principled methods \citep{leistedt_hierarchical_2016, malz_cosmological_2019}, even modern analyses still employ it \citep{sheldon_photometric_2012, hoyle_dark_2018}.
+On top of the expected inertia and technical challenges, stacking is bolstered by pervasive misunderstandings about the causal structure of the problem of redshift inference and \pz\ PDFs as probabilistic objects overall \citep{gruen_combining_2017, jarvis_open_2018, malz_re:_2018}.
+
+This \letter\ aims to expose and rectify these common errors of logic through tangible thought experiments, written in the language of mathematics.
+We present a flexible mathematical framework in \Sect{sec:preamble}, derive the general form of the redshift distribution in \Sect{sec:pedanticmath}, explore limiting cases of the general form in \Sect{sec:pedanticres}, and interpret the implications thereof in \Sect{sec:disco}\dwh{.}
+
+% \section{Background}
+% \sectlabel{sec:intro}
+\section{Definitions}
+\sectlabel{sec:preamble}
 
 % \aim{Fix the endpoints of sums: some have the starting point, some have the end point, some have neither}
 
-Though it is at this point well known that estimating the redshift distribution \Nz\ via stacking, defined by Equation~\ref{intro:eq:eqn:stack}, is incorrect \citep{leistedt_hierarchical_2016, Malz:chippr}, even modern analyses still employ the stacked estimator rather than a principled approach \citep{sheldon_photometric_2012, hoyle_dark_2017}.
-In this instance, the resistance to change goes beyond simple inertia and the technical challenges associated with more sophisticated inference methods.
-Stacking is bolstered by pervasive misunderstandings about the causal structure of the problem of redshift inference and \pzpdf s as probabilistic objects overall \citep{gruen_sumzz_2017, jarvis_rmjarvis_2018, malz_aimalz_2018}.
+%Though it is at this point well known that estimating the redshift distribution \Nz\ via stacking, defined by Equation~\ref{intro:eq:eqn:stack}, is incorrect \citep{leistedt_hierarchical_2016, malz_cosmological_2019}, even modern analyses still employ the stacked estimator rather than a principled approach \citep{sheldon_photometric_2012, hoyle_dark_2018}.
+%In this instance, the resistance to change goes beyond simple inertia and the technical challenges associated with more sophisticated inference methods.
 
-%\aim{I might not be distinguishing definitions, propositions, lemmas, and theorems properly and need to consult with someone more familiar with this formalism.}
-%\aim{Still not sure if the notation is entirely consistent.}
-
-To identify and expose the roots of these common errors of logic we consider the chance that a single galaxy $i$ has a given redshift $z'$ and begin by establishing some definitions.
+To answer the question of when stacking can recover the true redshift distribution, we must first \dwh{dust off our knowledge of probability and explicitly connect these classic concepts to the problem at hand}.
+We begin by considering the chance \dwh{that} a single galaxy's true redshift $z^{\dagger}_{i}$ \dwh{takes} some reference value $z'$.
 
 \begin{definition}\label{def:binarystatespace}
-	The \textit{state space} $\Omega(z_{i}) = \{z_{i} = z', z_{i} = \lnot z'\}$ of a particular galaxy's redshift $z_{i}$ can be broken down into two states, that of redshift equal to $z'$ and that of any other redshift $\lnot z'$.
+%	The \textit{state space} $\Omega(z_{i}) = \{z_{i} = z', z_{i} = \lnot z'\}$ of a particular galaxy's redshift $z_{i}$ can be broken down into two states, that of redshift equal to $z'$ and that of any other redshift $\lnot z'$.
+	The \textit{outcome space} $\Omega(z^{\dagger}_{i})$ of the true redshift $z_{i}^{\dagger}$ of a single-galaxy $i$ is $-\infty < z^{\dagger}_{i} < \infty$, although in cosmology we can safely assume $z \geq 0$;
+	though redshift $z$ is continuous in reality, for the pedagogical purposes of this \letter, redshift $z$ is assumed to be a discrete random variable ${z_{i}^{\dagger} \in \{z', \lnot z'\}}$ that can take only two possible values, that of a reference redshift $z'$ and that of any other redshift $\lnot z'$.
+    (The extension to the limit of continuous redshift is left as an exercise for the reader.)
+% 	Because there are only two possible states, $\Omega(z_{i})$ is a \textit{binary state space}.
+\end{definition}
+
+\begin{definition}\label{def:event}
+	An \textit{event} is a collection of possible outcomes;
+	in our case, the experiment may be the natural occurence of the true redshift $z_{i}^{\dagger}$ of a galaxy $i$, though it may be unknown to us.
 \end{definition}
 
 \begin{definition}\label{def:disjoint}
-	The elements of the state space are \textit{disjoint} if one occurring means that all others do not occur; our single galaxy cannot have both $z_{i} = z'$ and $z_{i} = \lnot z'$.
+	The possible outcomes in $\Omega(z_{i}^{\dagger})$ are \textit{disjoint} if one occurring means that all others cannot occur; 
+	our single galaxy $i$ cannot satisfy both ${z^{\dagger}_{i} = z'}$ and ${z^{\dagger}_{i} = \lnot z'}$.
 \end{definition}
 
 \begin{definition}\label{def:pdens}
-	The \textit{probability density function (PDF)} $\pr{z_{i}} \geq 0$ is the chance that a galaxy's redshift $z_{i}$ takes any possible value.
-	The PDF may be parameterized by some function $f(z_{i}; \theta)$ over redshifts $z_{i}$ with parameters $\theta$.
-	This function determining the PDF can be evaluated at any specific redshift $z'$ to yield the chance $\pr{z'}$ that the galaxy has that particular redshift, which in terms of $f(z_{i}; \theta)$ is $\lim_{\varepsilon \to 0} \int_{z' - \varepsilon}^{z' + \varepsilon} f(z_{i}; \ndphi) \mathrm{d}z_{i}$.
+%	The PDF may be parameterized by some function $f(z_{i}; \theta)$ over redshifts $z_{i}$ with parameters $\theta$.
+%	This function determining the PDF can be evaluated at any specific redshift $z'$ to yield the chance $\pr{z'}$ that the galaxy has that particular redshift, which in terms of $f(z_{i}; \theta)$ is $\lim_{\varepsilon \to 0} \int_{z' - \varepsilon}^{z' + \varepsilon} f(z_{i}; \ndphi) \mathrm{d}z_{i}$.
+	The \textit{probability density function (PDF)} $\dwh{{\mathrm{P}}(z^{\dagger}_{i} = z') \geq 0}$ is the chance that a galaxy's redshift $z_{i}^{\dagger}$ takes the value $z'$ if $z$ is continuous;
+% 	The PDF may be parameterized by some function $f(z_{i}; \theta)$ over redshifts $z_{i}$ with parameters $\theta$.
+% 	This function defining the PDF can be evaluated at any specific redshift $z'$ to yield the chance $\pr{z_{i} = z'}$ that the galaxy has that particular redshift, which in terms of $f(z_{i}; \theta)$ is $\lim_{\varepsilon \to 0} \int_{z' - \varepsilon}^{z' + \varepsilon} f(z_{i}; \theta) \mathrm{d}z_{i}$.
+    in \dwh{our pedagogical example} of the binary discrete outcome space, ${\pr{z^{\dagger}_{i} = z'} \dwh{= \int_{z'-\epsilon}^{z'+\epsilon} \mathrm{P}(z^{\dagger} = z) \mathrm{d}z} \geq 0}$\dwh{, for a very small $0 \leq \epsilon \ll 1$,} is instead a \textit{probability mass function (PMF)}.
+    (\dwh{It would be irresponsible not to note that this integral over a continuous PDF $\mathrm{P}(z)$ respects the physical units of redshift, whereas the resulting discrete PMF $\mathrm{p}(z)$ is unitless \citep{hogg_data_2012}.})
 \end{definition}
 
 \begin{definition}\label{def:normalization}
-	A probability density must satisfy the \textit{normalization} condition $\integral{\pr{z_{i}}}{z_{i}} = 1$.
-	Combined with Definition \ref{def:disjoint}, the normalization condition is equivalent to $\pr{z_{i} = z'} + \pr{z_{i} = \lnot z'} = 1$ for our single galaxy $i$ and reference redshift $z'$.
+	A \dwh{PMF} must satisfy the \textit{normalization} condition $\dwh{{\sum_{z} \pr{z^{\dagger}_{i} = z}} = 1}$;
+	the \dwh{PMF over our binary} outcome space $\Omega(z^{\dagger}_{i})$ satisfies ${\pr{z^{\dagger}_{i} = z'} = 1 - \pr{z^{\dagger}_{i} = \lnot z'}}$.
 \end{definition}
 
-These definitions pertain to the redshift of a single galaxy, but this \paper\ concerns the distribution \Nz\ of redshifts of an ensemble of $N$ galaxies.
-For a single redshift $z'$, which is the true redshift of some whole number $0 \leq K \leq N$ of those galaxies.
-The state space $\Omega(K) = \{K = 0, \dots, K = N\}$ of $K$ thus has $N + 1$ elements, and there is a \textit{probability mass function} (PMF) over the discrete-valued $\Omega(K)$ defining the probability of each value of $K$ is, i.e. $\pr{N(z) = K}$, we need to use information from the ensemble of redshift PDFs in a mathematically correct way.
-% \aim{Upgrade PMF to a definition.}
+The above definitions pertain to the redshift of a single galaxy $i$, but this \letter\ concerns the distribution \Nz\ of redshifts of an ensemble of $N$ galaxies\dwh{, which is some pre-defined sample that need not include all galaxies in the universe}.
+A small window about a single redshift $z' \pm \epsilon$ for small $0 < \epsilon \ll 1$ contains the true redshift of some whole number ${\mathcal{N}(z') = K^{\dagger}}$ of those galaxies.
+The discrete outcome space ${\Omega(K^{\dagger}) = \{K^{\dagger} = 0, \dots, K^{\dagger} = N\}}$ of the true number $K^{\dagger}$ of galaxies with true redshift $z'$ thus has $N + 1$ elements, and there is some probability ${\pr{K^{\dagger} = K}}$ of each value of $K$ that must be related to the \pzpdf s ${\{\pr{z^{\dagger}_{i} = z'}\}_{i = 1, \dots, N}}$.
+\dwh{In Definitions \ref{def:pdens} and \ref{def:normalization}, the units of $\mathrm{d}z'$ vanish because $K$ is unitless, being a count over galaxies, which recovers the more familiar ${\pr{K^{\dagger} = K'} = 1 - \pr{K^{\dagger} = \lnot K'}}$.}
 
+%The redshift distribution itself can be used to define a probability density $n(z) \equiv \pr{z \gvn \ndphi} = N(z) / N_{tot}$ of finding a galaxy at a given redshift under the parameter $\ndphi$.
+%Thus the state space of $\pr{\ndphi}$ depends on the function $f$, but the state space of $\pr{z \gvn \ndphi}$ must only satisfy Definitions \ref{def:pdens} and \ref{def:normalization}.
+
+\begin{definition}\label{def:conditional}
+	We may consider the \textit{conditional} probability that an event occurs given that another event occurs;
+	for example, if ${z^{\dagger}_{i} = z'}$, then ${\pr{K^{\dagger} = 0 \gvn z^{\dagger}_{i} = z'} = 0}$.
+\end{definition}
 \begin{definition}\label{def:independence}
-	Multiple events are \textit{statistically independent} if the probability of each occurring does not affect the probability that the others occur, in terms of conditional probability.
+	Multiple events are \textit{statistically independent} if the probability of each occurring does not affect the probability that the others occur;
+	for this work, we broadly assume the statistical independence ${\pr{z^{\dagger}_{i}} \perp \pr{z^{\dagger}_{j \neq i}}}$ of the redshifts of individual galaxies.
 \end{definition}
-% \aim{Actually need to introduce conditional probability up here instead of later in \Sect{sec:pedanticres}.
-% Not optional!}
 
-\begin{claim}\label{cla:intersection}
-	Consider a universe with $N = 2$ galaxies $i = 1, 2$ whose redshifts are statistically independent, denoted as $z_{1} \perp z_{2}$.
-	The probability that each galaxy takes a specific redshift is $\pr{z_{1}' \cap z_{2}'} = \pr{z_{1}'} \pr{z_{2}'}$.
-	If $z'_{1} = z'_{2} = z'$, then this probability is also equal to $\pr{K = 2}$.
-	The proof of this claim depends on the notion of conditional probability that will be explored in \Sect{sec:pedanticres}.
-\end{claim}
+%\begin{claim}\label{cla:intersection}
+\begin{definition}\label{def:intersection}
+%	Consider a universe with $N = 2$ galaxies $i = 1, 2$ whose redshifts are statistically independent, denoted as $z_{1} \perp z_{2}$.
+%	The probability that each galaxy takes a specific redshift is $\pr{z_{1}' \cap z_{2}'} = \pr{z_{1}'} \pr{z_{2}'}$.
+%	If $z'_{1} = z'_{2} = z'$, then this probability is also equal to $\pr{K = 2}$.
+%	The proof of this claim depends on the notion of conditional probability that will be explored in \Sect{sec:pedanticres}.
+    In a universe with an ensemble of $N$ galaxies whose redshifts are statistically independent, the \textit{intersection} of the probability that they all have a specific redshift $z'$, which is also the probability that the number of galaxies with redshift $z'$ is equal to the total number of galaxies ${\pr{K^{\dagger} = N}}$ is the product of the probabilities that each has that redshift: ${\pr{z^{\dagger}_{0} = z' \cap \dots \cap z^{\dagger}_{N} = z'} = \pr{z^{\dagger}_{0} = z'} \times \dots \times \pr{z^{\dagger}_{N} = z'}}$.
+% 	The proof of this claim depends on the notion of conditional probability that will be explored in \Sect{sec:results}.
+%\end{claim}
+\end{definition}
 
 %\aim{Should I include the proof by induction that follows from Definition \ref{def:independence} or leave it as an exercise for the reader?}
 
-\begin{claim}\label{lem:independence}
-	The probability of an ensemble of statistically independent events occurring is the product of the probabilities of the individual events.
-	Given Claim~\ref{cla:intersection} as the base case, one can in fact write the general form of Definition~\ref{def:independence} via a proof by induction that similarly relies on conditional probability.
-\end{claim}
+%\begin{claim}\label{lem:independence}
+%	The probability of an ensemble of statistically independent events occurring is the product of the probabilities of the individual events.
+%	Given Claim~\ref{cla:intersection} as the base case, one can in fact write the general form of Definition~\ref{def:independence} via a proof by induction that similarly relies on conditional probability.
+%\end{claim}
+% mjrosenb: this claim has been moved up and changed to a definition? or just removed?
+
 %\begin{proof}
 %	Claim~\ref{cla:intersection} serves as a base case for an inductive proof, meaning we next assume $\pr{z_{1} \cap z_{2} \cap \dots z_{N - 1}} = \prod_{i=1}^{N-1} \pr{z_{i}}$ if $z_{i} \perp z_{\lnot i}$ for every galaxy $i$.
 %	For notational simplicity, consider an event $z_{N} \perp z_{i}$ for all $i = 1, 2, \dots, N-1$.
@@ -89,157 +158,219 @@ The state space $\Omega(K) = \{K = 0, \dots, K = N\}$ of $K$ thus has $N + 1$ el
 %The redshift distribution itself can be used to define a probability density $n(z) \equiv \pr{z \gvn \ndphi} = N(z) / N_{tot}$ of finding a galaxy at a given redshift under the parameter $\ndphi$.
 %Thus the state space of $\pr{\ndphi}$ depends on the function $f$, but the state space of $\pr{z \gvn \ndphi}$ must only satisfy Definitions \ref{def:pdens} and \ref{def:normalization}.
 
-To relate the infinite case to the problem at hand, we note that the stacked estimator of Equation~\ref{intro:eq:eqn:stack} can only hold if $\pr{z_{1} = z' \cap z_{2} = z'} = \pr{z_{1} = z'} + \pr{z_{2} = z'}$, which does not directly follow from any combination of the above definitions.
-Because the stacked estimator of the redshift distribution given in Equation~\ref{intro:eq:eqn:stack} yields a single value $\hat{K}$ for $K$ rather than the probability distribution $\pr{K}$, we'll work with the expected value so we can compare apples to apples.
+Definition~\ref{def:intersection} implies that the stacked estimator $\hat{\mathcal{N}}(z)$ of the redshift distribution given by \Eq{eqn:stack} can be equal to the true redshift distribution if ${\pr{z^{\dagger}_{1} = z' \cap \dots \cap z^{\dagger}_{N} = z'}} = {\pr{z^{\dagger}_{1} = z'} + \dots + \pr{z^{\dagger}_{N} = z'}}$, which does not directly follow from any combination of the above definitions and in fact may well violate Definition~\ref{def:normalization}.
+Because the stacked estimator of the redshift distribution given in \Eq{eqn:stack} yields a single estimate $\hat{K}$ rather than the probability distribution $\pr{K}$, we'll work with a summary statistic of $\pr{K}$ so we can compare apples to apples.
 
 \begin{definition}\label{def:expected}
-	The expected value $\langle z \rangle = \integral{z \pr{z}}{z}$, for a continuous random variable $z$.
+	The \textit{expected value} \dwh{of a continuous random variable such as $z$} is its first moment ${\langle z_{i}^{\dagger} \rangle \equiv \dwh{\int_{-\infty}^{\infty}z'\mathrm{P}(z_{i}^{\dagger} = z')\mathrm{d}z'}}$;
+	\dwh{the expected value of a discrete random variable such as $\dwh{K}$} is defined as ${\langle K^{\dagger} \rangle \dwh{\equiv} \sum_{K' = 0}^{N} K' \pr{K^{\dagger} = K'}}$.
 \end{definition}
 
-\begin{example}\label{exe:expectednz}
-	As a discrete random variable, the expected value $\langle K \rangle$ of $K$ is $\sum_{K = 0}^{N} K \pr{K}$.
-\end{example}
+%\begin{example}\label{exe:expectednz}
+%	As a discrete random variable, the expected value $\langle K \rangle$ of $K$ is $\sum_{K = 0}^{N} K \pr{K}$.
+%\end{example}
+% mjrosenb: this definition has been merged into the definition of expected
 
-However, all we have to work with are the members of the catalog of \pzpdf s, $\{\pr{z_{i}}\}$, not $\pr{K}$.
-\Sect{sec:pedanticmath} connects our \pzpdf s to the distribution of possible values $K$ for $N(z')$.
+% However, all we have to work with are the members of the catalog of \pzpdf s, $\{\pr{z_{i}}\}$, not $\pr{K}$.
+% \Sect{sec:pedanticmath} connects our \pzpdf s to the distribution of possible values $K$ for $N(z')$.
+
+Now, we may derive the tools necessary to determine when the stacked estimator of the redshift distribution is valid, i.e. when it is equal to the mathematically self-consistent expected value of the redshift distribution.
 
 \section{Derivation}
 \sectlabel{sec:pedanticmath}
 
-The following proofs establish the relationship between a catalog of individual \pzpdf s and the redshift distribution from a combinatorial perspective.
-Though it doesn't matter for our science on its own, we build up to the goal by first considering all possible orderings of the whole set of $N$ galaxies $i = 1, \dots, N$.
+% The following lemmas establish the relationship between a catalog of individual \pzpdf s and the redshift distribution from a combinatorial perspective.
+% Though it doesn't matter for our science on its own, we build up to the goal by first considering all possible orderings of the whole set of $N$ galaxies $i = 1, \dots, N$.
+% These lemmas have classic proofs that can be found in any elementary textbook on probability.
+% \aim{TODO: Find one to cite!}
+Here we compare the stacked estimator $\hat{\mathcal{N}}(z')$ of the redshift distribution to the expected value of the PMF over all possible values of the redshift distribution, derived using the tools of combinatorics.
+
+We consider a generic set ${S_{j} = \{i_{1}, \dots, i_{K}\}}$ of ${|S_{j}| = K}$ galaxies $i \in S_{j}$ and its complement 
+$\lnot S_{j}$ of ${|\lnot S_{j}| = N - K}$ galaxies $i \notin S_{j}$.
+All $N$ galaxies belong to one set or the other, and no galaxy can be in both $S_{j}$ and $\lnot S_{j}$.
+One can imagine sets such as these being possible galaxies with true redshifts $z_{i}^{\dagger}$ equal to $z'$ and $\lnot z'$.
+
+Since galaxies have true redshifts in nature, there is a true number $K^{\dagger}$ of galaxies with $z_{i}^{\dagger} = z'$.
+If we aim to recover $\mathcal{N}(z')$, we only care about the size of the set, not its members.
+Thus we seek sets $\{S_{j}\}$ with ${|S_{j}| = K^{\dagger}}$ galaxies out of all $[N]^{K}$ possible subsets of $N$ galaxies.
+However, to find the probability that $\mathcal{N}(z')$ takes its true value $K^{\dagger}$, we will need to acknowledge that there is exactly one set $S_{j^{\dagger}}$ out of the set $[N]^{K^{\dagger}}$ of all sets $S_{j}$ with ${|S_{j}| = K^{\dagger}}$ galaxies that contains all galaxies of true redshift ${z_{i}^{\dagger} = z'}$ and no galaxies that have redshift ${z_{i}^{\dagger} = \lnot z'}$, for each possible redshift $z'$.
+
+% What is the proper terminology for this concept?}
+% There are of course also sets $S^{K^{\dagger}}_{j \neq j^{\dagger}}$ of $0 < K = K^{\dagger} < N$ galaxies that are not the exact set of galaxies that have true redshift $z'$, but in our two-redshift universe, we only need to recover from our \pzpdf\ catalog the number $K^{\dagger}$ of galaxies with redshift $z'$, not which galaxies are in $S^{K^{\dagger}}_{k^{\dagger}}$. 
+% And there are even more sets $S^{K}_{j}$ of $|S^{K}_{j}| = K \neq K^{\dagger}$ galaxies that do not even have the same number of members as the true number $K^{\dagger}$ of galaxies with redshift $z'$.
+% The following lemmas establish the combinatorial relationship between a catalog of individual \pzpdf s and the distribution of possible values for the redshift distribution.
+% Though it doesn't matter for our science on its own, we build up to the goal by first considering all possible orderings of the whole set of $N$ galaxies $i = 1, \dots, N$.
+
+One might be tempted to construct all these sets for a cosmologically relevant sample of $N$ galaxies, but the following lemmas show why that is impractical.
 
 \begin{lemma}\label{lem:permutations}
-	The number of possible orderings of the $N$ galaxies is $N! = N \cdot (N - 1) \cdot \dots \cdot 1$.
+	The number of possible orderings of $N$ galaxies is ${N! \equiv N \cdot (N - 1) \cdot \dots \cdot 1}$.
 \end{lemma}
-\begin{proof}
-	The first few cases are trivial: there is only one possible ordering of a single galaxy, and two galaxies may only be ordered in two ways, $(1, 2)$ and $(2, 1)$.
-	For induction, we assume that $N - 1$ galaxies can be ordered $(N - 1)!$ ways.
-	If we include one more galaxy, there are $N$ possible spots in which to place it in an arbitrary ordering of $N - 1$ galaxies, so there must be $N \cdot (N - 1)! = N!$ possible orderings.
-\end{proof}
+%\begin{proof}
+%	The first few cases are trivial: there is only one possible ordering of a single galaxy, and two galaxies may only be ordered in two ways, $(1, 2)$ and $(2, 1)$.
+%	For induction, we assume that $N - 1$ galaxies can be ordered $(N - 1)!$ ways.
+%	If we include one more galaxy, there are $N$ possible spots in which to place it in an arbitrary ordering of $N - 1$ galaxies, so there must be $N \cdot (N - 1)! = N!$ possible orderings.
+%\end{proof}
 
 \begin{lemma}\label{lem:combinations}
-	The number of possible unordered subsets of $K$ galaxies that can be selected from a set of $N \geq K$ galaxies is $\binom{N}{K} \equiv \frac{N!}{K! (N - K)!}$.
+%	The number of possible unordered subsets of $K$ galaxies that can be selected from a set of $N \geq K$ galaxies is $\binom{N}{K} \equiv \frac{N!}{K! (N - K)!}$.
+	The number of possible unordered subsets of $K$ galaxies that can be selected from a set of $N \geq K$ galaxies is ${\binom{N}{K} \equiv \frac{N!}{K! (N - K)!}}$.
 \end{lemma}
-\begin{proof}
-	If there are $K$ galaxies with redshift $z'$, we can think of them as the first $K$ in an ordering of the full $N$ galaxies.
-	We expect that many of the $N!$ orderings can result in the same ordered set of $K$ at the beginning of the ordered list.
-	Not only do we not care about the ordering within the first $K$ galaxies, but we also don't care about the ordering of the last $N - K$ galaxies.
-	Thus there are $C \equiv \frac{N!}{K! (N - K)!}$ combinations of the first $K$ galaxies, defining a set $[N]^{K} = \{S^{K}_{j}\}$ of $|[N]^{K}| = C$ possible sets $S^{K}_{j}$ of galaxies with $|S^{K}_{j}| = K$ to consider.
-\end{proof}
+%\begin{proof}
+%	If there are $K$ galaxies with redshift $z'$, we can think of them as the first $K$ in an ordering of the full $N$ galaxies.
+%	We expect that many of the $N!$ orderings can result in the same ordered set of $K$ at the beginning of the ordered list.
+%	Not only do we not care about the ordering within the first $K$ galaxies, but we also don't care about the ordering of the last $N - K$ galaxies.
+%	Thus there are $C \equiv \frac{N!}{K! (N - K)!}$ combinations of the first $K$ galaxies, defining a set $[N]^{K} = \{S^{K}_{j}\}$ of $|[N]^{K}| = C$ possible sets $S^{K}_{j}$ of galaxies with $|S^{K}_{j}| = K$ to consider.
+%\end{proof}
 
-Since galaxies have true redshifts in nature, there is one set $S^{K^{\dagger}}_{j^{\dagger}}$ out of the set $[N]^{K}$ of all sets $S^{K^{\dagger}}_{j}$ with $|S^{K^{\dagger}}_{j}| = K^{\dagger}$ galaxies that contains all galaxies that really do have redshift $z'$ and no galaxies that have redshift $\lnot z'$, for every possible redshift $z'$.
-There are of course also sets $S^{K^{\dagger}}_{j \neq j^{\dagger}}$ of $0 < K = K^{\dagger} < N$ galaxies that are not the exact set of galaxies that have true redshift $z'$, but in our two-redshift universe, we only need to recover from our \pzpdf\ catalog the number $K^{\dagger}$ of galaxies with redshift $z'$, not which galaxies are in $S^{K^{\dagger}}_{k^{\dagger}}$. 
-And there are even more sets $S^{K}_{j}$ of $|S^{K}_{j}| = K \neq K^{\dagger}$ galaxies that do not even have the same number of members as the true number $K^{\dagger}$ of galaxies with redshift $z'$.
+% Since galaxies have true redshifts in nature, there is one set $S^{K^{\dagger}}_{j^{\dagger}}$ out of the set $[N]^{K}$ of all sets $S^{K^{\dagger}}_{j}$ with $|S^{K^{\dagger}}_{j}| = K^{\dagger}$ galaxies that contains all galaxies that really do have redshift $z'$ and no galaxies that have redshift $\lnot z'$, for every possible redshift $z'$.
+% There are of course also sets $S^{K^{\dagger}}_{j \neq j^{\dagger}}$ of $0 < K = K^{\dagger} < N$ galaxies that are not the exact set of galaxies that have true redshift $z'$, but in our two-redshift universe, we only need to recover from our \pzpdf\ catalog the number $K^{\dagger}$ of galaxies with redshift $z'$, not which galaxies are in $S^{K^{\dagger}}_{k^{\dagger}}$. 
+%  And there are even more sets $S^{K}_{j}$ of $|S^{K}_{j}| = K \neq K^{\dagger}$ galaxies that do not even have the same number of members as the true number $K^{\dagger}$ of galaxies with redshift $z'$.
+\dwh{The proofs by induction for both of these lemmas may be found in \citet{pitman_probability_1999}.}
 
-We are now prepared to consider the probability $\pr{K'}$ that $N(z')$ takes any particular value $K'$ at a fixed $z'$.
+Because there are so many possible sets of $K^{\dagger}$ galaxies in question and we do not even know the value of $K^{\dagger}$ in the first place, it is not possible to check them by hand, but this thought experiment mandates that we consider them.
+With these lemmas, we are now prepared to evaluate the \dwh{generic} probability ${\pr{K^{\dwh{\dagger}} = K'}}$ that $\mathcal{N}(z')$ takes any particular value $K'$ at a fixed $z'$\dwh{, where ${\mathcal{N}(z') \equiv \sum_{i \in S_{j}} \begin{cases} 
+1, & z'-\epsilon < z_{i}^{\dagger} < z'+\epsilon\\
+0, & \mathrm{else}
+\end{cases}}$}.
+
+We begin with a toy case of simplifying assumptions and strip them away one by one to obtain a general result.
 
 \subsection{A universe of identical galaxies}
 \sectlabel{sec:tworedshift}
 
-It is helpful to consider the special case in which all galaxies have the same \pzpdf\ $\pr{z_{i}} = \pr{z}$.
+It is instructive to first consider the special case in which there is one \pzpdf\ ${\pr{z'} \equiv \pr{z_{i}^{\dagger} = z'}}$ shared among each galaxy $i$ in the sample of $N$ galaxies.
 
-\begin{theorem}
-	In a two-redshift universe in which all galaxies have the same \pzpdf\ with probability $\pr{z'} = \phi$ of having redshift $z'$, the probability mass function over the redshift distribution is
+%\begin{theorem}
+\begin{lemma}\label{lem:identical}
+%	In a two-redshift universe in which all galaxies have the same \pzpdf\ with probability $\pr{z'} = \phi$ of having redshift $z'$, the probability mass function over the redshift distribution is
+%	\begin{equation}
+%	\eqlabel{eqn:binomial}
+%	\pr{K} = \binom{N}{K} \phi^{K} (1 - \phi)^{N - K} .
+%	\end{equation}
+	In a universe in which all galaxies have the same \pzpdf with probability $\pr{z'}$ of having redshift $z'$, the PMF over the redshift distribution is
 	\begin{equation}
 	\eqlabel{eqn:binomial}
-	\pr{K} = \binom{N}{K} \phi^{K} (1 - \phi)^{N - K} .
+	\pr{K^{\dagger} = K'} = \binom{N}{K'} \pr{z'}^{K'} (1 - \pr{z'})^{N - K'} .
 	\end{equation}
-\end{theorem}
+% \end{theorem}
+\end{lemma}
 \begin{proof}
-If there are only two possible redshifts, those of Definition \ref{def:binarystatespace}, then the problem is equivalent to that of counting $K$ successes after flipping a single coin with $\pr{\mathrm{success}} = \phi$ a total of $N$ times.
-The $N$ coin flips build a set $S^{K}_{j}$ of $K$ galaxies with redshift $z'$ and $S^{N-K}_{j}$ of $N - K$ galaxies with redshift $\lnot z$'.
-If we want the probability of $K$ successes, we sum over the set $[N]^{K}$ all combinations of galaxies that could define these sets.
-Bearing in mind that our galaxies have $\pr{\lnot z'} = 1 - \phi$, due to Definitions \ref{def:binarystatespace} and \ref{def:disjoint}, the probability of $K$ galaxies having redshift $z'$ is given by the binomial theorem, which is \Eq{eqn:binomial}.
+%If there are only two possible redshifts, those of Definition \ref{def:binarystatespace}, then the problem is equivalent to that of counting $K$ successes after flipping a single coin with $\pr{\mathrm{success}} = \phi$ a total of $N$ times.
+In terms of the discrete binary outcome space of Definition~\ref{def:binarystatespace}, the problem is equivalent to that of counting $K$ successes after flipping a single coin with $\pr{\mathrm{success}} = \pr{z'}$ a total of $N$ times.
+The $N$ coin flips build a set $S_{j}$ of ${|S_{j}| = K}$ galaxies with redshift $z'$ and a set $\lnot S_{j}$ of ${|\lnot S_{j}| = N - K}$ galaxies with redshift $\lnot z$'.
+If we want the probability of $K'$ successes, we sum over the set $[N]^{K'}$ of all combinations of galaxies that could define these sets.
+Bearing in mind that our galaxies have ${\pr{\lnot z'} = 1 - \pr{z'}}$, due to Definitions \ref{def:binarystatespace} and \ref{def:disjoint}, the probability of $K'$ galaxies having redshift $z'$ is given by the binomial theorem, which is \Eq{eqn:binomial}.
 \end{proof}
 
-We may generalize the two-redshift universe to a many-redshift universe by considering the extension of the binomial theorem to the birthday problem, which asks for the probability that $K$ people in a room of $N$ people share the same birthday $z'$.
+We may generalize the binary redshift universe to a multi-valued redshift universe by considering the extension of the binomial theorem to the birthday problem, which asks for the probability that $K'$ people in a room of $N$ people share the same birthday $z'$.
+% \aim{specific question about multinomial distribution, talk about the general distribution rather than specific question}
 %the birthday problem is solved by $p(N_{z}) = 1 - p(z)^{N_{tot}} \times \perm{N_{tot}}{N_{z}}$
 %\aim{Should I include the proof by induction or is it okay to assert that it works?}
-We will, however, proceed by considering only one redshift $z'$ at a time to maintain the simple state space; the proof of the birthday problem case is left as an exercise for the reader.
+We will, however, proceed by considering only one redshift $z'$ at a time to maintain the simple binary outcome space; 
+the proof of the birthday problem case is left as an exercise for the reader.
+
+Instead of seeking the redshift distribution $\mathcal{N}(z')$ of a set of $N$ galaxies, one may wish to estimate the redshift density ${n(z') \equiv \mathcal{N}(z') / N}$, a normalized version of the redshift distribution, for all galaxies ${N \to \infty}$, not just those observed in a given sample.
+This limit is the very same one under which the binomial distribution approaches the Poisson distribution.
+These two extensions, to continuous $z$ and to continuous $n(z)$, are not explicitly addressed in this document but may straightforwardly be executed by any interested reader.
 
 \subsection{A universe of unique galaxies}
 \sectlabel{sec:unique}
 
-Of course galaxies do not share the same \pzpdf; the \pzpdf s differ because the photometry $\data_{i}$ differs.
+% Of course galaxies do not share the same \pzpdf; the \pzpdf s differ because the photometry $\data_{i}$ differs.
+Of course galaxies do not share the same \pzpdf, so we must next extend the toy case of identical galaxies to a more realistic set of galaxies with unique \pzpdf s ${\{\pr{z'_{i}} \equiv \pr{z_{i}^{\dagger} = z'}\}}$.
 %\aim{Figure: isolating one redshift slice of $N(z)$}
 
-\begin{lemma}\label{lem:unique}
-	The probability that $N(z')$ takes the value $K'$ is 
+\begin{lemma}\label{lem:unique} 
+	In a universe where galaxies do not necessarily all have the same \pzpdf, the probability that $\mathcal{N}(z')$ takes the value $K'$ is 
 	\begin{align}
 	\eqlabel{eqn:general}
-	\pr{K'} &= \sum_{j}^{N! / K'! (N - K')!} \left[ \prod_{i \in S^{K'}_{j}}^{K'} \pr{z'}_{i} \prod_{i \notin S^{K'}_{j}}^{N - K'} 1 - \pr{z'}_{i} \right] .
+	% \pr{K'} &= \sum_{j}^{N! / K'! (N - K')!} \left[ \prod_{i \in S^{K'}_{j}}^{K'} \pr{z'}_{i} \prod_{i \notin S^{K'}_{j}}^{N - K'} 1 - \pr{z'}_{i} \right] .
+	\pr{K^{\dagger} = K'} &= \sum_{j \backepsilon |S_{j}| = K'}^{\binom{N}{K'}} \left[ \prod_{i \in S_{j}}^{K'} \pr{z'_{i}} \prod_{i \notin S_{j}}^{N - K'} 1 - \pr{z'_{i}} \right] .
 	\end{align}
 \end{lemma}
 \begin{proof}
-	By Definition \ref{def:independence}, the probability of obtaining set $S^{K'}_{j}$ is the product of the probability that all the galaxies in that set have redshift $z'$ and the probability that all the galaxies outside that set have redshift $\lnot z'$.
-	By Definition \ref{def:independence} again, the probability that all the galaxies in that set have redshift $z'$ is the product of the $K'$ probabilities $\{\pr{z'}_{i}\}_{i \in S^{K'}_{j}}$ of the galaxies in $S^{K'}_{j}$, and the probability that all the galaxies outside that set have redshift $\lnot z'$ is the product of the $N - K'$ probabilities $\{\pr{\lnot z'}_{i}\}_{i \notin S^{K'}_{j}}$.
-	By Definition \ref{def:binarystatespace}, $\pr{\lnot z'}_{i} = 1 - \pr{z'}_{i}$.
-	So the probability $\pr{S^{K'}_{j}}$ of a single combination $S^{K'}_{j}$ is $\prod_{i \in S^{K'}_{j}} \pr{z'}_{i} \prod_{i \notin S^{K'}_{j}} 1 - \pr{z'}_{i}$.
-	Invoking Definition \ref{def:disjoint}, we know that $\pr{K'} = \sum_{j}^{N! / K'! (N - K')!} \pr{S^{K'}_{j}}$.
+	By Definition \ref{def:independence}, the probability of obtaining set $S_{j}$ of ${|S_{j}| = K'}$ galaxies is the product of the probabilities that all the galaxies in the set $S_{j}$ have redshift $z'$ and the probabilities that all the galaxies outside that set, in $\lnot S_{j}$, have redshift $\lnot z'$.
+	By Definition \ref{def:independence} again, the probability that $S_{j}$ corresponds to the true set of galaxies of redshift $z'$ is the product of the $K'$ probabilities ${\{\pr{z'_{i}}\}_{i \in S_{j}}}$ of the galaxies in $S_{j}$ having redshift $z'$, and the probability that all galaxies outside $S_{j}$ have redshift $\lnot z'$ is the product of the $N - K'$ probabilities ${\{\pr{\lnot z'_{i}}\}_{i \notin S_{j}}}$.
+	By Definition \ref{def:binarystatespace}, $\pr{\lnot z'_{i}} = 1 - \pr{z'_{i}}$, so the probability $\pr{S_{j}}$ of obtaining a set of galaxies $S_{j}$ with ${|S_{j}| = K'}$ members is ${\pr{S_{j}} = {\prod_{i \in S_{j}} \pr{z'_{i}} \prod_{i \notin S_{j}} 1 - \pr{z'_{i}}}}$.
+	Invoking Definition \ref{def:disjoint}, we know that ${\pr{K^{\dagger} = K'} = \sum_{j \backepsilon |S_{j}| = K'}^{\binom{N}{K'}} \pr{S_{j}}}$.
 \end{proof}
 %\aim{Figure: posterior samples of $N_{z}$ for that slice}
+
+\Eq{eqn:general} is, of course, computationally intractable for any nontrivial number of galaxies.
+However, we glean insight by comparing it with \Eq{eqn:stack} in the limiting cases of data- and prior-dominated \pzpdf s in Sections~\Sect{sec:informative} and \Sect{sec:uninformative} below.
 
 \section{Results}
 \sectlabel{sec:pedanticres}
 
+We are now able to derive the general form of the expected value $\langle \mathcal{N}(z')\rangle$ of the number of galaxies with reference redshift $z'$, which we may then compare to the stacked estimator of the redshift distribution $\hat{\mathcal{N}}(z')$ given by \Eq{eqn:stack}.
 \begin{theorem}\label{thm:general}
-	The expected value of $K$ in the general case of a universe of unique galaxies is given by
+	The expected value of the number of galaxies $\mathcal{N}(z')$ with redshift $z'$ in the general case of a universe of unique galaxies is given by
 	\begin{align}
 	\eqlabel{eqn:complete}
-	\langle N_{z} \rangle &= \sum_{K = 0}^{N} K \sum_{j}^{N! / K! (N - K)!} \left[ \prod_{i \in S^{K}_{j}}^{K} \pr{z_{i} = z'} \prod_{i \in S^{K}_{j}}^{N - K} 1 - \pr{z_{i} = z'} \right].
+	\langle K^{\dagger} \rangle &= \sum_{K' = 0}^{N} K' \sum_{j \backepsilon |S_{j}| = K'}^{\binom{N}{K'}} \left[ \prod_{i \in S_{j}}^{K'} \pr{z_{i}^{\dagger} = z'} \prod_{i \notin S_{j}}^{N - K'} 1 - \pr{z_{i}^{\dagger} = z'} \right].
 	\end{align}
 \end{theorem}
 \begin{proof}
 	Apply Definition \ref{def:expected} to Lemma \ref{lem:unique} to arrive at \Eq{eqn:complete}.
 \end{proof}
 
-In \Sect{sec:informative} and \Sect{sec:uninformative}, we will correct the gross abuse of notation that is ``$\pr{z_{i}}$'' by revealing its true nature and propagating that through \Eq{eqn:complete}.
-By confronting what this ubiquitous notation sweeps under the rug, we will identify the only conditions under which Equation~\ref{intro:eq:eqn:stack} can yield a result consistent with \Eq{eqn:complete}.
+\Eq{eqn:complete} gives the key quantity against which we may compare the stacked estimator of the redshift distribution given in \Eq{eqn:stack}.
+In \Sect{sec:informative} and \Sect{sec:uninformative}, we correct the gross abuse of notation that is ``$\pr{z_{i}}$'' and confront what this ubiquitous shorthand sweeps under the rug.
+By exposing the true nature of \pzpdf s, we identify the only conditions under which \Eq{eqn:stack} can yield a result consistent with \Eq{eqn:complete}.
 
 \subsection{Perfectly informative data}
 \sectlabel{sec:informative}
 
-Let's investigate what differentiates \pzpdf s for each galaxy.
-The redshifts are always defined over the same dimension, but what's different is the photometric data $\data_{i}$ for each galaxy.
-The way that enters into the \pzpdf\ is that $\pr{z_{i}}$ is really a horrible shorthand for $\pr{z \gvn \data_{i}}$, the probability that a galaxy has each redshift conditional on the data observed.
-From this point on, we'll use the full form of Equation~\ref{intro:eq:eqn:stack},
+In \Sect{sec:unique}, we assert that \pzpdf s are in general different for each galaxy, and we now justify that claim and consider its implications.
+Across the galaxy sample, redshifts are always defined over the same dimension, so the \pzpdf s are all defined over $z$, not $z_{i}^{\dagger}$ as if it were another dimension.
+What differs between the \pzpdf s of the galaxy sample is the photometric data $\data_{i}$ upon which our knowledge of each galaxy's redshift is conditioned.
+% \aim{address the tone of following sentence!}
+It is a deceptive shorthand to write ${\pr{z_{i}^{\dagger} = z'}}$, the probability that a particular galaxy's true redshift takes a reference value, in place of ${\pr{z = z' \gvn \data_{i}}}$, the probability of a redshift being equal to a reference value conditional on the data observed from a particular galaxy.
+
+In light of this clarification, the stacked estimator of the redshift distribution must be written as
 \begin{align}
 \eqlabel{eqn:stackwithdata}
-\hat{N}(z) &= \sum_{i = 0}^{N} \pr{z \gvn \data_{i}} .
+    \hat{N}(z) &= \sum_{i = 0}^{N} \pr{z \gvn \data_{i}}
 \end{align}
-It is important to note here what is wrong with \Eq{eqn:stackwithdata}.
-While it may look like Definition~\ref{def:normalization}, we can never integrate over the quantity on the right side of a conditional; there is only a mathematical framework for integrating over the quantity on the left side of a conditional \citep{Hogg2012}.
+instead of the oversimplified version of \Eq{eqn:stack}.
+\Eq{eqn:stackwithdata}, however, is not correct.
+While it may look like Definition~\ref{def:normalization}, we can never integrate over the quantity on the right side of a conditional; 
+it is only mathematically valid to integrate over the quantity on the left side of a conditional \citep{hogg_data_2012}, the one that is a free variable rather than a fixed value thereof.
 
-If the data is perfectly informative, then $\pr{z \gvn \data_{i}} = \delta(z,\ z_{i}^{\dagger})$, where $z_{i}^{\dagger}$ is the true redshift of galaxy $i$.
-\Pzpdf s are not delta functions because the data are inherently noisy and because our model for the relationship between photometry and redshift is imperfect, as was addressed in \Chap{intro} where Figure~\ref{intro:fig:fig:pedagogical_scatter} was introduced.
-However, if we wanted to write the PDF of a spectroscopic redshift, it could be considered a delta function like this.
-We know that \Eq{eqn:stackwithdata} works in this case and will now answer whether \Eq{eqn:complete} yields an equivalent result in the idealized case of spectroscopic-quality observations.
+% We know that \Eq{eqn:stackwithdata} works in this case and will now answer whether \Eq{eqn:complete} yields an equivalent result in the idealized case of spectroscopic-quality observations.
+If the photometric data $\data_{i}$ is optimistically informative, meaning ${\pr{z \gvn \data_{i}} \approx \delta(z,\ z_{i}^{\dagger})}$, then \Eq{eqn:stackwithdata} approaches $K^{\dagger}$.
+% \aim{write the math for what approaches what}
+Though \pzpdf s cannot be delta functions because photometry is inherently noisy,
+% and because our model for the relationship between photometry and redshift is imperfect, as was addressed in \Sect{intro} where Figure~\ref{intro:fig:fig:pedagogical_scatter} was introduced.
+the PMF of an idealized errorless spectroscopic redshift could be considered a delta function like this.
+We now answer whether \Eq{eqn:complete} yields an equivalent result to \Eq{eqn:stackwithdata} in the idealized case of errorless spectroscopic-quality observations.
 % \aim{Write out the result of stacking more formally as well so it can be compared after Theorem~\ref{thm:informative}}
 
 \begin{theorem}
 	\label{thm:informative}
-	The mathematically valid $\langle N(z') \rangle$ asymptotically approaches the result of stacking and the true number $K^{\dagger}$ of galaxies with redshift $z'$ under perfectly informative photometry, i.e. $\pr{z' \gvn \data_{i}} = \delta(z',\ z^{\dagger}_{i})$.
+	The mathematically valid expected value $\langle K \rangle$ of the redshift distribution at a reference redshift $z'$ given by \Eq{eqn:complete} is equivalent to the stacked estimator $\hat{\mathcal{N}}(z')$ at the reference redshift and the true number $K^{\dagger}$ of galaxies at the reference redshift if the data is perfectly informative, with ${\{\pr{z' \gvn \data_{i}} = \delta(z',\ z^{\dagger}_{i})\}}$.
 \end{theorem}
 \begin{proof}
-	First, we replace all instances of $\pr{z_{i}}$ in \Eq{eqn:complete} with $\pr{z \gvn \data_{i}}$, yielding
+	First, we replace all instances of ${\pr{z_{i}^{\dagger} = z'}}$ in \Eq{eqn:complete} with $\pr{z' \gvn \data_{i}}$, yielding
 	\begin{align}
 	\eqlabel{eqn:proofwithdata1}
-	\langle N(z') \rangle &= \sum_{K = 0}^{N} K \sum_{j}^{N! / K! (N - K)!} \left[ \prod_{i \in S^{K}_{j}} \pr{z' \gvn \data_{i}} \prod_{i \notin S^{K}_{j}} 1 - \pr{z' \gvn \data_{i}} \right]
+	    \langle K \rangle &= \sum_{K' = 0}^{N} K' \sum_{j \backepsilon |S_{j}|=K'}^{\binom{N}{K'}} \left[ \prod_{i \in S_{j}} \pr{z' \gvn \data_{i}} \prod_{i \notin S_{j}} 1 - \pr{z' \gvn \data_{i}} \right] .
 	\end{align}
-	For perfectly informative data, each of these $\pr{z \gvn \data_{i}}$ becomes $\delta(z,\ z^{\dagger}_{i})$, making \Eq{eqn:proofwithdata1} into
+	For galaxies $i$ with perfectly informative data, each of their individual \pzpdf s ${\pr{z' \gvn \data_{i}}}$ becomes a delta function $\delta(z,\ z^{\dagger}_{i})$ centered at their true redshift, making \Eq{eqn:proofwithdata1} into
 	\begin{align}
 	\eqlabel{eqn:proofwithdata2}
-	\langle N(z') \rangle &= \sum_{K = 0}^{N} K \sum_{j}^{N! / K! (N - K)!} \left[ \prod_{i \in S^{K}_{j}} \delta(z', z^{\dagger}_{i}) \prod_{i \notin S^{K}_{j}} 1 - \delta(z', z^{\dagger}_{i}) \right]
+	    \langle K \rangle &= \sum_{K' = 0}^{N} K' \sum_{j \backepsilon |S_{j}| = K'}^{\binom{N}{K'}} \left[ \prod_{i \in S_{j}} \delta(z', z^{\dagger}_{i}) \prod_{i \notin S_{j}} 1 - \delta(z', z^{\dagger}_{i}) \right] .
 	\end{align}
-	Each of the delta function terms in \Eq{eqn:proofwithdata2} will be $1$ when $z' = z^{\dagger}_{i}$ and $0$ otherwise.
-	There is only one combination $j^{\dagger}$ that will result in a nonzero product, the one whose $S^{K}_{j}$ contains all $K = K^{\dagger}$ galaxies with $z^{\dagger}_{i} = z'$ and no interlopers with $z^{\dagger}_{i} \neq z'$.
-	Thus there is only one nonzero term in the entire sum, and it can only correspond to 
+	Each of the delta function terms in \Eq{eqn:proofwithdata2} will be $1$ when ${z^{\dagger}_{i} = z'}$ and $0$ otherwise.
+	Only sets of galaxies with ${|S_{j}| = K^{\dagger}}$ contribute to the outer sum, and there is only one set of galaxies $S_{j^{\dagger}}$ that results in a nonzero product within the inner sum.
+	This single contributing set of galaxies is the one containing all ${K = K^{\dagger}}$ galaxies with ${z^{\dagger}_{i} = z'}$ and no interlopers with ${z^{\dagger}_{i} = \lnot z'}$.
+	Thus the sole contributing term to the nested summations is
 	\begin{align}
 	\eqlabel{eqn:proofwithdata3}
-	\langle N(z') \rangle &= K^{\dagger} \left[ \prod_{i \in S^{K}_{j^{\dagger}}} \delta(z', z^{\dagger}_{i}) \prod_{i \notin S^{K}_{j^{\dagger}}} 1 - \delta(z', z^{\dagger}_{i}) \right]
+	    \langle K \rangle &= K^{\dagger} \left[ \prod_{i \in S_{j^{\dagger}}} \delta(z', z^{\dagger}_{i}) \prod_{i \notin S_{j^{\dagger}}} 1 - \delta(z', z^{\dagger}_{i}) \right] .
 	\end{align}
-	Since the entire bracketed quantity in \Eq{eqn:proofwithdata3} is $1$, we arrive at the desired $\langle N(z') \rangle = K^{\dagger}$, the same as what stacking yields.
+	Since the entire bracketed quantity in \Eq{eqn:proofwithdata3} is $1$, we arrive at the desired ${\langle K \rangle = K^{\dagger}}$, the same as what stacking yields.
 \end{proof}
 
 To reiterate, a fully probabilistic treatment of \Nz\ is equivalent to stacking in the case of accurate delta function \pzpdf s.
@@ -249,67 +380,77 @@ Section~\ref{chippr:sect:sec:alldata} constrains the response of the stacked est
 %Figure:\\
 %left: rugplot, smoothing/histogram, recover $N(z)$\\
 %right: broadening of \zpdf s broadens $N(z)$\\
-%in realistic circumstances of photometry being noisy and less informative, stacking is guaranteed to yield an overly broad $N(z)$.}
+%in realistic circumstances of photometry being noisy and less informative, stacking is guaranteed to yield an overly broad $N(z)$.
 
 \subsection{Perfectly uninformative data}
 \sectlabel{sec:uninformative}
 
-In \Sect{sec:informative}, we clarified the relationship between the redshift probability and the photometric data and assumed that the \pzpdf s were perfectly informed by the photometry, but that picture is still overly simplistic.
+\Sect{sec:informative} concerns \pzpdf s perfectly informed by the photometry, but that picture is still overly simplistic.
 If \pzpdf s were conditioned solely on photometry, there would be no disagreement about how to derive them from photometric catalogs, because every approach would yield the same result, for which ample counterevidence is presented in \Chap{pzdc1}.
-Thus \pzpdf s must be conditioned not only on data unique to each galaxy but also on prior information $\tilde{\theta}$ which corresponds to an interim guess $\tilde{K}$ for $N(z')$ that may come from a template library, a training set, and/or the method by which either of those is combined with the observations.
-So, \pzpdf s should be more completely written as $\pr{z \gvn \data_{i}, \tilde{K}}$ making \Eq{eqn:stackwithdata} into
+Thus \pzpdf s must be conditioned not only on data unique to each galaxy but also on prior information $\tilde{\theta}$ corresponding to a model for the relationship between data $\data$ and redshift $z$ that may come from a template library, a training set, and/or the way each algorithm combines those pieces of information with the actual observations to arrive at an estimated \pzpdf.
+This prior information is then projected into the space of $\mathcal{N}(z')$ as some interim guess $\tilde{K}$ for the number of galaxies with reference redshift $z'$.
+
+If \pzpdf s are more completely written as ${\pr{z \gvn \data_{i}, \tilde{K}}}$, \Eq{eqn:stackwithdata} becomes
 \begin{align}
 \eqlabel{eqn:stackwithprior}
-\hat{N}(z) &= \sum_{i = 0}^{N} \pr{z \gvn \data_{i}, \tilde{K}} .
+    \hat{\mathcal{N}}(z) &= \sum_{i = 0}^{N} \pr{z \gvn \data_{i}, \tilde{K}} .
 \end{align}
-If the data were totally uninformative, each galaxy would have the same $\pr{z \gvn \data_{i}, \tilde{K}} = \pr{z \gvn \tilde{K}}$.
-Now, we consider what happens to \Eq{eqn:complete} under perfectly uninformative data.
+If the photometric data were totally uninformative, as could occur in a pessimistic noise-dominated photometric survey, each galaxy $i$ has the same ${\pr{z \gvn \data_{i}, \tilde{K}} \approx \pr{z \gvn \tilde{K}}}$.
+Furthermore, the prior $\tilde{K}$ may take any possible value for $K$, but it is baked into the \pzpdf s and cannot in general be modified at will.
+Next, we consider what happens to \Eq{eqn:complete} under perfectly uninformative data dominated by a prior $\tilde{K}$.
 
 \begin{theorem}
 	\label{thm:uninformative}
-	The mathematically valid $\langle N(z') \rangle$ asymptotically approaches the result of stacking and the true number $K^{\dagger}$ of galaxies with redshift $z'$ under a special case of perfectly uninformative photometry and perfect prior information $\tilde{K} = K^{\dagger}$.
+	Under a special case of perfectly uninformative photometry and perfect prior information ${\tilde{K} = K^{\dagger}}$, the mathematically valid expected value $\langle K \rangle$ of the number of galaxies with reference redshift $z'$ is equivalent to the stacked estimator $\hat{\mathcal{N}}(z')$ at the reference redshift; 
+	both $\langle K \rangle$ and $\hat{\mathcal{N}}(z')$ are equal to the true number $K^{\dagger}$ of galaxies with redshift $z'$ .
 \end{theorem}
 \begin{proof}
-	To start, let's update \Eq{eqn:complete} to reflect our new understanding of the role of the prior $\tilde{K}$ in \pzpdf s.
+	If every galaxy has the same \pzpdf, then every galaxy also has the same probability ${\pr{z' \gvn \tilde{K}} = \frac{\tilde{K}}{N}}$ of having the reference redshift.
+	The stacked estimator is thus ${\hat{\mathcal{N}}(z) = N \cdot \pr{z \gvn \tilde{K}} = \tilde{K}}$.
+	To start deriving the complete, correct result, we first update \Eq{eqn:complete} to reflect our new understanding of the role of the prior $\tilde{K}$ in estimated \pzpdf s.
 	\begin{align}
-	\label{eqn:proofwithprior1}
-	\langle N(z') \rangle &= \sum_{K = 0}^{N} K \sum_{j}^{N! / K! (N - K)!} \left[ \prod_{i \in S^{K}_{j}} \pr{z' \gvn \tilde{K}} \prod_{i \in S^{K}_{j}} 1 - \pr{z' \gvn \tilde{K}} \right]
+	\eqlabel{eqn:proofwithprior1}
+	    \langle K \rangle &= \sum_{K' = 0}^{N} K' \sum_{j \backepsilon |S_{j}|=K'}^{\binom{N}{K'}} \left[ \prod_{i \in S_{j}} \pr{z' \gvn \tilde{K}} \prod_{i \notin S_{j}} 1 - \pr{z' \gvn \tilde{K}} \right] .
 	\end{align}
-	If every galaxy has the same \pzpdf, then every galaxy also has the same probability $\pr{z' \gvn \tilde{K}} = \phi = \frac{\tilde{K}}{N}$ for some $\tilde{K}$.
-	Without having to worry about the true galaxy redshifts $z^{\dagger}_{i}$, we can very straightforwardly rewrite this in the form of \Eq{eqn:binomial} as
+	Without having to worry about the true galaxy redshifts $z^{\dagger}_{i}$, we can rewrite this in the form of \Eq{eqn:binomial} as
 	\begin{align}
 	\eqlabel{eqn:proofwithprior2}
-	\langle N(z') \rangle &= \sum_{K = 0}^{N} K \sum_{j}^{N! / K! (N - K)!} \left[ \left(\frac{\tilde{K}}{N}\right)^{K} \left(1 - \frac{\tilde{K}}{N}\right)^{N - K} \right] .
+	    \langle K \rangle &= \sum_{K' = 0}^{N} K' \sum_{j \backepsilon |S_{j}| = K'}^{\binom{N}{K'}} \left[ \left(\frac{\tilde{K}}{N}\right)^{K'} \left(1 - \frac{\tilde{K}}{N}\right)^{N - K'} \right] .
 	\end{align}
-	Since the \pzpdf s are identical to one another, the bracketed terms are the same for a given $K$, meaning each term in the inner sum is the same, so we can eliminate it as 
+	Since the \pzpdf s are identical to one another, the bracketed terms are the same for a given $K'$, meaning each term in the inner sum is the same, so we can eliminate the inner sum as 
 	\begin{align}
 	\eqlabel{eqn:proofwithprior3}
-	\langle N(z') \rangle &= \sum_{K = 0}^{N} K \frac{N!}{K! (N - K)!} \left(\frac{\tilde{K}}{N}\right)^{K} \left(1 - \frac{\tilde{K}}{N}\right)^{N - K} .
+	    \langle K \rangle &= \sum_{K' = 0}^{N} K' \binom{N}{K'} \left(\frac{\tilde{K}}{N}\right)^{K'} \left(1 - \frac{\tilde{K}}{N}\right)^{N - K'} .
 	\end{align}
-	Noting that the first term with $K = 0$ always vanishes, canceling factors of $K$, and factoring out a guess inspired by the coin-flipping analogy, we can rewrite \Eq{eqn:proofwithprior3} as
+	Noting that the first term with $K = 0$ always vanishes, canceling factors of $K$, and factoring out a quantity motivated by the coin-flipping analogy, we can rewrite \Eq{eqn:proofwithprior3} as
 	\begin{align}
 	\eqlabel{eqn:proofwithprior4}
-	\langle N(z') \rangle &= N \frac{\tilde{K}}{N} \sum_{K = 1}^{N} \frac{(N - 1)!}{(K - 1)! ((N - 1) - (K - 1))!} \left(\frac{\tilde{K}}{N}\right)^{K - 1} \left(1 - \frac{\tilde{K}}{N}\right)^{(N - 1) - (K - 1)} .
+	    \langle K \rangle &= N \frac{\tilde{K}}{N} \sum_{K' = 1}^{N} \binom{N - 1}{K' - 1} \left(\frac{\tilde{K}}{N}\right)^{K' - 1} \left(1 - \frac{\tilde{K}}{N}\right)^{(N - 1) - (K' - 1)} .
 	\end{align}
-	From here, we can recursively apply \Eq{eqn:binomial} to yield
+	We recognize this as a binomial expansion of
 	\begin{align}
 	\eqlabel{eqn:proofwithprior5}
-	\langle N(z') \rangle &= \tilde{K} \left(\frac{\tilde{K}}{N} + 1 - \frac{\tilde{K}}{N}\right)^{N - 1} ,
+	    \langle K \rangle &= \tilde{K} \left(\frac{\tilde{K}}{N} + 1 - \frac{\tilde{K}}{N}\right)^{N - 1} .
 	\end{align}
-	and since the term in parentheses is $1$, we arrive at $\langle N(z') \rangle = \tilde{K}$ for this case.
-	The only way for $\langle N(z') \rangle$ to be equal to $K^{\dagger}$ is if $\tilde{K} = K^{\dagger}$, i.e. if the prior were equal to the truth.
+	Since the term in parentheses is $1$, we arrive at ${\langle K \rangle = \tilde{K}}$ for this case.
+	As $\langle K \rangle = \tilde{K} = \hat{\mathcal{N}}(z')$, the only way for the result of stacking and the expected value of the redshift distribution to be equal to the true value $K^{\dagger}$ of the redshift distribution is if $\tilde{K} = K^{\dagger}$, i.e. if the prior is equal to the truth.
 \end{proof}
 
-If we stacked such a catalog, we would be taking the average of identical distributions, so $\hat{N}(z) = N \pr{z \gvn \tilde{K}} = \tilde{K}$, the same as the result of Theorem \ref{thm:uninformative}.
+%If we stacked such a catalog, we would be taking the average of identical distributions, so $\hat{N}(z) = N \pr{z \gvn \tilde{K}} = \tilde{K}$, the same as the result of Theorem \ref{thm:uninformative}.
 % \aim{really should write out stacking result here}
-Everything thus far has not compared either of these to the true value $K^{\dagger}$ of the redshift distribution.
-Indeed, neither can approach the truth unless $\tilde{K} = K^{\dagger}$, i.e. the prior must be the truth in order for stacking to work.
-
-Previous galaxy surveys covered the same limited redshift range and got a thorough sample over the sky to overcome cosmic variance, leading to the use of priors that were representative of the data in the regime where they were applied.
-However, at higher redshifts or in atypical galaxy environments, we will not be able to count on a lucky guess of $\tilde{K} \approx K^{\dagger}$.
-Without knowing truth sufficiently well to use it as a prior, we will instead have to rely on imperfect data.
+%Everything thus far has not compared either of these to the true value $K^{\dagger}$ of the redshift distribution.
+%Indeed, neither can approach the truth unless $\tilde{K} = K^{\dagger}$, i.e. the prior must be the truth in order for stacking to work.
+Thus stacking is valid if the data is uninformative and if the true value is known \textit{a priori}.
+% \aim{Cite previous \pz/spec-z surveys that covered same redshift range so were a valid pair for a prior.}
+%Previous galaxy surveys covered the same limited redshift range and got a thorough sample over the sky to overcome cosmic variance, leading to the use of priors that were representative of the data in the regime where they were applied.
+%However, at higher redshifts or in atypical galaxy environments, we will not be able to count on a lucky guess of $\tilde{K} \approx K^{\dagger}$.
+%Without knowing truth sufficiently well to use it as a prior, we will instead have to rely on imperfect data.
 %\aim{Figure: sum of same $N_{z}$ building up to that times $N_{tot}$}
-The sensitivity of the stacked estimator of the redshift distribution to deviations from this assumption is explored in Section~{chippr:sect:sec:interim}.
+%The sensitivity of the stacked estimator of the redshift distribution to deviations from this assumption is explored in Section~{chippr:sect:sec:interim}.
+Previous low-redshift galaxy surveys with a sufficient sample size to overcome cosmic variance could serve as an appropriate prior for one another's redshift distributions because they would have complete support over the redshift range of their galaxy samples.
+However, at higher redshifts or in atypical galaxy environments, a lucky guess of ${\tilde{K} \approx K^{\dagger}}$ is tremendously unlikely;
+in fact, if the truth were known independently of the redshift survey itself, it would not be necessary to collect the photometric data at all.
+Though stacking works in the case of uninformative data with a prior equal to the truth, this situation is not realistic for upcoming nor ongoing galaxy surveys.
 
 \section{Conclusion}
 \sectlabel{sec:disco}
@@ -317,18 +458,23 @@ The sensitivity of the stacked estimator of the redshift distribution to deviati
 %\aim{Discuss the limit of $N\to\infty$.
 %Doesn't the binomial stuff become Poisson, so I can write it differently?}
 
-This \paper\ conducts an investigation of the sleight of hand that enables the thoroughly unmotivated Equation~\ref{intro:eq:eqn:stack} to masquerade as an acceptable approximation to the provably correct but computationally intractable \Eq{eqn:complete}.
-The preceding proofs show not only the most complete and correct way to frame the redshift distribution \Nz, but they also address the question of how stacking can fool even clever astrophysicists into thinking it works.
+%The preceding proofs show not only the most complete and correct way to frame the redshift distribution \Nz, but they also address the question of how stacking can fool even clever astrophysicists into thinking it works.
+This \letter\ conducts an investigation of the sleight of hand that enables the thoroughly invalid stacked estimator of the redshift distribution given by \Eq{eqn:stack} to masquerade as an acceptable approximation to the provably correct but computationally intractable expected value of the distribution of possible redshift distributions given by \Eq{eqn:complete}.
+The preceding proofs show not only the most complete and consistent way to frame the redshift distribution \Nz\ but also address the question of how stacking has earned the trust of the astronomical community.
 
-The only cases in which stacking works are when the \pzpdf s are perfect or when the prior information is perfect.
+The only cases in which stacking can recover the true \Nz\ are when the \pz\ PDFs are conditioned on perfect data or when the \pz\ PDFs are conditioned on perfect prior information.
+The first case may have been approximately true for spectroscopic redshift surveys but is not true for photometric surveys, particularly the noise-dominated ones that probe faint galaxies.
+The second case may have been approximately true for galaxy surveys that cover the same redshift range with comparable depth and sufficient area to overcome cosmic variance, but upcoming surveys will explore higher redshift ranges than have been previously studied, violating the perfect prior condition.
+
 %when the right procedure is equivalent to stacking, but in that final case, it only approaches the true $\textbf{N}_{z}$ when $\tilde{n}(z) = \frac{\textbf{N}_{z}}{N_{tot}}$, i.e. when the truth is already known and baked into the PDFs.\\
-While it is possible to imagine some conspiracy between informative and uninformative \pzpdf s that enables stacking to work, such a solution would be very finely tuned and thus not generally achievable, out of the many, many possible \pzpdf\ catalogs.
+While it is possible to imagine some conspiracy between informative and uninformative \pz PDFs that enables stacking to work, such a solution would be very finely tuned and thus not generically achievable, out of the many, many possible \pz\ PDF catalogs.
 
-Though the conditions of \Sect{sec:informative} and \Sect{sec:uninformative} may not have been strongly violated in the past, they will be nowhere near satisfied for ongoing and upcoming surveys.
-Note that if those conditions held, we would not need \lsst\ at all.
+% Though the conditions of \Sect{sec:informative} and \Sect{sec:uninformative} may not have been strongly violated in the past, they will be nowhere near satisfied for ongoing and upcoming surveys.
+In conclusion, though the conditions of \Sect{sec:informative} and \Sect{sec:uninformative} may not have been strongly violated in the past, they will be nowhere near satisfied for ongoing and upcoming surveys.
+% Note that if those conditions held, we would not need \lsst\ at all.
 Thus, we must not stack!
 %\aim{Maybe beef up this section to tie in to cosmology.}
 
 \section*{Chapter acknowledgements}
 
-I thank David Alonso, Johann Cohen-Tanugi, Daniel Gruen, Will Hartley, Alan Heavens, Mike Jarvis, Boris Leistedt, Tom Loredo, Rachel Mandelbaum, Mark Manera, Phil Marshall, Jeff Newman, Eduardo Rozo, and Josh Speagle for helpful conversations that inspired this work and for feedback as it developed.
+I thank David Alonso, Johann Cohen-Tanugi, Daniel Gruen, Will Hartley, Alan Heavens, David Hogg, Mike Jarvis, Boris Leistedt, Tom Loredo, Rachel Mandelbaum, Mark Manera, Phil Marshall, Jeff Newman, Eduardo Rozo, An{\v z}e Slosar, Josh Speagle, and James Stevenson for helpful conversations that inspired this work and for feedback as it developed.

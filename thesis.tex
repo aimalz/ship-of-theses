@@ -28,6 +28,7 @@
 \setlength{\skip\footins}{.3in}
 
 \usepackage{setspace}
+\usepackage[normalem]{ulem}
 % \singlespacing{}
 \doublespacing{}
 
@@ -36,7 +37,7 @@
 \input{definitions}
 
 \begin{document}
-	
+
 % Just for committee review! 
 % \aim{Comment this out before submitting the real thing}
 %\linenumbers
@@ -82,12 +83,11 @@
 \newpage
 
 % %%%%%%%%%%%%%% Copyright %%%%%%%%%%%%%%%%%
+\thispagestyle{empty}
 \vspace*{\fill}
 \begin{center}
-    Copyright \textcopyright\ 2019 \thesisauthor\\
-    This work is licensed under a Creative Commons Attribution 4.0
-    International License.
-    \addcontentsline{toc}{section}{Copyright}
+    \textcopyright \thesisauthor\\
+    All rights reserved, 2020
 \end{center}
 \vfill
 \newpage
@@ -112,9 +112,9 @@
 %\newpage
 
 %%%%%%%%%%%%% Dedication %%%%%%%%%%%%%%%%%%
-\thispagestyle{empty}
-\vspace*{0in}
-\newpage
+% \thispagestyle{empty}
+% \vspace*{0in}
+% \newpage
 
 %%%%%%%%%%%%%% Acknowledgements %%%%%%%%%%%%
 %% Comment out the following lines if you do not want to acknowledge
@@ -135,18 +135,19 @@
 %%%%% List of Figures %%%%%%%%%%%%%
 %% Comment out the following two lines if your thesis does not
 %% contain any figures. The list of figures contains only
-%% those figures included withing the "figure" environment.
+%% those figures included within the "figure" environment.
 \newpage\addcontentsline{toc}{section}{List of Figures}
 \listoffigures
 
 %%%%% List of Tables %%%%%%%%%%%%%
 %% Comment out the following two lines if your thesis does not
 %% contain any tables. The list of tables contains only
-%% those tables included withing the "table" environment.
+%% those tables included within the "table" environment.
 \newpage\addcontentsline{toc}{section}{List of Tables}
 \listoftables
+\newpage\addcontentsline{toc}{section}{List of Appendices}
+\listofappendices
 \newpage
-
 %%%%% Body of thesis starts %%%%%%%%%%%%
 \pagenumbering{arabic}
 
@@ -167,12 +168,12 @@
 
 % %%%%% Appendices start %%%%%%%%%%%%%%%%
 % %% Comment out the following line if your thesis has no appendix
-% \appendix
-% \input{app1}
+%\appendix
+\input{chapters/appendices}
 % %% Note: If your thesis has more than one appendix, NYU requires a "list of
 % %% appendices" page before the body of the thesis. I don't provide the tools
 % %% to create that here, so you're on your own for that one... Sorry.
-% %\input{app2}
+%\input{app2}
 
 %%%% Bibliography %%%%%%%%%%%%%%%
 %\aim{Eliminate duplicate entries!}

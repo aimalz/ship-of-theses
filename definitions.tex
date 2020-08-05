@@ -50,17 +50,22 @@
 % Algorithms:
 \usepackage{algorithmic, algorithm}
 
+% for a list of appendecies
+\usepackage{tocloft}
+\usepackage{chngcntr}
+
 % Thesis-specific:
 \newcommand{\thesistitle}{Probabilistic analysis methods for cosmology \\
 	using uncertainty-dominated photometric data}
 \newcommand{\thesisauthor}{Alex I. Malz}
 \newcommand{\thesisadvisor}{Professor David W. Hogg}
-\newcommand{\graddate}{May 2019}
+\newcommand{\graddate}{May 2020}
 
 % Commands:
 
 % General formatting:
 \newcommand{\paper}{Chapter}
+\newcommand{\letter}{Chapter}
 %\newcommand{\textul}[1]{{\underline{#1}}}
 \newcommand{\mathul}[1]{\underline{#1}}
 \newcommand{\enquote}[1]{{``{#1}''}}
@@ -172,5 +177,12 @@
 \newcommand{\stack}{$\hat{N}(z)$}
 \newcommand{\ntot}{\ensuremath{N_{\mathrm{tot}}}}
 \newcommand{\ndphi}{\bvec{\phi}}
+\newcommand{\diff}{\todo{check diff}{green}{}}
+
+% for appendices
+\newcommand{\listappendicesname}{List of Appendices}
+\newlistof{appendices}{apc}{\listappendicesname}
+\newcommand{\appendices}[1]{\addcontentsline{apc}{appendices}{\thesection~#1}}
+
 
 \sloppy\sloppypar
